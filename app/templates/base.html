@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}goldEagle{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Additional Styles -->
+    {% block styles %}{% endblock %}
+</head>
+<body class="min-h-screen flex flex-col select-none">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-800">goldEagle</a>
+            <ul class="flex space-x-6 items-center">
+                {% if session.get('username') %}
+                <li class="text-sm font-mono text-gray-700">Hi, {{ session['username'] }}!</li>
+                <li>
+                    <a href="{{ url_for('profile') }}"
+                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                    Profile
+                    </a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{{ url_for('login') }}"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                    Login
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('register') }}"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                    Sign Up
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto mt-6 px-4 flex-grow">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white shadow-md mt-8">
+        <div class="container mx-auto px-4 py-6 text-center text-gray-600">
+            &copy; {{ current_year }} goldEagle 
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>
