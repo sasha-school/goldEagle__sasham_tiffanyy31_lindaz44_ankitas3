@@ -3,3 +3,6 @@ sashaM, ankitaS, tiffanyY, lindaZ -- 2025-4-30 IN CLASS
 
 sashaM, ankitaS, tiffanyY, lindaZ -- 2025-5-1 IN CLASS
 - Working on researching the games that we are emulating and making decisions
+
+tiffanyY -- 2025-5-5 IN CLASS
+Did some basic HTML and PY 
