@@ -25,12 +25,21 @@ secret = os.urandom(32)
 app.secret_key = secret
 
 @app.route('/', methods=['GET', 'POST'])
+def home():
+    return render_template("home.html")
+
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if 'username' in session:
         return redirect("/home")
     elif request.method == 'POST':
         return redirect("/auth")
     return render_template("login.html")
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    return render_template("register.html")
 
 
 if __name__ == "__main__":

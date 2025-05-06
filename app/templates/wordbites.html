@@ -4,15 +4,7 @@
 <style>
 #div1 {
   width: 100px;
-  height: 35px;
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid black;
-}
-#div2 {
-  width: 100px;
-  height: 35px;
-  margin: 10px;
+  height: 100px;
   padding: 10px;
   border: 1px solid black;
 }
@@ -34,14 +26,46 @@ function dropHandler(ev) {
 </script>
 </head>
 <body>
+  <table>
+    <tr>
+      <td>
+        <div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
+        <img id="img1" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">
+        </div>
+      </td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+    </tr>
+    <tr>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+    </tr>
+    <tr>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
+    </tr>
+  </table>
 
-<div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
-<img id="img1" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31">
-</div>
-
-<div id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
 
 </body>
 </html>
+
+<!--wordbites.html
+Leaderboard
+Has username and number of points in ascending order
+Game
+8x9 board
+first working version: letters randomly generated (weighted) and placed on board. scrabble style, ability to move tiles. after every move, checks every row and col for consecutive tiles making a word (with blank tiles on either side). words won't be counted twice. points based on word length
+later: “double tiles”
+later: (using someone else’s existing) solver to try to approximate number of words that can be made with letters to ensure a playable board
+At the end of game, sends stats to player they are playing w/ and play button for them
+After the game, if not already friended, popup asking if you’d like to friend the user
+-->
