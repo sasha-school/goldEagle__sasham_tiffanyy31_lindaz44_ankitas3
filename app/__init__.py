@@ -1,15 +1,17 @@
 import os, sys
 
-import urllib.parse  
+import urllib.parse
 import sqlite3
 import requests
-import datetime 
-import calendar  
+import datetime
+import calendar
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from dateutil.parser import parse
 from functools import wraps
 from calendar import monthrange, day_name
+
+from db_functions import *
 
 # adding config.py to search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -17,7 +19,6 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # flask app initializing
 app = Flask(__name__)
 
-import setup_db
 
 # sessions
 secret = os.urandom(32)
