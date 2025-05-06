@@ -4,3 +4,66 @@ Users need to log in or register to be able to have their stats saved on the lea
 guest mode: only single player mode is available + does not store score or board info anywhere
 Usernames have to be unique
 -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>goldEagles</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>goldEagle</h1>
+    </header>
+    <!DOCTYPE html>
+    <html lang="en">
+ 
+      <nav class="navbar">
+        <form action="/">
+          <button type="submit" class="button1">Home</button>
+        </form>
+        <form action="/users">
+          <button type="submit" class="button1">Users</button>
+        </form>
+        <form action="/mypages">
+          <button type="submit" class="button1">My Pages</button>
+        </form>
+        <form action="/logout">
+          <button type="submit" class="button">Log Out</button>
+        </form>
+      </nav>
+      <hr>
+      <div class="login">
+        <h2>Log In</h2>
+      </div>
+      <hr>
+      <br>
+      <div class="input">
+        <h3>Welcome back!</h3>
+        <form action="{{ url_for('login') }}" method="post">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required>
+          <br><br>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required>
+          <br><br>
+          <button type="submit" class="b">Log In</button>
+        </form>
+        <br><br>
+        <div>
+          <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
+        </div>
+      </div>
+      <hr>
+      <div class="return">
+        <form action="/">
+          <button type="submit">Return Home</button>
+        </form>
+      </div>
+    </body>
+    
+    </html>
