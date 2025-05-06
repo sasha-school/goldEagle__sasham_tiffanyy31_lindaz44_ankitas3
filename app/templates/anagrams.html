@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<style>
+#div1 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display:inline;
+}
+#div2 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display: inline;
+}
+
+#div6 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display: inline;
+}
+
+#div3 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display: inline;
+}
+
+#div4 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display: inline;
+}
+
+#div5 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display: inline;
+}
+
+#seperate {
+display:block;}
+</style>
+<script>
+function dragstartHandler(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function dragoverHandler(ev) {
+  ev.preventDefault();
+}
+
+function dropHandler(ev) {
+  ev.preventDefault();
+  const data = ev.dataTransfer.getData("text");
+  ev.target.appendChild(document.getElementById(data));
+}
+</script>
+</head>
+<body>
+
+<div id="seperate"></div>
+<div id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div id="div3" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+
+<br></br>
+<br></br>
+<br></br>
+<div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><img id="img1" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31"></div>
+<div id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><img id="img1" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31"></div>
+<div id="div3" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><img id="img1" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31"></div>
+<div id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><img id="img1" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31"></div>
+<div id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><img id="img1" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31"></div>
+<div id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><img id="img1" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31"></div>
+</div>
+
+
+</body>
+</html>
