@@ -2,7 +2,7 @@
 <html>
 <head>
 <style>
-#div1 {
+.box {
   width: 100px;
   height: 100px;
   padding: 10px;
@@ -18,40 +18,47 @@ function dragoverHandler(ev) {
   ev.preventDefault();
 }
 
-function dropHandler(ev) {
+function dropHandler(ev, boxNumber) {
   ev.preventDefault();
-  const data = ev.dataTransfer.getData("text");
-  ev.target.appendChild(document.getElementById(data));
+  const letter = ev.dataTransfer.getData("text");
+  const imageElement = document.getElementById(letter);
+  ev.target.appendChild(imageElement);
+
+  fetch("/box_dropped", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ box_number: boxNumber, letter: letter})
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("Server response:", data);
+  });
 }
 </script>
 </head>
 <body>
   <table>
-    <tr>
-      <td>
-        <div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
-        <img id="img1" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">
-        </div>
-      </td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-    </tr>
-    <tr>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-    </tr>
-    <tr>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-      <td><div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div></td>
-    </tr>
+    {% for row in range(3) %}
+      <tr>
+        {% for col in range(5) %}
+          {% set box_number = row * 5 + col + 1 %}
+          <td>
+            <div class="box" id="box{{ box_number }}"
+                 ondrop="dropHandler(event, {{ box_number }})"
+                 ondragover="dragoverHandler(event)">
+              {% if box_number == 1 %}
+                <img id="square" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">
+              {% endif %}
+              {% if box_number == 2 %}
+                <img id="circle" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR16kaS_MrQsvnqmHABLCunvUTmBpwN4uaGJQ&s" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">
+              {% endif %}
+            </div>
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
   </table>
 
 
