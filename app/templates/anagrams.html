@@ -1,13 +1,131 @@
-<!-- anagrams.html
-Leaderboard
-Has username and number of points in ascending order
-Game
-1x6 board
-Logic of selected letter (3 vowels, 3 consonants selected randomly) Can enter words with >= 3 letters
-If real word (<= 6 letters & in words.txt), adds points; if not, flash message
-Points are based on length of word (100 for 3, 200 for 4, 400 for 5, 600 for 6)
-Have 60 seconds to complete (from clicking start to when timer is up)
-Gets list of words created, and points for each, and total points
-At the end of game, sends stats to player they are playing w/ and play button for them
-After the game, if not already friended, popup asking if you’d like to friend the user
--->
+<!DOCTYPE HTML>
+<html>
+<head>
+<style>
+#div1 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display:inline;
+}
+#div2 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display: inline;
+}
+
+#div6 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display: inline;
+}
+
+#div3 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display: inline;
+}
+
+#div4 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display: inline;
+}
+
+#div5 {
+  width: 100px;
+  height: 35px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  display: inline;
+}
+
+#seperate {
+display:block;
+margin-top: 30px;}
+</style>
+<script>
+function dragstartHandler(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function dragoverHandler(ev) {
+  ev.preventDefault();
+}
+
+function dropHandler(ev) {
+  ev.preventDefault();
+  const data = ev.dataTransfer.getData("text");
+  ev.target.appendChild(document.getElementById(data));
+}
+
+function dragstartHandler1(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function dragoverHandler1(ev) {
+  ev.preventDefault();
+}
+
+function dropHandler1(ev) {
+  ev.preventDefault();
+  const data = ev.dataTransfer.getData("text");
+  ev.target.appendChild(document.getElementById(data));
+}
+</script>
+</head>
+<body>
+
+<div id="seperate">
+<div id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div id="div3" ondrop="dropHandler1(event)"   ondragover="dragoverHandler1(event)"></div>
+<div id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+</div>
+<br></br>
+<br></br>
+<br></br>
+
+<button id="enterWord">Enter</button>
+<br>
+<br>
+<div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
+<button id="img1" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31">A</button>
+</div>
+
+<div id="div2" ondrop="dropHandler1(event)"   ondragover="dragoverHandler1(event)">
+<button id="img2" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31">A</button>
+</div>
+
+<div id="div3" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
+<button id="img3" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31">A</button>
+</div>
+
+<div id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
+<button id="img4" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31">A</button>
+</div>
+
+<div id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><img id="img5" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31"></div>
+<div id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><img id="img6" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="88" height="31"></div>
+</div>
+
+
+</body>
+</html>
