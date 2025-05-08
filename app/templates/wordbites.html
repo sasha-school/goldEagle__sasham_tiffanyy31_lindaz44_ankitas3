@@ -10,6 +10,9 @@
 }
 </style>
 <script>
+<!--stores movement locations-->
+const toFrom = {};
+
 function dragstartHandler(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
 }
@@ -24,12 +27,20 @@ function dropHandler(ev, boxNumber) {
   const imageElement = document.getElementById(letter);
   ev.target.appendChild(imageElement);
 
+  const fromBox = toFrom[letter] || null;   //for later: make it not null but rather where they spawn
+  const toBox = boxNumber;
+  toFrom[letter] = toBox;
+
   fetch("/box_dropped", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ box_number: boxNumber, letter: letter})
+    body: JSON.stringify({
+      letter: letter,
+      from_box: fromBox,
+      to_box: toBox
+    })
   })
   .then(response => response.json())
   .then(data => {
@@ -40,7 +51,7 @@ function dropHandler(ev, boxNumber) {
 </head>
 <body>
   <table>
-    {% for row in range(3) %}
+    {% for row in range(5) %}
       <tr>
         {% for col in range(5) %}
           {% set box_number = row * 5 + col + 1 %}

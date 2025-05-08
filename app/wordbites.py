@@ -10,10 +10,12 @@ def main():
 @app.route("/box_dropped", methods=["POST"]) #happens in the background and ensures that it doesnt need to refresh
 def box_dropped():
     data = request.get_json()
-    box_number = data.get("box_number")
     letter = data.get("letter")
-    print(f"Letter '{letter}' dropped in box number: {box_number}")
-    return jsonify({"status": "received", "box_number": box_number, "letter": letter})
+    from_box = data.get("from_box")
+    to_box = data.get("to_box")
+
+    print(f"Letter '{letter}' moved from box {from_box} to box {to_box}")
+    return jsonify({"status": "received"})
 
 if __name__ == "__main__":
     app.run(debug=True)
