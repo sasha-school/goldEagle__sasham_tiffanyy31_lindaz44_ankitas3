@@ -25,7 +25,18 @@ function dropHandler(ev, boxNumber) {
   ev.preventDefault();
   const letter = ev.dataTransfer.getData("text");
   const imageElement = document.getElementById(letter);
+
+  //to prevent moving a letter 2 a box w a letter alreadyy
+  const dropTarget = ev.target;
+  const box = dropTarget.classList.contains("box") ? dropTarget : dropTarget.closest(".box");
+  if (box.querySelector("img")) {
+    console.log(`Box ${boxNumber} already has an letter, cannot overlap`);
+    return;
+  }
+
   ev.target.appendChild(imageElement);
+
+
 
   const fromBox = toFrom[letter] || null;   //for later: make it not null but rather where they spawn
   const toBox = boxNumber;
@@ -59,12 +70,11 @@ function dropHandler(ev, boxNumber) {
             <div class="box" id="box{{ box_number }}"
                  ondrop="dropHandler(event, {{ box_number }})"
                  ondragover="dragoverHandler(event)">
-              {% if box_number == 1 %}
-                <img id="square" src="https://cdn.abcteach.com/abcteach-content-free/docs/free_preview/s/shapesquarecolorlabeled_p.png" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">
-              {% endif %}
-              {% if box_number == 2 %}
-                <img id="circle" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR16kaS_MrQsvnqmHABLCunvUTmBpwN4uaGJQ&s" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">
-              {% endif %}
+                 {% if box_number <= letters|length %}
+                   {% set l, imgs = letters[box_number - 1] %}
+                   <img id="{{ l }}" src="{{ imgs }}" draggable="true"
+                        ondragstart="dragstartHandler(event)" width="100" height="100">
+                  {% endif %}
             </div>
           </td>
         {% endfor %}
