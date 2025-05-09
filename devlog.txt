@@ -5,7 +5,10 @@ sashaM, ankitaS, tiffanyY, lindaZ -- 2025-5-1 IN CLASS
 - Working on researching the games that we are emulating and making decisions
 
 tiffanyY -- 2025-5-5 IN CLASS
-Did some basic HTML and PY 
+Did some basic HTML and PY
 
 tiffanyY -- 2025-5-6 IN CLASS
 Added some parts of site mapping, base HTML, figured out color palette based on team flags
+
+sashaM -- 2025-5-8 IN CLASS
+- Working on wordbites game
