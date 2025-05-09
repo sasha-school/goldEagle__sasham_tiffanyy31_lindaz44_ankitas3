@@ -26,15 +26,51 @@ app.secret_key = secret
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    build()
     if 'username' in session:
         return redirect("/home")
-    elif request.method == 'POST':
-        return redirect("/auth")
-    return render_template("login.html")
 
-@app.route('/anagrams')
-def anagrams():
-    
+    if request.method =="POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        if not username or not password:
+            flash("Missing username or password", "error")
+            return redirect("/login")
+
+        if checkPassword(username, password):# if password is correct, given user exists
+            session["username"] = username# adds user to session
+            return redirect("/home")
+
+        else:# if password isnt correct
+            flash("Invalid username or password", "error")
+            return redirect("/login")
+
+    return render_template("login.html")# if GET request, just renders login page
+
+@app.route("/register", methods=["GET", "POST"])# will code registering and logging forms later
+def register():
+    if request.method =="POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+      
+
+        if not username or not password:# checks if all 3 form entries were filled out
+            return render_template("register.html", warning = "empty field(s)")
+
+        #check if user has special chars
+        #check for existing username
+        message = addUser(username, password, city)
+        if message:
+            return render_template("register.html", warning = message)
+        else:
+            return redirect("/login")
+
+    return render_template("register.html")
+
+#@app.route('/anagrams')
+#def anagrams():
+#    
 
 
 if __name__ == "__main__":
