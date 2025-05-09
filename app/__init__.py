@@ -24,7 +24,7 @@ app = Flask(__name__)
 secret = os.urandom(32)
 app.secret_key = secret
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     build()
     if 'username' in session:
@@ -48,6 +48,7 @@ def login():
 
     return render_template("login.html")# if GET request, just renders login page
 
+
 @app.route("/register", methods=["GET", "POST"])# will code registering and logging forms later
 def register():
     if request.method =="POST":
@@ -60,18 +61,24 @@ def register():
 
         #check if user has special chars
         #check for existing username
-        message = addUser(username, password, city)
+        message = addUser(username, password)
         if message:
-            return render_template("register.html", warning = message)
+            return render_template("login.html", warning = message)
         else:
             return redirect("/login")
 
     return render_template("register.html")
 
-#@app.route('/anagrams')
-#def anagrams():
-#    
+@app.route('/home') 
+def home():
+    return render_template("home.html")
+
+
+@app.route('/anagrams')
+def anagrams():
+    return render_template("anagrams.html")
+    
 
 
 if __name__ == "__main__":
-    app.run(port = 5001,debug=True)
+    app.run(debug=True)

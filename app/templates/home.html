@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,7 +23,7 @@ If not logged in, brief blurb about how guest mode is only single player and wil
     <header>
         <h1>goldEagle</h1>
     </header>
-
+ <hr>
     <nav class="navbar">
         <form action="/">
             <button type="submit" class="button1">Home</button>
@@ -42,24 +41,24 @@ If not logged in, brief blurb about how guest mode is only single player and wil
 
     <hr>
     <br></br>
-    {% if username %}
-    <h2>Welcome back, {{ username }}!</h2>
-    {% else %}
-    <h2>Click here to Log in/Sign up!</h2>
-    <div class="bottom">
-        <form action="/login">
-            <button type="submit" class="button2">Log in</button>
-        </form>
-        <form action="/signup">
-            <button type="submit" class="button3">Sign Up</button>
-        </form>
-    </div>
-    {% endif %}
+   
 
 
-    <br><br><br><br>
-    <hr>
+ 
+    
+    <form action="/anagrams">
+        <button>Anagrams</button>
+    </form>
+
+    <form action="/wordHunt">
+        <button>Word Hunt</button>
+    </form>
+
+    <form action="/wordBites">
+        <button>Word Bites</button>
+    </form>
+
 </body>
 
 </html>
->>>>>>> 658d6c714aec9c33d47d2785f21007ae0dc5ef85
+

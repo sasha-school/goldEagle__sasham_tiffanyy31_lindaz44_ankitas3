@@ -14,14 +14,14 @@ def createUsers():
     users.commit()
 
 
-def addUser(username, password, city):
+def addUser(username, password):
     users = sqlite3.connect(USER_FILE)
     goodcharas = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678910._-")
     if set(username).difference(goodcharas) or set(password).difference(goodcharas):
         return "There are special characters in the username or password."
     c = users.cursor()
     if (c.execute("SELECT 1 FROM users WHERE username=?", (username,))).fetchone() == None:
-        c.execute("INSERT INTO users (username, password, city, wordle, streak) VALUES (?, ?, ?, ?, ?)", (username, password, city, 0, 0))
+        c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
         users.commit()
         return
     return "Username taken."
