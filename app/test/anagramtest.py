@@ -18,4 +18,3 @@ print(getWordSelectionAnagrams())
 
 #get 3 random vowels
 #get 3 random consonants
-

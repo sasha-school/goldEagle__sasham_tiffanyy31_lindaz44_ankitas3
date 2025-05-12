@@ -24,6 +24,13 @@ app = Flask(__name__)
 secret = os.urandom(32)
 app.secret_key = secret
 
+@app.route('/') 
+def checkSession():
+    if 'username' in session:
+        return redirect("/home")
+    return redirect("/login")
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     build()
@@ -67,10 +74,8 @@ def register():
         else:
             return redirect("/login")
 
-    return render_template("register.html")
-
-@app.route('/home') 
-def home():
+@app.route('/home')
+def homePage():
     return render_template("home.html")
 
 

@@ -101,33 +101,29 @@ function dragoverHandler(ev) {
 function dropHandler(ev) {
   ev.preventDefault();
   const data = ev.dataTransfer.getData("text");
-  ev.target.appendChild(document.getElementById(data));
+  const imgTag = document.getElementById(data)
+
+  const dropTarget = ev.target;
+  const box = dropTarget.classList.contains("box") ? dropTarget : dropTarget.closest(".box");
+  if (box.querySelector("button")) {
+    console.log(`Box ${boxNumber} already has an letter, cannot overlap`);
+    return;
+  }
+
+  ev.target.appendChild(imgTag);
 }
 
-function dragstartHandler1(ev) {
-  ev.dataTransfer.setData("text", ev.target.id);
-}
-
-function dragoverHandler1(ev) {
-  ev.preventDefault();
-}
-
-function dropHandler1(ev) {
-  ev.preventDefault();
-  const data = ev.dataTransfer.getData("text");
-  ev.target.appendChild(document.getElementById(data));
-}
 </script>
 </head>
 <body>
 
 <div id="seperate">
-<div id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div id="div3" ondrop="dropHandler1(event)"   ondragover="dragoverHandler1(event)"></div>
-<div id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div class = "box" id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div class = "box" id="div3" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div class = "box" id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div class = "box" id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div class = "box" id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div class = "box" id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
 </div>
 <br></br>
 <br></br>
@@ -136,26 +132,26 @@ function dropHandler1(ev) {
 <button id="enterWord">Enter</button>
 <br>
 <br>
-<div id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
+<div class = "box" id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
 <button id="img1" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">S</button>
 </div>
 
-<div id="div2" ondrop="dropHandler1(event)"   ondragover="dragoverHandler1(event)">
+<div class = "box" id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
 <button id="img2" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">C</button>
 </div>
 
-<div id="div3" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
+<div class = "box" id="div3" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
 <button id="img3" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">H</button>
 </div>
 
-<div id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
+<div class = "box" id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
 <button id="img4" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">O</button>
 </div>
 
-<div id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><button id="img5" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">X</button></div>
+<div class = "box" id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><button id="img5" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">X</button></div>
 
 
-<div id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><button id="img6" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">L</button></div>
+<div class = "box" id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><button id="img6" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">L</button></div>
 </div>
 
 
