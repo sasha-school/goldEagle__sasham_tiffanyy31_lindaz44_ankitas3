@@ -10,8 +10,16 @@ Did some basic HTML and PY
 tiffanyY -- 2025-5-6 IN CLASS
 Added some parts of site mapping, base HTML, figured out color palette based on team flags
 
+ankitaS -- 2025-05-06
+- added drag and drop functionalities for anagrams
+- using JS to create a timer
+
 sashaM -- 2025-5-8 IN CLASS
 - Working on wordbites game
 
+ankitaS -- 2025-05-08
+- changed structure of letters in anagrams
+
 sashaM -- 2025-5-9 IN CLASS
 - Working on wordbites game -- movable letters
+
