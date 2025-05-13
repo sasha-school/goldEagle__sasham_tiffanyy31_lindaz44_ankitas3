@@ -1,27 +1,8 @@
-<!-- 
-login/register.html
-Users need to log in or register to be able to have their stats saved on the leaderboard or be able to play multiplayer
-guest mode: only single player mode is available + does not store score or board info anywhere
-Usernames have to be unique
--->
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}Register{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>goldEagles</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-</head>
-
-<body>
-    <header>
-        <h1>goldEagle</h1>
-    </header>
-    <!DOCTYPE html>
-    <html lang="en">
- 
+{% block content %}
     
       <hr>
       <div class="login">
@@ -45,3 +26,4 @@ Usernames have to be unique
     </body>
     
     </html>
+{% endblock %}

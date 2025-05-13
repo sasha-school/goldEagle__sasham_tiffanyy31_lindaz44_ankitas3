@@ -56,26 +56,25 @@ def login():
     return render_template("login.html")# if GET request, just renders login page
 
 
-@app.route("/register", methods=["GET", "POST"])# will code registering and logging forms later
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method =="POST":
+    if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-      
 
-        if not username or not password:# checks if all 3 form entries were filled out
-            return render_template("register.html", warning = "empty field(s)")
+        if not username or not password:
+            return render_template("register.html", warning="Empty field(s)")
 
-        #check if user has special chars
-        #check for existing username
         message = addUser(username, password)
         if message:
-            return render_template("login.html", warning = message)
+            return render_template("register.html", warning=message)  # Make sure it renders the register page with error
         else:
-            return redirect("/login")
+            return redirect(url_for("login"))  # Proper redirect after successful registration
+
+    return render_template("register.html")  # Ensures a response is returned for GET requests
 
 @app.route('/home')
-def homePage():
+def home():
     return render_template("home.html")
 
 

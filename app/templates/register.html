@@ -1,34 +1,29 @@
-<!-- 
-login/register.html
-Users need to log in or register to be able to have their stats saved on the leaderboard or be able to play multiplayer
-guest mode: only single player mode is available + does not store score or board info anywhere
-Usernames have to be unique
--->
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}Register{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>goldEagles</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-</head>
+{% block content %}
+    <body style="padding: 3%; text-align: center; width: 100%;">
+        <div>
+            <h3>Register to Save Stats & Play Multiplayer</h3>
+            <p>Guest mode allows only single-player games and does not store scores or leaderboard info.</p>
 
-<body style="padding: 3%; text-align: center; width: 100%;">
-    <div>
-      <h3></h3>
-      <form action="/register" method="POST">
-        <div class="form-group">
-          <label for="username">Username: </label>
-          <input type="text" id="username" name="username" placeholder="Enter username" required>
+            <form action="{{ url_for('register') }}" method="POST">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter password" required>
+                </div>
+                {% if warning %}
+                    <p style="color: red;">{{ warning }}</p>
+                {% endif %}
+                <button type="submit">Register Account</button>
+            </form>
+
+            <a href="{{ url_for('login') }}">Already have an account? Log in</a>
         </div>
-        <div class="form-group">
-          <label for="password">Password: </label>
-          <input type="password" id="password" name="password" placeholder="Enter password" required>
-        </div>
-        <button type="submit">Register Account</button>
-      </form>
-      <a href="/login">Have an account?</a>
-    </div>
-  </body>
+    </body>
+{% endblock %}
