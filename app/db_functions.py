@@ -20,7 +20,7 @@ DB_PATH = os.path.join(DB_DIR, 'database.db')
 print("DB_PATH:", DB_PATH)
 
 def build():
-    createUsers()
+    create_tables()
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
