@@ -1,7 +1,5 @@
-<<<<<<< HEAD
+
 import json
-=======
->>>>>>> 23e91bf01e2a2155073cce2b32dfec7fdd02ab05
 import sqlite3
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
