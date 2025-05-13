@@ -21,7 +21,7 @@ try:
     from app.db_functions import *
 except:
     from db_functions import *
->>>>>>> 9913b6ef12b7b3a82cd3168da73ec82b873de119
+
 
 # adding config.py to search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -104,8 +104,14 @@ def anagrams():
 
     letters = getWordSelectionAnagrams()
     return render_template("anagrams.html", letters = letters)
+<<<<<<< HEAD
     
 
+=======
+
+=======
+    return render_template("anagrams.html")
+>>>>>>> 23e91bf01e2a2155073cce2b32dfec7fdd02ab05
 
 @app.route("/wordhunt", methods=['GET', 'POST'])
 def main():
