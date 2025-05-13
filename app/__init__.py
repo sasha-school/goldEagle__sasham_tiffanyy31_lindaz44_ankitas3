@@ -11,8 +11,17 @@ from dateutil.parser import parse
 from functools import wraps
 from calendar import monthrange, day_name
 
+<<<<<<< HEAD
 from db_functions import *
 from anagrams import *
+=======
+from wordhunt import *
+
+try:
+    from app.db_functions import *
+except:
+    from db_functions import *
+>>>>>>> 9913b6ef12b7b3a82cd3168da73ec82b873de119
 
 # adding config.py to search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +34,7 @@ app = Flask(__name__)
 secret = os.urandom(32)
 app.secret_key = secret
 
-@app.route('/') 
+@app.route('/')
 def checkSession():
     if 'username' in session:
         return redirect("/home")
@@ -78,13 +87,39 @@ def register():
 def home():
     return render_template("home.html")
 
+@app.route('/game')
+def game():
+    return render_template("gamepage.html")
+
+@app.route('/wordbites')
+def wordbites():
+    return render_template("wordbites.html")
+
+@app.route('/wordhunt')
+def wordhunt():
+    return render_template("wordhunt.html")
 
 @app.route('/anagrams')
 def anagrams():
+<<<<<<< HEAD
     letters = getWordSelectionAnagrams()
     return render_template("anagrams.html", letters = letters)
     
+=======
+    return render_template("anagrams.html")
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+@app.route("/wordhunt", methods=['GET', 'POST'])
+def main():
+    Letters = board()
+    return render_template('wordhunt.html', LetterA=Letters[0], LetterB=Letters[1], LetterC=Letters[2], LetterD=Letters[3], LetterE=Letters[4], LetterF=Letters[5], LetterG=Letters[6], LetterH=Letters[7], LetterI=Letters[8], LetterJ=Letters[9], LetterK=Letters[10], LetterL=Letters[11], LetterM=Letters[12], LetterN=Letters[13], LetterO=Letters[14], LetterP=Letters[15])
+=======
+>>>>>>> c4c721ad1509d9bb55b7d5b109296ba15a1c3354
+>>>>>>> 9913b6ef12b7b3a82cd3168da73ec82b873de119
 
 
+=======
+>>>>>>> 41e0c0c332ae11f98dc0afde4579c193a4f8336b
 if __name__ == "__main__":
     app.run(debug=True)

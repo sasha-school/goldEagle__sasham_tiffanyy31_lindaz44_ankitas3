@@ -24,24 +24,19 @@ If not logged in, brief blurb about how guest mode is only single player and wil
         <h1>goldEagle</h1>
     </header>
  <hr>
-    <nav class="navbar">
-        <form action="/">
-            <button type="submit" class="button1">Home</button>
-        </form>
-        <form action="/users">
-            <button type="submit" class="button1">Users</button>
-        </form>
-        <form action="/mypages">
-            <button type="submit" class="button1">My Pages</button>
-        </form>
-        <form action="/logout">
-            <button type="submit" class="button">Log Out</button>
-        </form>
-    </nav>
+
 
     <hr>
     <br></br>
    
+              <div class="group p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-hidden">
+              <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">Coming soon...</h3>
+              <p class="text-gray-600 dark:text-gray-300 mt-2">Coming soon...</p>
+              <div class="absolute inset-0 bg-purple-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300"></div>
+              <div class="absolute bottom-4 left-4 hidden group-hover:flex space-x-2">
+                  <a href="{{ url_for('game') }}" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">Coming soon...</a>
+              </div>
+          </div>
 
 
  
