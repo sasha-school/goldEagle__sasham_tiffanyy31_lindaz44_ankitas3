@@ -21,7 +21,7 @@ try:
     from app.db_functions import *
 except:
     from db_functions import *
->>>>>>> 9913b6ef12b7b3a82cd3168da73ec82b873de119
+
 
 # adding config.py to search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -104,7 +104,7 @@ def anagrams():
 <<<<<<< HEAD
     letters = getWordSelectionAnagrams()
     return render_template("anagrams.html", letters = letters)
-    
+
 =======
     return render_template("anagrams.html")
 
