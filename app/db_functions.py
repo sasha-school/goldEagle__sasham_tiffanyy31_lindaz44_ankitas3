@@ -17,6 +17,9 @@ os.makedirs(DB_DIR, exist_ok=True)  # Make sure the folder exists
 DB_PATH = os.path.join(DB_DIR, 'database.db')
 print("DB_PATH:", DB_PATH)
 
+def build():
+    createUsers()
+
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
