@@ -23,3 +23,8 @@ ankitaS -- 2025-05-08
 sashaM -- 2025-5-9 IN CLASS
 - Working on wordbites game -- movable letters
 
+sashaM -- 2025-5-12 IN CLASS
+- Working on droplet hosting
+
+sashaM -- 2025-5-12 13:00
+- Finished droplet hosting
