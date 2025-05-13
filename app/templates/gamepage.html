@@ -1,56 +1,46 @@
-<!--gamepage.html
-Nav bar (see above)
-All directly sent pending challenges (from friends or not) at the top of page
-3 floating cards of 3 games and different game mode options (if game is created or joined, redirect to respective game page)
-Pending users waiting for another player below the cards
-Ability to invite friend/user to new game (search up) 
-Start a new multiplayer game (play your round and wait for someone else to play one)
-Start a new single player game
-Clicking start a new game prompts a pop-up that allows you to choose between single player or multiplayer mode
-** Pending challenge from __: Accept/Decline
-** Pending challenge from __: Accept/Decline
+{% extends "base.html" %}
+{% block title %}Games{% endblock %}
 
-Anagrams             
-Maybe a one sentence desc here
-Word Hunt
-Maybe a one sentence desc here
-Word bites
-Maybe a one sentence desc here
-Pending games to join:
-** User__
-** User__
-Pending games to join:
-** User__
-** User__
-Pending games to join:
-** User__
-** User__
-Invite friend/user to new game
-Invite friend/user to new game
-Invite friend/user to new game
-Start a new game
-Start a new game
-Start a new game
+{% block content %}
 
+<img src="https://upload.wikimedia.org/wikipedia/en/7/71/Crossy_Road_icon.jpeg" alt="Crossy Road Chicken" width="250" height="300"> 
+    <!-- Highlight Cards Section -->
+    <div class="mt-12">
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Games: </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    
+          <div class="group p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-hidden">
+              <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">Anagrams</h3>
+              <p class="text-gray-600 dark:text-gray-300 mt-2">Some description here</p>
+              <div class="absolute inset-0 bg-blue-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300"></div>
+              <div class="absolute bottom-4 left-4 hidden group-hover:flex space-x-2">
+                  <a href="{{ url_for('anagrams') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Crossy Roads!</a>
 
+              </div>
+          </div>
 
+          
+          <div class="group p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-hidden">
+              <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">Coming soon...</h3>
+              <p class="text-gray-600 dark:text-gray-300 mt-2">Coming soon...</p>
+              <div class="absolute inset-0 bg-purple-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300"></div>
+              <div class="absolute bottom-4 left-4 hidden group-hover:flex space-x-2">
+                  <a href="{{ url_for('wordhunt') }}" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">Coming soon...</a>
+              </div>
+          </div>
 
-
-If user is not logged in, they are only given singleplayer options
-Log in to play multiplayer !
-
-Anagrams             
-Maybe a one sentence desc here
-Word Hunt
-Maybe a one sentence desc here
-Word bites
-Maybe a one sentence desc here
-Start a new single player game
-Start a new single player game
-Start a new single player game
-
-
-
-
-
--->
+     
+          <div class="group p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-hidden">
+              <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">Coming soon...</h3>
+              <p class="text-gray-600 dark:text-gray-300 mt-2">Coming soon...</p>
+              <div class="absolute inset-0 bg-green-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300"></div>
+              <div class="absolute bottom-4 left-4 hidden group-hover:flex space-x-2">
+                <a href="{{ url_for('wordbites') }}"s class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">Coming soon...</a>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+</body>
+</html>
+{% endblock %}

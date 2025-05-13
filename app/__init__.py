@@ -77,6 +77,9 @@ def register():
 def home():
     return render_template("home.html")
 
+@app.route('/game')
+def game():
+    return render_template("gamepage.html")
 
 @app.route('/anagrams')
 def anagrams():
