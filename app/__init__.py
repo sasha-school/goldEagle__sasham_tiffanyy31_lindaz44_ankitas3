@@ -103,22 +103,14 @@ def anagrams():
 
     letters = getWordSelectionAnagrams()
     return render_template("anagrams.html", letters = letters)
-<<<<<<< HEAD
     
 
-=======
-
-    return render_template("anagrams.html")
->>>>>>> 23e91bf01e2a2155073cce2b32dfec7fdd02ab05
 
 @app.route("/wordhunt", methods=['GET', 'POST'])
 def main():
     Letters = board()
     return render_template('wordhunt.html', LetterA=Letters[0], LetterB=Letters[1], LetterC=Letters[2], LetterD=Letters[3], LetterE=Letters[4], LetterF=Letters[5], LetterG=Letters[6], LetterH=Letters[7], LetterI=Letters[8], LetterJ=Letters[9], LetterK=Letters[10], LetterL=Letters[11], LetterM=Letters[12], LetterN=Letters[13], LetterO=Letters[14], LetterP=Letters[15])
-<<<<<<< HEAD
 
-=======
->>>>>>> c44c7f51ebbb0f0dba683f7653ec23c9dd6a7109
 
 if __name__ == "__main__":
     app.run(debug=True)
