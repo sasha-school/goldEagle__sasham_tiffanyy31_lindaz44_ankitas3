@@ -9,3 +9,86 @@ Given that the word is present in our database, user will gain specific number o
 At the end of game, sends stats to player they are playing w/ and play button for them
 After the game, if not already friended, popup asking if you’d like to friend the user
 -->
+
+<!DOCTYPE html>
+<html lang="en" dir="lir">
+  <head>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <style type="text/tailwindcss">
+              @layer utilities {
+                  .content-auto {
+                    content-visibility: auto;
+                  }
+              }
+      </style>
+  </head>
+  <body>
+    <input id="display" readonly class="block mx-auto my-4 p-2 border border-gray-500 rounded w-full max-w-screen-sm">
+    <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-blue-200 p-5 rounded-lg">
+      <div class="grid grid-cols-4 grid-rows-4 gap-5 h-full">
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterA}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterB}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterC}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterD}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterE}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterF}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterG}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterH}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterI}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterJ}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterK}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterL}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterM}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterN}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterO}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterP}}</button>
+      </div>
+    </div>
+    <script>
+      const display = document.getElementById("display");
+      const buttons = document.querySelectorAll(".letter-button");
+      const board = document.getElementById("board");
+
+      let selectedLetters = new Set();
+      let currentWord = "";
+
+      function appendLetter(button) {
+        if (!selectedLetters.has(button)) {
+          selectedLetters.add(button);
+          currentWord += button.textContent;
+          appendToDisplay(currentWord);
+          button.classList.remove('bg-blue-500');
+          button.classList.add('bg-green-500');
+        }
+      }
+
+      function removeWord() {
+        currentWord = "";
+        selectedLetters.clear();
+        appendToDisplay(currentWord);
+        buttons.forEach(button => {
+          button.classList.remove('bg-green-500');
+          button.classList.add('bg-blue-500');
+        })
+      }
+
+      buttons.forEach(button => {
+        button.addEventListener("mousedown", () => appendLetter(button));
+        button.addEventListener("mouseover", (e) => {
+          if (e.buttons === 1) {
+            appendLetter(button);
+          }
+        });
+        button.addEventListener("mouseup", removeWord);
+      })
+
+      board.addEventListener("mouseleave", removeWord);
+
+      function appendToDisplay(input){
+        display.value = input;
+      }
+    </script>
+  </body>
+</html>
