@@ -11,15 +11,12 @@ from dateutil.parser import parse
 from functools import wraps
 from calendar import monthrange, day_name
 
-<<<<<<< HEAD
 from wordhunt import *
-from db_functions import *
-=======
+
 try:
     from app.db_functions import *
 except:
     from db_functions import *
->>>>>>> c4c721ad1509d9bb55b7d5b109296ba15a1c3354
 
 # adding config.py to search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -89,10 +86,19 @@ def home():
 def game():
     return render_template("gamepage.html")
 
+@app.route('/wordbites')
+def wordbites():
+    return render_template("wordbites.html")
+
+@app.route('/wordhunt')
+def wordhunt():
+    return render_template("wordhunt.html")
+
 @app.route('/anagrams')
 def anagrams():
     return render_template("anagrams.html")
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 @app.route("/wordhunt", methods=['GET', 'POST'])
 def main():
@@ -102,5 +108,7 @@ def main():
 >>>>>>> c4c721ad1509d9bb55b7d5b109296ba15a1c3354
 
 
+=======
+>>>>>>> 41e0c0c332ae11f98dc0afde4579c193a4f8336b
 if __name__ == "__main__":
     app.run(debug=True)
