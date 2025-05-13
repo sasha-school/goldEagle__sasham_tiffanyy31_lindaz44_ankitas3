@@ -11,6 +11,8 @@ from dateutil.parser import parse
 from functools import wraps
 from calendar import monthrange, day_name
 
+from wordhunt import *
+
 try:
     from app.db_functions import *
 except:
@@ -87,7 +89,7 @@ def game():
 @app.route('/wordbites')
 def wordbites():
     return render_template("wordbites.html")
-    
+
 @app.route('/wordhunt')
 def wordhunt():
     return render_template("wordhunt.html")
@@ -96,5 +98,17 @@ def wordhunt():
 def anagrams():
     return render_template("anagrams.html")
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+@app.route("/wordhunt", methods=['GET', 'POST'])
+def main():
+    Letters = board()
+    return render_template('wordhunt.html', LetterA=Letters[0], LetterB=Letters[1], LetterC=Letters[2], LetterD=Letters[3], LetterE=Letters[4], LetterF=Letters[5], LetterG=Letters[6], LetterH=Letters[7], LetterI=Letters[8], LetterJ=Letters[9], LetterK=Letters[10], LetterL=Letters[11], LetterM=Letters[12], LetterN=Letters[13], LetterO=Letters[14], LetterP=Letters[15])
+=======
+>>>>>>> c4c721ad1509d9bb55b7d5b109296ba15a1c3354
+
+
+=======
+>>>>>>> 41e0c0c332ae11f98dc0afde4579c193a4f8336b
 if __name__ == "__main__":
     app.run(debug=True)

@@ -10,162 +10,85 @@ At the end of game, sends stats to player they are playing w/ and play button fo
 After the game, if not already friended, popup asking if you’d like to friend the user
 -->
 
-PLACEHOLDER: <!DOCTYPE HTML>
-<html>
-<head>
-<style>
-#div1 {
-  width: 60px;
-  height: 35px;
-  margin: 10px;
-  padding: 60px;
-  border: 1px solid black;
-  display:inline;
-}
-#div2 {
-  width: 60px;
-  height: 35px;
-  margin: 10px;
-  padding: 60px;
-  border: 1px solid black;
-  display: inline;
-}
+<!DOCTYPE html>
+<html lang="en" dir="lir">
+  <head>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <style type="text/tailwindcss">
+              @layer utilities {
+                  .content-auto {
+                    content-visibility: auto;
+                  }
+              }
+      </style>
+  </head>
+  <body>
+    <input id="display" readonly class="block mx-auto my-4 p-2 border border-gray-500 rounded w-full max-w-screen-sm">
+    <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-blue-200 p-5 rounded-lg">
+      <div class="grid grid-cols-4 grid-rows-4 gap-5 h-full">
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterA}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterB}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterC}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterD}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterE}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterF}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterG}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterH}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterI}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterJ}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterK}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterL}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterM}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterN}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterO}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterP}}</button>
+      </div>
+    </div>
+    <script>
+      const display = document.getElementById("display");
+      const buttons = document.querySelectorAll(".letter-button");
+      const board = document.getElementById("board");
 
-#div6 {
-  width: 60px;
-  height: 35px;
-  margin: 10px;
-  padding: 60px;
-  border: 1px solid black;
-  display: inline;
-}
+      let selectedLetters = new Set();
+      let currentWord = "";
 
-#div3 {
-  width: 60px;
-  height: 35px;
-  margin: 10px;
-  padding: 60px;
-  border: 1px solid black;
-  display: inline;
-}
+      function appendLetter(button) {
+        if (!selectedLetters.has(button)) {
+          selectedLetters.add(button);
+          currentWord += button.textContent;
+          appendToDisplay(currentWord);
+          button.classList.remove('bg-blue-500');
+          button.classList.add('bg-green-500');
+        }
+      }
 
-#div4 {
-  width: 60px;
-  height: 35px;
-  margin: 10px;
-  padding: 60px;
-  border: 1px solid black;
-  display: inline;
-}
+      function removeWord() {
+        currentWord = "";
+        selectedLetters.clear();
+        appendToDisplay(currentWord);
+        buttons.forEach(button => {
+          button.classList.remove('bg-green-500');
+          button.classList.add('bg-blue-500');
+        })
+      }
 
-#div5 {
-  width: 60px;
-  height: 35px;
-  margin: 10px;
-  padding: 60px;
-  border: 1px solid black;
-  display: inline;
-}
+      buttons.forEach(button => {
+        button.addEventListener("mousedown", () => appendLetter(button));
+        button.addEventListener("mouseover", (e) => {
+          if (e.buttons === 1) {
+            appendLetter(button);
+          }
+        });
+        button.addEventListener("mouseup", removeWord);
+      })
 
-#seperate {
-display:block;
-margin-top: 30px;}
+      board.addEventListener("mouseleave", removeWord);
 
-#img1 {
-padding:30px;
-font-size:30px;
-}
-
-#img2 {
-padding:30px;
-font-size:30px;
-}
-
-#img3 {
-padding:30px;
-font-size:30px;
-}
-
-#img5 {
-padding:30px;
-font-size:30px;
-}
-
-#img4 {
-padding:30px;
-font-size:30px;
-}
-
-#img6 {
-padding:30px;
-font-size:30px;
-}
-</style>
-<script>
-function dragstartHandler(ev) {
-  ev.dataTransfer.setData("text", ev.target.id);
-}
-
-function dragoverHandler(ev) {
-  ev.preventDefault();
-}
-
-function dropHandler(ev) {
-  ev.preventDefault();
-  const data = ev.dataTransfer.getData("text");
-  const imgTag = document.getElementById(data)
-
-  const dropTarget = ev.target;
-  const box = dropTarget.classList.contains("box") ? dropTarget : dropTarget.closest(".box");
-  if (box.querySelector("button")) {
-    console.log(`Box ${boxNumber} already has an letter, cannot overlap`);
-    return;
-  }
-
-  ev.target.appendChild(imgTag);
-}
-
-</script>
-</head>
-<body>
-
-<div id="seperate">
-<div class = "box" id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div class = "box" id="div3" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div class = "box" id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div class = "box" id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div class = "box" id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div class = "box" id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-</div>
-<br></br>
-<br></br>
-<br></br>
-
-<button id="enterWord">Enter</button>
-<br>
-<br>
-<div class = "box" id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
-<button id="img1" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">S</button>
-</div>
-
-<div class = "box" id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
-<button id="img2" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">C</button>
-</div>
-
-<div class = "box" id="div3" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
-<button id="img3" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">H</button>
-</div>
-
-<div class = "box" id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
-<button id="img4" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">O</button>
-</div>
-
-<div class = "box" id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><button id="img5" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">X</button></div>
-
-
-<div class = "box" id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><button id="img6" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">L</button></div>
-</div>
-
-
-</body>
+      function appendToDisplay(input){
+        display.value = input;
+      }
+    </script>
+  </body>
 </html>
