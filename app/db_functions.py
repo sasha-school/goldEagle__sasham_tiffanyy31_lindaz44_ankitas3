@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+import json
+=======
+>>>>>>> 23e91bf01e2a2155073cce2b32dfec7fdd02ab05
 import sqlite3
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -98,7 +102,7 @@ def addUser(username, password):
         return "There are special characters in the username or password."
     c = users.cursor()
     if (c.execute("SELECT 1 FROM users WHERE username=?", (username,))).fetchone() == None:
-        c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+        c.execute("INSERT INTO users (username, passwordgit) VALUES (?, ?)", (username, password))
         users.commit()
         return
     return "Username taken."
@@ -112,3 +116,10 @@ def checkPassword(username, password):
     if (password != res[0]):
         return "Invalid login; please try again."
     return True
+
+
+with open('letters7.txt', 'r') as file:
+    lines = [line.strip() for line in file]
+
+with open("wordList.json", "w") as f:
+    json.dump(lines, f)
