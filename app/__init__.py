@@ -11,7 +11,10 @@ from dateutil.parser import parse
 from functools import wraps
 from calendar import monthrange, day_name
 
-from db_functions import *
+try:
+    from app.db_functions import *
+except:
+    from db_functions import *
 
 # adding config.py to search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +27,7 @@ app = Flask(__name__)
 secret = os.urandom(32)
 app.secret_key = secret
 
-@app.route('/') 
+@app.route('/')
 def checkSession():
     if 'username' in session:
         return redirect("/home")
@@ -84,7 +87,7 @@ def game():
 @app.route('/anagrams')
 def anagrams():
     return render_template("anagrams.html")
-    
+
 
 
 if __name__ == "__main__":
