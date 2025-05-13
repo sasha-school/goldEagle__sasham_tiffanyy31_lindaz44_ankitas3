@@ -12,6 +12,7 @@ from functools import wraps
 from calendar import monthrange, day_name
 
 from db_functions import *
+from anagrams import *
 
 # adding config.py to search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -80,7 +81,8 @@ def home():
 
 @app.route('/anagrams')
 def anagrams():
-    return render_template("anagrams.html")
+    letters = getWordSelectionAnagrams()
+    return render_template("anagrams.html", letters = letters)
     
 
 
