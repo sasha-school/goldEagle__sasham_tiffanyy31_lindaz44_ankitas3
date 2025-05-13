@@ -1,92 +1,61 @@
-h1 {
-    font-weight: bold;
-    font-size: 75px;
+:root {
+    --coyote: #7E6A4C;
+    --timberwolf: #D9D3CA;
+    --khaki: #C8B69A;
+    --lion: #B08952;
+    --coyote-2: #7E5927;
+    --sepia: #653F0C;
+    --caf-noir: #4B3A22;
+    --black: #000200;
+    --pakistan-green: #17310B;
+    --dark-moss-green: #426011;
+}
+
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background: var(--black);
+    color: var(--timberwolf);
     text-align: center;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  hr {
-    height: 2px;
-    max-width: 100%;
-    margin: 0 auto;
-  }
-  
-  div.middle, div.bottom {
-    text-align: center;
-    font-size: 30px;
-    max-width: 100%;
-    overflow: hidden;
-    word-wrap: break-word;
-  }
-  
-  .middle, .bottom {
+}
+
+/* Navigation Bar */
+nav {
     display: flex;
-    justify-content: center;
-    max-width: 100%;
-    overflow: hidden;
-  }
-  
-  .navbar {
-    display: flex;
-    justify-content: space-around;
-    background-color: #f8f8f8;
-    padding: 10px 0;
-    border-bottom: 2px solid #ccc;
-    max-width: 100%;
-    margin: 0 auto;
-    overflow: hidden;
-  }
-  
-  .navbar form {
-    flex-grow: 1;
-    text-align: center;
-    max-width: 100%;
-    overflow: hidden;
-  }
-  
-  .button, .button1, .button2, .button3 {
-    padding: 10px 40px;
-    font-size: 20px;
+    justify-content: space-between;
+    padding: 15px;
+    background: var(--coyote-2);
+    border-bottom: 2px solid var(--sepia);
+}
+
+nav a {
+    color: var(--timberwolf);
+    text-decoration: none;
+    padding: 10px 15px;
     border-radius: 10px;
+    background: var(--caf-noir);
+}
+
+/* Game Cards */
+.game-card {
+    display: inline-block;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 15px;
+    background: var(--lion);
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Buttons */
+button {
+    background: var(--pakistan-green);
+    color: var(--timberwolf);
     border: none;
-    background-color: transparent;
-    max-width: 100%;
-    overflow: hidden;
-  }
-  
-  .button1 {
-    margin-right: 250px;
-  }
-  
-  .button2, .button3 {
-    font-size: 15px;
-    margin-right: 100px;
-    border-radius: 30px;
-    border: normal;
-  }
-  
-  h2 {
-    text-align: center;
-    font-weight: normal;
-    font-size: 40px;
-    margin-top: 5px;
-    max-width: 100%;
-    overflow: hidden;
-  }
-  
-  p {
-    padding-top: 10px;
-    font-size: 20px;
-    padding-left: 7px;
-    max-width: 100%;
-    overflow: hidden;
-    word-wrap: break-word;
-  }
-  
-  .text {
-    word-wrap: break-word;
-    max-width: 100%;
-    overflow: hidden;
-  }
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--dark-moss-green);
+}
