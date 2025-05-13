@@ -11,6 +11,7 @@ from dateutil.parser import parse
 from functools import wraps
 from calendar import monthrange, day_name
 
+from wordhunt import *
 from db_functions import *
 
 # adding config.py to search path
@@ -24,7 +25,7 @@ app = Flask(__name__)
 secret = os.urandom(32)
 app.secret_key = secret
 
-@app.route('/') 
+@app.route('/')
 def checkSession():
     if 'username' in session:
         return redirect("/home")
@@ -81,7 +82,11 @@ def home():
 @app.route('/anagrams')
 def anagrams():
     return render_template("anagrams.html")
-    
+
+@app.route("/wordhunt", methods=['GET', 'POST'])
+def main():
+    Letters = board()
+    return render_template('wordhunt.html', LetterA=Letters[0], LetterB=Letters[1], LetterC=Letters[2], LetterD=Letters[3], LetterE=Letters[4], LetterF=Letters[5], LetterG=Letters[6], LetterH=Letters[7], LetterI=Letters[8], LetterJ=Letters[9], LetterK=Letters[10], LetterL=Letters[11], LetterM=Letters[12], LetterN=Letters[13], LetterO=Letters[14], LetterP=Letters[15])
 
 
 if __name__ == "__main__":

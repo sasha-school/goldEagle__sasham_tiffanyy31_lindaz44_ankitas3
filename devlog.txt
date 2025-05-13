@@ -7,6 +7,9 @@ sashaM, ankitaS, tiffanyY, lindaZ -- 2025-5-1 IN CLASS
 tiffanyY -- 2025-5-5 IN CLASS
 Did some basic HTML and PY
 
+lindaZ -- 2025-5-5 IN CLASS
+- made functions to call from wordsolver api and to create randomly generated string of Letters inspired from boggle game
+
 tiffanyY -- 2025-5-6 IN CLASS
 Added some parts of site mapping, base HTML, figured out color palette based on team flags
 
@@ -20,11 +23,18 @@ sashaM -- 2025-5-8 IN CLASS
 ankitaS -- 2025-05-08
 - changed structure of letters in anagrams
 
+lindaZ -- 2025-5-8 IN CLASS
+- Created preliminary board for wordhunt
+
 sashaM -- 2025-5-9 IN CLASS
 - Working on wordbites game -- movable letters
 
 sashaM -- 2025-5-12 IN CLASS
 - Working on droplet hosting
+
+lindaZ -- 2025-5-12 IN CLASS
+- Working on incorporating randomly generated board in wordhunt
+- Able to connect letters by dragging on board
 
 sashaM -- 2025-5-12 13:00
 - Finished droplet hosting
