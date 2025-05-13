@@ -84,11 +84,17 @@ def home():
 def game():
     return render_template("gamepage.html")
 
+@app.route('/wordbites')
+def wordbites():
+    return render_template("wordbites.html")
+    
+@app.route('/wordhunt')
+def wordhunt():
+    return render_template("wordhunt.html")
+
 @app.route('/anagrams')
 def anagrams():
     return render_template("anagrams.html")
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
