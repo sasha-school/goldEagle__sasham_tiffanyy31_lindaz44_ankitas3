@@ -94,22 +94,17 @@ def game():
 def wordbites():
     return render_template("wordbites.html")
 
-@app.route('/wordhunt')
+@app.route("/wordhunt", methods=['GET', 'POST'])
 def wordhunt():
-    return render_template("wordhunt.html")
+    Letters = board()
+    print(Letters + "test")
+    return render_template('wordhunt.html', LetterA=Letters[0], LetterB=Letters[1], LetterC=Letters[2], LetterD=Letters[3], LetterE=Letters[4], LetterF=Letters[5], LetterG=Letters[6], LetterH=Letters[7], LetterI=Letters[8], LetterJ=Letters[9], LetterK=Letters[10], LetterL=Letters[11], LetterM=Letters[12], LetterN=Letters[13], LetterO=Letters[14], LetterP=Letters[15])
 
 @app.route('/anagrams')
 def anagrams():
 
     letters = getWordSelectionAnagrams()
     return render_template("anagrams.html", letters = letters)
-    
-
-
-@app.route("/wordhunt", methods=['GET', 'POST'])
-def main():
-    Letters = board()
-    return render_template('wordhunt.html', LetterA=Letters[0], LetterB=Letters[1], LetterC=Letters[2], LetterD=Letters[3], LetterE=Letters[4], LetterF=Letters[5], LetterG=Letters[6], LetterH=Letters[7], LetterI=Letters[8], LetterJ=Letters[9], LetterK=Letters[10], LetterL=Letters[11], LetterM=Letters[12], LetterN=Letters[13], LetterO=Letters[14], LetterP=Letters[15])
 
 if __name__ == "__main__":
     app.run(debug=True)

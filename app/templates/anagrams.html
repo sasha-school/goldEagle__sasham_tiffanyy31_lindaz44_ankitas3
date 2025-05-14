@@ -113,29 +113,40 @@ function dropHandler(ev) {
   ev.target.appendChild(imgTag);
 }
 
-function checkLetters(ev) {
-  ev.preventDefault();
-  const data = ev.dataTransfer.getData("text");
-  const imgTag = document.getElementById(data)
 
+function checkLetters() {
   const numLetters = 0;
-  const dropTarget = ev.target;
   for (int i = 1; i <= 5; i++) {
-    const div = dropTarget.idList.contains("div" + i.toString()) ? dropTarget : dropTarget.closest(".box");
-    if (div.querySelector("button")) {
+    const button = document.getElementByTagName("button");
+    if document.getElementById("div" + i.toString()).contains(button) {
         numLetters++;
-        console.log(`Box ${boxNumber} already has an letter, cannot overlap`);
-        return;
       }
+}
+    if (numLetters > 2) {
+        console.log("true");
+        document.getElementById("enterWord").innerHTML = "YOU CLICKED ME!";
+        return true;
+
+}
+    else {
+    console.log("false");
+    return false;
+}
+
+
 
 }
 
 function checkIfRealWord() {
+    if (checkLetters()) {
+
+}
 
 
 }
+
   
-}
+
 </script>
 </head>
 <body>
@@ -152,7 +163,7 @@ function checkIfRealWord() {
 <br></br>
 <br></br>
 
-<button id="enterWord">Enter</button>
+<button id="enterWord" onclick="checkLetters()">Enter</button>
 
 <br>
 <br>

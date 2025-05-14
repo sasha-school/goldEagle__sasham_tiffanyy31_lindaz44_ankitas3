@@ -89,6 +89,7 @@ def create_tables():
         );
     ''')
 
+#store letters so they stay same upon reload
     conn.commit()
     conn.close()
 
@@ -100,7 +101,7 @@ def addUser(username, password):
         return "There are special characters in the username or password."
     c = users.cursor()
     if (c.execute("SELECT 1 FROM users WHERE username=?", (username,))).fetchone() == None:
-        c.execute("INSERT INTO users (username, passwordgit) VALUES (?, ?)", (username, password))
+        c.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (username, password))
         users.commit()
         return
     return "Username taken."
@@ -109,7 +110,7 @@ def addUser(username, password):
 def checkPassword(username, password):
     users = sqlite3.connect(DB_PATH)
     c = users.cursor()
-    c.execute("SELECT password FROM users WHERE username=?", (username,))
+    c.execute("SELECT password_hash FROM users WHERE username=?", (username,))
     res = c.fetchone()
     if (password != res[0]):
         return "Invalid login; please try again."
