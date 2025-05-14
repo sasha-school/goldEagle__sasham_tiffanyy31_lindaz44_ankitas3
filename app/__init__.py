@@ -12,8 +12,8 @@ from functools import wraps
 from calendar import monthrange, day_name
 
 
-from db_functions import *
 from anagrams import *
+
 from wordhunt import *
 
 try:
@@ -110,7 +110,6 @@ def anagrams():
 def main():
     Letters = board()
     return render_template('wordhunt.html', LetterA=Letters[0], LetterB=Letters[1], LetterC=Letters[2], LetterD=Letters[3], LetterE=Letters[4], LetterF=Letters[5], LetterG=Letters[6], LetterH=Letters[7], LetterI=Letters[8], LetterJ=Letters[9], LetterK=Letters[10], LetterL=Letters[11], LetterM=Letters[12], LetterN=Letters[13], LetterO=Letters[14], LetterP=Letters[15])
-
 
 if __name__ == "__main__":
     app.run(debug=True)
