@@ -235,3 +235,7 @@ button {
     top: 300px;
     left: 895px;
 }
+
+img {
+  border-radius: 25%;
+}
