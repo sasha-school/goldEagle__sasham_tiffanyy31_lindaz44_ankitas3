@@ -41,4 +41,11 @@ sashaM -- 2025-5-12 13:00
 
 ankitaS -- 2025-05-12
 - added functionality to not drag and drop letters into same box
+
+sashaM -- 2025-5-13 IN CLASS
+- Droplet reload -- fixed all issues, should be running smoothly on there
+- Wordbites
+
+sashaM -- 2025-5-14 IN CLASS
+- Wordbites
 - created letter set functionality to generate randome letters to use for anagrams
