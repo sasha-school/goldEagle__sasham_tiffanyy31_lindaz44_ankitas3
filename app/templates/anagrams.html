@@ -117,19 +117,19 @@ function dropHandler(ev) {
 function checkLetters() {
   const numLetters = 0;
   for (int i = 1; i <= 5; i++) {
-    const button = document.getElementByTagName("button")
-    if document.getElementById("div" + i.toString()).contains(button)
-    if (div.querySelector("button")) {
+    const button = document.getElementByTagName("button");
+    if document.getElementById("div" + i.toString()).contains(button) {
         numLetters++;
       }
 }
     if (numLetters > 2) {
-        console.log("true")
+        console.log("true");
+        document.getElementById("enterWord").innerHTML = "YOU CLICKED ME!";
         return true;
 
 }
     else {
-    console.log("false")
+    console.log("false");
     return false;
 }
 
@@ -163,7 +163,7 @@ function checkIfRealWord() {
 <br></br>
 <br></br>
 
-<button id="enterWord">Enter</button>
+<button id="enterWord" onclick="checkLetters()">Enter</button>
 
 <br>
 <br>
