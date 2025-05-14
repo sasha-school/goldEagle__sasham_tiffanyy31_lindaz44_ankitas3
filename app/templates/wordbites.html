@@ -7,6 +7,13 @@
   height: 100px;
   padding: 10px;
   border: 1px solid black;
+  text-align: center;
+  display:table;
+}
+h1 {
+  font-size: 60px;
+  vertical-align:middle;
+  display:table-cell;
 }
 </style>
 <script>
@@ -38,11 +45,11 @@ function dropHandler(ev, boxNumber) {
 
 
 
-  const fromBox = toFrom[letter] || null;   //for later: make it not null but rather where they spawn
+  const fromBox = toFrom[letter] || null;
   const toBox = boxNumber;
   toFrom[letter] = toBox;
 
-  fetch("/box_dropped", {
+  fetch("/wordbites_helper", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -71,9 +78,9 @@ function dropHandler(ev, boxNumber) {
                  ondrop="dropHandler(event, {{ box_number }})"
                  ondragover="dragoverHandler(event)">
                  {% if box_number <= letters|length %}
-                   {% set l, imgs = letters[box_number - 1] %}
-                   <img id="{{ l }}" src="{{ imgs }}" draggable="true"
-                        ondragstart="dragstartHandler(event)" width="100" height="100">
+                   {% set letter = letters[box_number - 1] %}
+                   <h1 id="{{ letter }}" draggable="true"
+                        ondragstart="dragstartHandler(event)" >{{ letter }}</h1>
                   {% endif %}
             </div>
           </td>
@@ -82,7 +89,14 @@ function dropHandler(ev, boxNumber) {
     {% endfor %}
   </table>
 
-
+<script>
+  const initialPositions = {
+    {% for i in range(letters|length) %}
+      "{{ letters[i][0] }}": {{ i + 1 }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+  };
+  Object.assign(toFrom, initialPositions);
+</script>
 </body>
 </html>
 
