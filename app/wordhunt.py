@@ -45,4 +45,4 @@ def print_words(board):
 
     for i in list_dict:
         list_words.append(i.get('word'))
-    return '\n'.join(list_words)
+    return list_words

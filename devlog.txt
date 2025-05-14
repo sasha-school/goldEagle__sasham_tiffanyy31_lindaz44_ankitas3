@@ -42,3 +42,7 @@ sashaM -- 2025-5-12 13:00
 ankitaS -- 2025-05-12
 - added functionality to not drag and drop letters into same box
 - created letter set functionality to generate randome letters to use for anagrams
+
+lindaZ -- 2025-05-14
+- fixed issue with letters not showing up on wordhunt
+- working on checking words
