@@ -85,6 +85,10 @@ def register():
 def home():
     return render_template("home.html")
 
+@app.route('/profile')
+def profile():
+    return render_template("profile.html")
+
 @app.route('/game')
 def game():
     return render_template("gamepage.html")
@@ -104,6 +108,9 @@ def anagrams():
 
     letters = getWordSelectionAnagrams()
     return render_template("anagrams.html", letters = letters)
-
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('home'))
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

@@ -22,10 +22,17 @@ If not logged in, brief blurb about how guest mode is only single player and wil
 -->
 <body>
     <header>
-        <h1>Player Username here</h1>
-    </header>
-<hr>
-<br> <br>
+        <h1>
+            {% if session.get('username') %}
+                <li class="text-sm font-mono text-gray-700">Hi, {{ session['username'] }}!</li>
+                <li>
+                    <a href="{{ url_for('profile') }}"
+                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                    Profile
+                    </a>
+                </li>
+
+                <br> <br>
 <div class="button-container">
         <form action="/profile">
             <button type="submit" class="button1">Profile</button>
@@ -35,6 +42,24 @@ If not logged in, brief blurb about how guest mode is only single player and wil
         </form>
         </div>
         <br> <br>
+<hr>
+                {% else %} You are currently in guest mode. Please log in or register!</h1>  
+                
+                <br>
+                
+                Please note that playing any games in guest mode does not save your results. 
+                
+                <br> <br> <div class="button-container">
+        <form action="/login">
+            <button type="submit" class="button1">Login</button>
+        </form>
+        <form action="/register">
+            <button type="submit" class="button">Register</button>
+        </form>
+        </div>
+        
+        <br> {% endif %}
+    </header>
 <hr>
 
     <br></br>
@@ -57,5 +82,5 @@ If not logged in, brief blurb about how guest mode is only single player and wil
 
 </body>
 
-</html>
+
 {% endblock %}
