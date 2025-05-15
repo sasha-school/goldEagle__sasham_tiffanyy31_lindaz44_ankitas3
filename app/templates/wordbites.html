@@ -30,8 +30,8 @@ function dragoverHandler(ev) {
 
 function dropHandler(ev, boxNumber) {
   ev.preventDefault();
-  const letter = ev.dataTransfer.getData("text");
-  const imageElement = document.getElementById(letter);
+  const letter_id = ev.dataTransfer.getData("text");
+  const imageElement = document.getElementById(letter_id);
 
   //to prevent moving a letter 2 a box w a letter alreadyy
   const dropTarget = ev.target;
@@ -44,10 +44,10 @@ function dropHandler(ev, boxNumber) {
   ev.target.appendChild(imageElement);
 
 
-
-  const fromBox = toFrom[letter] || null;
+  const letter = letter_id.split('_')[0];
+  const fromBox = toFrom[letter_id] || null;
   const toBox = boxNumber;
-  toFrom[letter] = toBox;
+  toFrom[letter_id] = toBox;
 
   fetch("/wordbites_helper", {
     method: "POST",
@@ -72,13 +72,14 @@ function dropHandler(ev, boxNumber) {
     {% for row in range(9) %}
       <tr>
         {% for col in range(8) %}
-          {% set box_number = row * 5 + col + 1 %}
+          {% set box_number = row * 8 + col + 1 %}
           <td>
             <div class="box" id="box{{ box_number }}"
                  ondrop="dropHandler(event, {{ box_number }})"
                  ondragover="dragoverHandler(event)">
                  {% if box_number <= letters|length %}
                    {% set letter = letters[box_number - 1] %}
+                   {% set letter_id = letter ~ "_" ~ (box_number - 1) %}
                    <h1 id="{{ letter }}" draggable="true"
                         ondragstart="dragstartHandler(event)" >{{ letter }}</h1>
                   {% endif %}
