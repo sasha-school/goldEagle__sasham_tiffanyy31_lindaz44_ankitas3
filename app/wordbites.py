@@ -9,18 +9,20 @@ app = Flask(__name__)
 def main():
     global wordbites_letter_positions
     wordbites_letter_positions = {} #reset letter positions (for every game)
-    #future: select 5 random letters from all
     all_letters = []
     with open('letters_w.csv', 'r') as file:
         reader = csv.reader(file)
         for row in reader:
             all_letters.extend(row)
     all_letters = [l for l in all_letters if l]
+
     letters = []
     i=0
-    while i<8:
-        letters += [random.choice(all_letters)]
-        i+=1
+    while i<10:
+        temp = random.choice(all_letters)
+        if temp not in letters:
+            letters += [temp]
+            i+=1
 
     for i, letter in enumerate(letters):
         if letter not in wordbites_letter_positions:
@@ -36,10 +38,11 @@ def wordbites_helper():
     from_box = data.get("from_box")
     to_box = data.get("to_box")
 
-    print(f"Letter '{letter}' moved from box {from_box} to box {to_box}")
     wordbites_letter_positions[letter] = to_box
     print(wordbites_letter_positions)
     #future: check for words
+
+
     return jsonify({"status": "received"})
 
 if __name__ == "__main__":

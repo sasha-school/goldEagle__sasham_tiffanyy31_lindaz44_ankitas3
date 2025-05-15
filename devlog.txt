@@ -53,3 +53,7 @@ sashaM -- 2025-5-14 IN CLASS
 lindaZ -- 2025-05-14
 - fixed issue with letters not showing up on wordhunt
 - working on checking words
+
+sashaM -- 2025-5-15 IN CLASS
+- Wordbites
+- Letters generated and moving, just need to check for words
