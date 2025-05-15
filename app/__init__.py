@@ -21,7 +21,6 @@ try:
 except:
     from db_functions import *
 
-
 # adding config.py to search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -107,4 +106,4 @@ def anagrams():
     return render_template("anagrams.html", letters = letters)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=8000, debug=True)
