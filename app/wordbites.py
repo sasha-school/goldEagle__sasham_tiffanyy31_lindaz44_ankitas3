@@ -1,4 +1,6 @@
 from flask import *
+import random
+import csv
 
 wordbites_letter_positions = {}
 app = Flask(__name__)
@@ -8,7 +10,17 @@ def main():
     global wordbites_letter_positions
     wordbites_letter_positions = {} #reset letter positions (for every game)
     #future: select 5 random letters from all
-    letters = ['A', 'B', 'C']
+    all_letters = []
+    with open('letters_w.csv', 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            all_letters.extend(row)
+    all_letters = [l for l in all_letters if l]
+    letters = []
+    i=0
+    while i<8:
+        letters += [random.choice(all_letters)]
+        i+=1
 
     for i, letter in enumerate(letters):
         if letter not in wordbites_letter_positions:
