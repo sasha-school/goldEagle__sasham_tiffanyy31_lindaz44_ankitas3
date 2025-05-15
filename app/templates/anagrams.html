@@ -115,10 +115,10 @@ function dropHandler(ev) {
 
 
 function checkLetters() {
-  const numLetters = 0;
-  for (int i = 1; i <= 5; i++) {
-    const button = document.getElementByTagName("button");
-    if document.getElementById("div" + i.toString()).contains(button) {
+  let numLetters = 0;
+  const buttons = document.getElementsByTagName("button");
+  for (let i = 1; i <= buttons.length; i++) {
+    if (document.getElementById("div" + i.toString()).contains(button)) {
         numLetters++;
       }
 }
