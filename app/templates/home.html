@@ -14,7 +14,7 @@ Nav bar (see above)done
 Profile info if logged in redirect done
 Highest score for each game
 Number of games played for each mode
-Recent challenge history/log
+Recent challenge history/log 
 Friends list if logged in
 Sort by most recent?
 Friends requests if logged in (Accept/Decline)
@@ -24,15 +24,9 @@ If not logged in, brief blurb about how guest mode is only single player and wil
     <header>
         <h1>
             {% if session.get('username') %}
-                <li class="text-sm font-mono text-gray-700">Hi, {{ session['username'] }}!</li>
-                <li>
-                    <a href="{{ url_for('profile') }}"
-                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
-                    Profile
-                    </a>
-                </li>
+                <li class="text-sm font-mono text-white-700">Hi, {{ session['username'] }}!</li>
 
-                <br> <br>
+                <br>
 <div class="button-container">
         <form action="/profile">
             <button type="submit" class="button1">Profile</button>
@@ -41,7 +35,7 @@ If not logged in, brief blurb about how guest mode is only single player and wil
             <button type="submit" class="button">Log Out</button>
         </form>
         </div>
-        <br> <br>
+        <br>
 <hr>
                 {% else %} You are currently in guest mode. Please log in or register!</h1>  
                 
