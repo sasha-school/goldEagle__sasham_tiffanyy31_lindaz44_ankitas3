@@ -25,8 +25,8 @@ After the game, if not already friended, popup asking if you’d like to friend 
       </style>
   </head>
   <body>
-    <p hidden id="letterString">{{letterString}}</p>
-    <input id="display" readonly class="block mx-auto my-4 p-2 border border-gray-500 rounded w-full max-w-screen-sm">
+    <div id="letterString">{{letterString}}</div>
+    <input id="display" readonly class="border-4 block mx-auto my-4 p-2 border border-gray-500 rounded w-full max-w-screen-sm">
     <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-blue-200 p-5 rounded-lg">
       <div class="grid grid-cols-4 grid-rows-4 gap-5 h-full">
         <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterA}}</button>
@@ -51,22 +51,49 @@ After the game, if not already friended, popup asking if you’d like to friend 
       const display = document.getElementById("display");
       const buttons = document.querySelectorAll(".letter-button");
       const board = document.getElementById("board");
+      const stringLetter = document.getElementById("letterString").textContent;
       let selectedLetters = new Set();
       let currentWord = "";
+      let wordBank = []
 
       async function getWords() {
-        const url = "https://api.whsolver.ajayganesh.com/solve?board=" + stringLetter
-        try {
-          const response = await fetch(url)
-          if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-          }
-          const json = await response.json();
-          console.log(json);
+        if (wordBank.length === 0) {
+          const url = "https://api.whsolver.ajayganesh.com/solve?board=" + stringLetter
+          try {
+            const response = await fetch(url)
+            if (!response.ok) {
+              throw new Error(`Response status: ${response.status}`);
+            }
+            const json = await response.json();
+            wordBank = json.map(item => item.word);
+            console.log(sdfsdfsdfsdfsf)
+            console.log(wordBank);
 
-        } catch (error) {
-          console.error(error.message);
+            } catch (error) {
+              console.error(error.message);
+            }
         }
+      }
+
+      async function checkWords() {
+          getWords();
+          displayWord = display.value;
+
+          if (wordBank.includes(displayWord)) {
+            console.log(`✅ "${displayWord}" is a valid word!`);
+            display.classList.add('border-green-500');
+
+            setTimeout(() => {
+              display.classList.remove('border-green-500')
+            })
+          } else {
+            console.log(`❌ "${displayWord}" is NOT in the word bank.`);
+            display.classList.add('border-red-500');
+
+            setTimeout(() => {
+              display.classList.remove('border-red-500');
+            })
+          }
       }
 
 
@@ -95,9 +122,14 @@ After the game, if not already friended, popup asking if you’d like to friend 
         button.addEventListener("mouseover", (e) => {
           if (e.buttons === 1) {
             appendLetter(button);
-          }
+          }// Show an error or shake the box, etc.
         });
-        button.addEventListener("mouseup", removeWord);
+        button.addEventListener("mouseup", (e) => {
+          if (display.value.length > 2){
+            checkWords();
+          }
+          removeWord();
+        });
       })
 
       board.addEventListener("mouseleave", removeWord);
