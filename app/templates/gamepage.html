@@ -3,46 +3,57 @@
 
 {% block content %}
 
-    <!-- Highlight Cards Section -->
-    <div class="mt-12">
-      <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Games: </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Highlight Cards Section -->
+<div class="mt-12">
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Games: </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-          <div class="group p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-hidden">
-              <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">Anagrams</h3>  
-              <img src="https://media.discordapp.net/attachments/1366798180833824808/1371863002701103197/Screenshot_20250513_105212_Discord.jpg?ex=6824ae7b&is=68235cfb&hm=51ca9c1913382e82f79ec37ebc37311a61252aceab3c83fa90b255199ea38904&=&format=webp" alt="Word Hunt" width="250" height="300"> 
-              <p class="text-gray-600 dark:text-gray-300 mt-2">Some description here</p>
-              <div class="absolute inset-0 bg-blue-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300"></div>
-              <div class="absolute bottom-4 left-4 hidden group-hover:flex space-x-2">
-                  <a href="{{ url_for('anagrams') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Play now!</a>
+        <div class="group p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-hidden">
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">Anagrams</h3>
+            <img src="https://media.discordapp.net/attachments/1366798180833824808/1371863002701103197/Screenshot_20250513_105212_Discord.jpg?ex=6827fa3b&is=6826a8bb&hm=adcd6e044797c9e69d153fbabb9ba06669f8e567a76ef5c303d17b0e96bff21c&=&format=webp"
+                alt="" width="250" height="250">
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Some description here</p>
+            <div class="absolute inset-0 bg-blue-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300">
+            </div>
+            <div class="absolute bottom-4 left-4 hidden group-hover:flex space-x-2">
+                <a href="{{ url_for('anagrams') }}"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Play now!</a>
 
-              </div>
-          </div>
-
-
-          <div class="group p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-hidden">
-              <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">wordbites</h3>
-
-                            <img src=" https://media.discordapp.net/attachments/1366798180833824808/1371863002135003288/Screenshot_20250513_105100_Discord.jpg?ex=6824ae7b&is=68235cfb&hm=53f0b0a8de2a12c2583073ae85667cdb9b7a6692894a370052b3a1219747d111&=&format=webp&width=652&height=738" alt="Word Hunt" width="250" height="300"> 
-              <p class="text-gray-600 dark:text-gray-300 mt-2">wordbites</p>
-              <div class="absolute inset-0 bg-purple-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300"></div>
-              <div class="absolute bottom-4 left-4 hidden group-hover:flex space-x-2">
-                  <a href="{{ url_for('wordhunt') }}" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">wordbites</a>
-              </div>
-          </div>
+            </div>
+        </div>
 
 
-          <div class="group p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-hidden">
-              <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">wordhunt</h3>
-              <p class="text-gray-600 dark:text-gray-300 mt-2">wordhunt</p>
-              <div class="absolute inset-0 bg-green-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300"></div>
-              <div class="absolute bottom-4 left-4 hidden group-hover:flex space-x-2">
-                <a href="{{ url_for('wordbites') }}"s class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">wordhunt</a>
-              </div>
-          </div>
-      </div>
-  </div>
+        <div class="group p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-hidden">
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">wordbites</h3>
+
+            <img src="https://media.discordapp.net/attachments/1366798180833824808/1371863002135003288/Screenshot_20250513_105100_Discord.jpg?ex=6827fa3b&is=6826a8bb&hm=d0f1e25f763d842565f28975a25d5387a63f688be844096079cd7cdcb0570502"
+                alt="" width="250" height="250">
+            <p class="text-gray-600 dark:text-gray-300 mt-2">wordbites</p>
+            <div class="absolute inset-0 bg-purple-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300">
+            </div>
+            <div class="absolute bottom-4 left-4 hidden group-hover:flex space-x-2">
+                <a href="{{ url_for('wordbites') }}"
+                    class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">wordbites</a>
+            </div>
+        </div>
+
+
+        <div class="group p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-hidden">
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">wordhunt</h3>
+            <img src="https://img.itch.zone/aW1nLzE0NjM0Mzc1LnBuZw==/original/0yWb0s.png" alt="" width="250"
+                height="250">
+            <p class="text-gray-600 dark:text-gray-300 mt-2">wordhunt</p>
+            <div class="absolute inset-0 bg-green-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300">
+            </div>
+            <div class="absolute bottom-4 left-4 hidden group-hover:flex space-x-2">
+                <a href="{{ url_for('wordhunt') }}" s
+                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">wordhunt</a>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </body>
+
 </html>
 {% endblock %}
