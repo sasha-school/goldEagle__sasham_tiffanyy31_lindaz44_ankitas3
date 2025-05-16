@@ -20,41 +20,44 @@ Sort by most recent?
 Friends requests if logged in (Accept/Decline)
 If not logged in, brief blurb about how guest mode is only single player and will not be saved
 -->
+
 <body>
     <header>
         <h1>
             {% if session.get('username') %}
-                <li class="text-sm font-mono text-white-700">Hi, {{ session['username'] }}!</li>
+            <h2 class="text-sm font-mono text-white-700">Hi, {{ session['username'] }}!</li>
+                <br>
+                <br>
+                <div class="button-container">
+                    <form action="/profile">
+                        <button type="submit" class="button1">Profile</button>
+                    </form>
+                    <form action="/logout">
+                        <button type="submit" class="button">Log Out</button>
+                    </form>
+                </div>
+                <br>
+                <hr>
+                {% else %} You are currently in guest mode. Please log in or register!
+        </h1>
 
-                <br>
-<div class="button-container">
-        <form action="/profile">
-            <button type="submit" class="button1">Profile</button>
-        </form>
-        <form action="/logout">
-            <button type="submit" class="button">Log Out</button>
-        </form>
-        </div>
         <br>
-<hr>
-                {% else %} You are currently in guest mode. Please log in or register!</h1>  
-                
-                <br>
-                
-                Please note that playing any games in guest mode does not save your results. 
-                
-                <br> <br> <div class="button-container">
-        <form action="/login">
-            <button type="submit" class="button1">Login</button>
-        </form>
-        <form action="/register">
-            <button type="submit" class="button">Register</button>
-        </form>
+
+        Please note that playing any games in guest mode does not save your results.
+
+        <br> <br>
+        <div class="button-container">
+            <form action="/login">
+                <button type="submit" class="button1">Login</button>
+            </form>
+            <form action="/register">
+                <button type="submit" class="button">Register</button>
+            </form>
         </div>
-        
+
         <br> {% endif %}
     </header>
-<hr>
+    <hr>
 
     <br></br>
 
@@ -62,17 +65,17 @@ If not logged in, brief blurb about how guest mode is only single player and wil
 
 
 
-<div class="button-container">
-    <form action="/anagrams">
-        <button>Anagrams</button>
-    </form>
-    <form action="/wordhunt">
-        <button>Word Hunt</button>
-    </form>
-    <form action="/wordBites">
-        <button>Word Bites</button>
-    </form>
-</div>
+    <div class="button-container">
+        <form action="/anagrams">
+            <button>Anagrams</button>
+        </form>
+        <form action="/wordhunt">
+            <button>Word Hunt</button>
+        </form>
+        <form action="/wordBites">
+            <button>Word Bites</button>
+        </form>
+    </div>
 
 </body>
 

@@ -1,40 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}goldEagle{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
     <!-- Additional Styles -->
     {% block styles %}{% endblock %}
 </head>
+
 <body class="min-h-screen flex flex-col select-none">
 
     <!-- Navigation Bar -->
     <nav class="shadow-md">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <img src="https://www.mining.com/wp-content/uploads/2016/06/someone-stole-this-5-million-diamond-encrusted-gold-eagle-statue.jpg"
+                alt="" width="150" height="150">
             <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-800">goldEagle</a>
             <ul class="flex space-x-6 items-center">
                 {% if session.get('username') %}
                 <li class="text-sm font-mono text-gray-700">Hi, {{ session['username'] }}!</li>
                 <li>
                     <a href="{{ url_for('profile') }}"
-                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
-                    Profile
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                        Profile
+                    </a>
+                </li><li>
+                    <a href="{{ url_for('logout') }}"
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                        Log out
                     </a>
                 </li>
                 {% else %}
                 <li>
                     <a href="{{ url_for('login') }}"
-                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-                    Login
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                        Login
                     </a>
                 </li>
                 <li>
                     <a href="{{ url_for('register') }}"
-                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-                    Sign Up
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                        Sign Up
                     </a>
                 </li>
                 {% endif %}
@@ -50,7 +59,7 @@
     <!-- Footer -->
     <footer class="shadow-md mt-8">
         <div class="container mx-auto px-4 py-6 text-center text-gray-600">
-            &copy; {{ current_year }} goldEagle 
+            &copy; {{ current_year }} goldEagle
         </div>
     </footer>
 
@@ -58,6 +67,7 @@
     {% block scripts %}{% endblock %}
 
 </body>
+
 </html>
 
 
