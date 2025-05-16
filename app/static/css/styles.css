@@ -1,7 +1,14 @@
 :root {
-    --coyote: #7E6A4C; --timberwolf: #D9D3CA; --khaki: #C8B69A; --lion: #B08952;
-    --coyote-2: #7E5927; --sepia: #653F0C; --caf-noir: #4B3A22; --black: #000200;
-    --pakistan-green: #17310B; --dark-moss-green: #426011;
+    --coyote: #7E6A4C;
+    --timberwolf: #D9D3CA;
+    --khaki: #C8B69A;
+    --lion: #B08952;
+    --coyote-2: #7E5927;
+    --sepia: #653F0C;
+    --caf-noir: #4B3A22;
+    --black: #000200;
+    --pakistan-green: #17310B;
+    --dark-moss-green: #426011;
 }
 
 /* General Styling */
@@ -23,7 +30,9 @@ nav {
     border-bottom: 2px solid var(--sepia);
 }
 
-nav a, .btn, button {
+nav a,
+.btn,
+button {
     font-family: inherit;
     color: var(--timberwolf);
     padding: 10px 15px;
@@ -33,10 +42,16 @@ nav a, .btn, button {
     transition: all 0.3s ease;
 }
 
-nav a { background: var(--caf-noir); }
-nav a:hover { text-shadow: 0 0 5px var(--khaki), 0 0 10px var(--lion); }
+nav a {
+    background: var(--caf-noir);
+}
 
-button, .btn {
+nav a:hover {
+    text-shadow: 0 0 5px var(--khaki), 0 0 10px var(--lion);
+}
+
+button,
+.btn {
     background: linear-gradient(135deg, #6a88e0, #75c9b7);
     border: none;
     text-transform: uppercase;
@@ -44,17 +59,20 @@ button, .btn {
     box-shadow: 0 0 10px #6a88e0, 0 0 20px #75c9b7;
 }
 
-button:hover, .btn:hover {
+button:hover,
+.btn:hover {
     background: linear-gradient(135deg, #75c9b7, #6a88e0);
     box-shadow: 0 0 15px #75c9b7, 0 0 30px #6a88e0;
 }
 
 /* Game Cards */
-.game-card, .card {
+.game-card,
+.card {
     display: inline-block;
     padding: 20px;
     margin: 10px;
     border-radius: 10px;
+    justify-content: center;
     background: rgba(42, 47, 62, 0.9);
     box-shadow: 0 0 10px rgba(163, 228, 219, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -72,12 +90,24 @@ button:hover, .btn:hover {
     gap: 10px;
 }
 
-img { border-radius: 25%; }
+img {
+    border-radius: 12.5%;
+    justify-content: center;
+}
 
 /* Animations */
 @keyframes glow {
-    0%, 100% { box-shadow: 0 0 5px #75c9b7, 0 0 10px #6a88e0; }
-    50% { box-shadow: 0 0 15px #6a88e0, 0 0 30px #75c9b7; }
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px #75c9b7, 0 0 10px #6a88e0;
+    }
+
+    50% {
+        box-shadow: 0 0 15px #6a88e0, 0 0 30px #75c9b7;
+    }
 }
 
-.glow { animation: glow 1.5s infinite; }
+.glow {
+    animation: glow 1.5s infinite;
+}

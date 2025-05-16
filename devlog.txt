@@ -32,6 +32,9 @@ sashaM -- 2025-5-9 IN CLASS
 sashaM -- 2025-5-12 IN CLASS
 - Working on droplet hosting
 
+tiffanyY -- 2025 - 5- 12 IN CLASS
+_ implemented login and register and site map
+
 lindaZ -- 2025-5-12 IN CLASS
 - Working on incorporating randomly generated board in wordhunt
 - Able to connect letters by dragging on board
@@ -39,12 +42,16 @@ lindaZ -- 2025-5-12 IN CLASS
 sashaM -- 2025-5-12 13:00
 - Finished droplet hosting
 
+
 ankitaS -- 2025-05-12
 - added functionality to not drag and drop letters into same box
 
 sashaM -- 2025-5-13 IN CLASS
 - Droplet reload -- fixed all issues, should be running smoothly on there
 - Wordbites
+
+tiffanyY -- 2025-5-13 IN CLASS
+- Did cards for the game pages
 
 sashaM -- 2025-5-14 IN CLASS
 - Wordbites
@@ -57,3 +64,7 @@ lindaZ -- 2025-05-14
 sashaM -- 2025-5-15 IN CLASS
 - Wordbites
 - Letters generated and moving, just need to check for words
+
+tiffanyY -- 2025-5-15 IN CLASS
+- fixed CSS to match flag (Brown looks bad tho)
+- fixed logout
