@@ -38,12 +38,13 @@ def main():
     for i, letter in enumerate(letters):
         if letter not in wordbites_letter_positions:
             wordbites_letter_positions[letter] = i + 1
-    print(wordbites_letter_positions)
+    #print(wordbites_letter_positions)
 
-    return render_template("wordbites.html", letters = letters)
+    return render_template("wordbites.html", letters = letters, found = wordbites_words)
 
 @app.route("/wordbites_helper", methods=["POST"]) #happens in the background and ensures that it doesnt need to refresh
 def wordbites_helper():
+    global wordbites_words
     data = request.get_json()
     letter = data.get("letter")
     from_box = data.get("from_box")
@@ -52,15 +53,14 @@ def wordbites_helper():
     wordbites_letter_positions[letter] = to_box
     #print(wordbites_letter_positions)
 
-#future: check for words
     wordbites_board = [['' for _ in range(8)] for _ in range(9)]
     for letter, pos in wordbites_letter_positions.items():
-        row, col = (pos-1) // 8, (pos-1) % 9
+        row, col = (pos-1) // 8, (pos-1) % 8
         wordbites_board[row][col] = letter
     for row in wordbites_board:
         i = 0
         while i < len(row):
-            if line[i] != '':
+            if row[i] != '':
                 start = i
                 while i < len(row) and row[i] != '':
                     i += 1
@@ -68,15 +68,32 @@ def wordbites_helper():
                 if (start == 0 or row[start - 1] == '') and (end == len(row) or row[end] == ''):
                     if end - start >= 3:
                         word = ''.join(row[start:end])
-                        if word in all_words: #WORDS
-                            wordbites_words += [word]
+                        if word.lower() in all_words: 
+                            if word not in wordbites_words:
+                                wordbites_words += [word]
             else:
                 i += 1
-    #do cols too
+    for col in range(8):
+        col_mod = [wordbites_board[row][col] for row in range(9)]
+        i = 0
+        while i < len(col_mod):
+            if col_mod[i] != '':
+                start = i
+                while i < len(col_mod) and col_mod[i] != '':
+                    i += 1
+                end = i
+                if (start == 0 or col_mod[start - 1] == '') and (end == len(col_mod) or col_mod[end] == ''):
+                    if end - start >= 3:
+                        word = ''.join(col_mod[start:end])
+                        if word.lower() in all_words: 
+                            if word not in wordbites_words:
+                                wordbites_words += [word]
+            else:
+                i += 1
     print(wordbites_words)
 
 
-    return jsonify({"status": "received"})
+    return jsonify({"status": "received", "found_words": wordbites_words})
 
 if __name__ == "__main__":
     app.run(debug=True)
