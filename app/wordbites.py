@@ -3,8 +3,9 @@ import random
 import csv
 
 wordbites_letter_positions = {}
-wordbites_words = []
+wordbites_words = {}
 wordbites_board = []
+wordbites_score = 0
 app = Flask(__name__)
 
 all_words = []
@@ -17,9 +18,11 @@ def main():
     global wordbites_letter_positions
     global wordbites_words
     global wordbites_board
+    global wordbites_score
     wordbites_letter_positions = {} #reset letter positions (for every game)
-    wordbites_words = [] #reset words (for every game)
+    wordbites_words = {} #reset words (for every game)
     wordbites_board = [['' for _ in range(8)] for _ in range(9)] #reset board (for every game)
+    wordbites_score = 0 #reset score (for every game)
     all_letters = []
     with open('letters_w.csv', 'r') as file:
         reader = csv.reader(file)
@@ -44,7 +47,11 @@ def main():
 
 @app.route("/wordbites_helper", methods=["POST"]) #happens in the background and ensures that it doesnt need to refresh
 def wordbites_helper():
+    global wordbites_letter_positions
     global wordbites_words
+    global wordbites_board
+    global wordbites_score
+
     data = request.get_json()
     letter = data.get("letter")
     from_box = data.get("from_box")
@@ -69,8 +76,8 @@ def wordbites_helper():
                     if end - start >= 3:
                         word = ''.join(row[start:end])
                         if word.lower() in all_words: 
-                            if word not in wordbites_words:
-                                wordbites_words += [word]
+                            if word not in wordbites_words.keys():
+                                wordbites_words[word] = wordbites_score_calc(len(word))
             else:
                 i += 1
     for col in range(8):
@@ -86,14 +93,20 @@ def wordbites_helper():
                     if end - start >= 3:
                         word = ''.join(col_mod[start:end])
                         if word.lower() in all_words: 
-                            if word not in wordbites_words:
-                                wordbites_words += [word]
+                            if word not in wordbites_words.keys():
+                                wordbites_words[word] = wordbites_score_calc(len(word))
             else:
                 i += 1
     print(wordbites_words)
 
 
     return jsonify({"status": "received", "found_words": wordbites_words})
+
+def wordbites_score_calc(len):
+    key = {3: 100, 4: 400, 5: 800, 6:1400, 7:1800, 8:2200, 9:2600} #from actual game
+    if len in key:
+        return key[len]
+    return 100
 
 if __name__ == "__main__":
     app.run(debug=True)

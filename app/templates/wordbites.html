@@ -65,11 +65,11 @@ function dropHandler(ev, boxNumber) {
     console.log("Server response:", data);
     const sidebar = document.getElementById("sidebar");
     sidebar.innerHTML = "";
-    for (const word of data.found_words) {
-    const p = document.createElement("p");
-    p.textContent = word;
-    sidebar.appendChild(p);
-  }
+    for (const [word, points] of Object.entries(data.found_words)) {
+  const p = document.createElement("p");
+  p.textContent = `${word} - ${points}`;
+  sidebar.appendChild(p);
+}
   });
 }
 </script>
@@ -101,8 +101,8 @@ function dropHandler(ev, boxNumber) {
     </table></div>
 
     <div id="sidebar" style="background-color: steelblue; padding: 10px; color: white; margin-left: 30px;">
-      {% for word in found %}
-        <p>{{ word }}</p>
+      {% for word, pts in found.items() %}
+        <p>{{ word }} - {{pts}}</p>
       {% endfor %}
     </div>
   </div>
