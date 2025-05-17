@@ -36,7 +36,7 @@ function dropHandler(ev, boxNumber) {
   //to prevent moving a letter 2 a box w a letter alreadyy
   const dropTarget = ev.target;
   const box = dropTarget.classList.contains("box") ? dropTarget : dropTarget.closest(".box");
-  if (box.querySelector("img")) {
+  if (box.querySelector("h1")) {
     console.log(`Box ${boxNumber} already has an letter, cannot overlap`);
     return;
   }
@@ -65,12 +65,19 @@ function dropHandler(ev, boxNumber) {
     console.log("Server response:", data);
     const sidebar = document.getElementById("sidebar");
     sidebar.innerHTML = "";
-    for (const [word, points] of Object.entries(data.found_words)) {
-  const p = document.createElement("p");
-  p.textContent = `${word} - ${points}`;
-  sidebar.appendChild(p);
-}
-  });
+
+    const scoreElem = document.createElement("p");
+    scoreElem.textContent = `Total Score: ${data.score}`;
+    scoreElem.style.fontSize = "18px";
+    sidebar.appendChild(scoreElem);
+
+    const sorted = Object.entries(data.found_words).sort((a, b) => b[1] - a[1]);
+    for (const [word, points] of sorted) {
+      const p = document.createElement("p");
+      p.textContent = `${word} - ${points}`;
+      sidebar.appendChild(p);
+    }
+      });
 }
 </script>
 </head>
@@ -101,6 +108,7 @@ function dropHandler(ev, boxNumber) {
     </table></div>
 
     <div id="sidebar" style="background-color: steelblue; padding: 10px; color: white; margin-left: 30px;">
+      <p id="total-score" style="font-weight: bold; font-size: 18px;">Score: {{ score }}</p>
       {% for word, pts in found.items() %}
         <p>{{ word }} - {{pts}}</p>
       {% endfor %}

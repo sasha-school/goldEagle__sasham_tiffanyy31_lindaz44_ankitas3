@@ -41,9 +41,8 @@ def main():
     for i, letter in enumerate(letters):
         if letter not in wordbites_letter_positions:
             wordbites_letter_positions[letter] = i + 1
-    #print(wordbites_letter_positions)
 
-    return render_template("wordbites.html", letters = letters, found = wordbites_words)
+    return render_template("wordbites.html", letters = letters, found = wordbites_words, score = wordbites_score)
 
 @app.route("/wordbites_helper", methods=["POST"]) #happens in the background and ensures that it doesnt need to refresh
 def wordbites_helper():
@@ -58,7 +57,6 @@ def wordbites_helper():
     to_box = data.get("to_box")
 
     wordbites_letter_positions[letter] = to_box
-    #print(wordbites_letter_positions)
 
     wordbites_board = [['' for _ in range(8)] for _ in range(9)]
     for letter, pos in wordbites_letter_positions.items():
@@ -77,6 +75,7 @@ def wordbites_helper():
                         word = ''.join(row[start:end])
                         if word.lower() in all_words: 
                             if word not in wordbites_words.keys():
+                                wordbites_score += wordbites_score_calc(len(word))
                                 wordbites_words[word] = wordbites_score_calc(len(word))
             else:
                 i += 1
@@ -94,13 +93,12 @@ def wordbites_helper():
                         word = ''.join(col_mod[start:end])
                         if word.lower() in all_words: 
                             if word not in wordbites_words.keys():
+                                wordbites_score += wordbites_score_calc(len(word))
                                 wordbites_words[word] = wordbites_score_calc(len(word))
             else:
                 i += 1
-    print(wordbites_words)
 
-
-    return jsonify({"status": "received", "found_words": wordbites_words})
+    return jsonify({"status": "received", "found_words": wordbites_words, "score": wordbites_score})
 
 def wordbites_score_calc(len):
     key = {3: 100, 4: 400, 5: 800, 6:1400, 7:1800, 8:2200, 9:2600} #from actual game
