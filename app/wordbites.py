@@ -32,7 +32,7 @@ def main():
 
     letters = []
     i=0
-    while i<10:
+    while i<16:
         temp = random.choice(all_letters)
         if temp not in letters:
             letters += [temp]
