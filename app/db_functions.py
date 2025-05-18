@@ -117,8 +117,8 @@ def checkPassword(username, password):
     return True
 
 
-with open('../letters7.txt', 'r') as file:
-    lines = [line.strip() for line in file]
+# with open('../letters7.txt', 'r') as file:
+#     lines = [line.strip() for line in file]
 
-with open("wordList.json", "w") as f:
-    json.dump(lines, f)
+# with open("wordList.json", "w") as f:
+#     json.dump(lines, f)
