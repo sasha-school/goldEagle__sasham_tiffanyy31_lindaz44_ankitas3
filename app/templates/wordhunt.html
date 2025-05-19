@@ -1,148 +1,195 @@
-<!--wordhunt.html
-Leaderboard
-Has username and number of points in ascending order
-Game
-4x4 grid with letters in each grid
-Users will be able to use their mouse when right-clicked to select a combination of letters on the grid adjacent to one another
-Each generated grid must have at least a certain amount of possible combinations
-Given that the word is present in our database, user will gain specific number of points depending on length of word
-At the end of game, sends stats to player they are playing w/ and play button for them
-After the game, if not already friended, popup asking if you’d like to friend the user
--->
 {% extends "base.html" %}
 
-{% block title %}Friends{% endblock %}
+{% block title %}WordBites{% endblock %}
 
 {% block content %}
-
-
 <!DOCTYPE html>
-<html lang="en" dir="lir">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <script src="https://cdn.tailwindcss.com"></script>
-      <style type="text/tailwindcss">
-              @layer utilities {
-                  .content-auto {
-                    content-visibility: auto;
-                  }
-              }
-      </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --coyote: #7E6A4C;
+        --timberwolf: #D9D3CA;
+        --khaki: #C8B69A;
+        --lion: #B08952;
+        --coyote-2: #7E5927;
+        --sepia: #653F0C;
+        --caf-noir: #4B3A22;
+        --black: #000200;
+        --pakistan-green: #17310B;
+        --dark-moss-green: #426011;
+      }
+      .board-bg {
+        background: var(--timberwolf);
+      }
+      .letter-button {
+        background: var(--coyote);
+        color: var(--timberwolf);
+        border: 2px solid var(--lion);
+        transition: background 0.2s, color 0.2s, border 0.2s;
+      }
+      .letter-button.selected {
+        background: var(--lion);
+        color: var(--black);
+        border-color: var(--sepia);
+      }
+      .letter-button:hover {
+        background: var(--khaki);
+        color: var(--black);
+        border-color: var(--coyote-2);
+      }
+      .letter-button.valid {
+        background: var(--dark-moss-green);
+        color: var(--timberwolf);
+        border-color: var(--pakistan-green);
+      }
+      .letter-button.invalid {
+        background: var(--caf-noir);
+        color: var(--timberwolf);
+        border-color: var(--sepia);
+      }
+    </style>
   </head>
   <body>
-    <div id="letterString">{{letterString}}</div>
+    <div id="letterString" class="hidden">{{letterString}}</div>
     <input id="display" readonly class="border-4 block mx-auto my-4 p-2 border border-gray-500 rounded w-full max-w-screen-sm">
-    <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-blue-200 p-5 rounded-lg">
+    <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 board-bg p-5 rounded-lg">
       <div class="grid grid-cols-4 grid-rows-4 gap-5 h-full">
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterA}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterB}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterC}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterD}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterE}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterF}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterG}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterH}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterI}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterJ}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterK}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterL}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterM}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterN}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterO}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterP}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterA}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterB}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterC}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterD}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterE}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterF}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterG}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterH}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterI}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterJ}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterK}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterL}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterM}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterN}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterO}}</button>
+        <button type="button" class="letter-button text-8xl pb-4">{{LetterP}}</button>
       </div>
     </div>
     <script>
       const display = document.getElementById("display");
-      const buttons = document.querySelectorAll(".letter-button");
+      const buttons = Array.from(document.querySelectorAll(".letter-button"));
       const board = document.getElementById("board");
-      const stringLetter = document.getElementById("letterString").textContent;
-      let selectedLetters = new Set();
-      let currentWord = "";
-      let wordBank = []
+      const stringLetter = document.getElementById("letterString").textContent.trim();
+      let wordBank = [];
+      let path = [];
+      let isMouseDown = false;
+
+      // Helper to get button index in 4x4 grid
+      function getButtonIndex(btn) {
+        return buttons.indexOf(btn);
+      }
+      function getCoords(idx) {
+        return [Math.floor(idx / 4), idx % 4];
+      }
+      function areAdjacent(idx1, idx2) {
+        const [r1, c1] = getCoords(idx1);
+        const [r2, c2] = getCoords(idx2);
+        return Math.abs(r1 - r2) <= 1 && Math.abs(c1 - c2) <= 1 && !(r1 === r2 && c1 === c2);
+      }
 
       async function getWords() {
         if (wordBank.length === 0) {
-          const url = "https://api.whsolver.ajayganesh.com/solve?board=" + stringLetter
+          const url = "https://api.whsolver.ajayganesh.com/solve?board=" + stringLetter;
           try {
-            const response = await fetch(url)
-            if (!response.ok) {
-              throw new Error(`Response status: ${response.status}`);
-            }
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Response status: ${response.status}`);
             const json = await response.json();
-            wordBank = json.map(item => item.word);
-            console.log(sdfsdfsdfsdfsf)
-            console.log(wordBank);
-
-            } catch (error) {
-              console.error(error.message);
-            }
+            wordBank = json.map(item => item.word.toUpperCase());
+          } catch (error) {
+            console.error(error.message);
+          }
         }
       }
 
-      async function checkWords() {
-          getWords();
-          displayWord = display.value;
-
-          if (wordBank.includes(displayWord)) {
-            console.log(`✅ "${displayWord}" is a valid word!`);
-            display.classList.add('border-green-500');
-
-            setTimeout(() => {
-              display.classList.remove('border-green-500')
-            })
-          } else {
-            console.log(`❌ "${displayWord}" is NOT in the word bank.`);
-            display.classList.add('border-red-500');
-
-            setTimeout(() => {
-              display.classList.remove('border-red-500');
-            })
-          }
+      function updateDisplay() {
+        display.value = path.map(idx => buttons[idx].textContent).join('');
       }
 
+      function clearSelection() {
+        path.forEach(idx => buttons[idx].classList.remove('selected', 'valid', 'invalid'));
+        path = [];
+        updateDisplay();
+      }
 
-      function appendLetter(button) {
-        if (!selectedLetters.has(button)) {
-          selectedLetters.add(button);
-          currentWord += button.textContent;
-          appendToDisplay(currentWord);
-          button.classList.remove('bg-blue-500');
-          button.classList.add('bg-green-500');
+      function handleSelect(idx) {
+        if (path.length === 0) {
+          path.push(idx);
+          buttons[idx].classList.add('selected');
+        } else {
+          const lastIdx = path[path.length - 1];
+          if (idx === path[path.length - 2]) {
+            // Undo last letter if going back
+            buttons[path.pop()].classList.remove('selected');
+          } else if (!path.includes(idx) && areAdjacent(lastIdx, idx)) {
+            path.push(idx);
+            buttons[idx].classList.add('selected');
+          }
         }
+        updateDisplay();
       }
 
-      function removeWord() {
-        currentWord = "";
-        selectedLetters.clear();
-        appendToDisplay(currentWord);
-        buttons.forEach(button => {
-          button.classList.remove('bg-green-500');
-          button.classList.add('bg-blue-500');
-        })
+      function checkWord() {
+        const word = display.value.toUpperCase();
+        if (word.length > 2 && wordBank.includes(word)) {
+          display.classList.add('border-green-500');
+          path.forEach(idx => {
+            buttons[idx].classList.add('valid');
+            buttons[idx].classList.remove('selected');
+          });
+        } else {
+          display.classList.add('border-red-500');
+          path.forEach(idx => {
+            buttons[idx].classList.add('invalid');
+            buttons[idx].classList.remove('selected');
+          });
+        }
+        setTimeout(() => {
+          display.classList.remove('border-green-500', 'border-red-500');
+          clearSelection();
+        }, 700);
       }
 
-      buttons.forEach(button => {
-        button.addEventListener("mousedown", () => appendLetter(button));
-        button.addEventListener("mouseover", (e) => {
-          if (e.buttons === 1) {
-            appendLetter(button);
-          }// Show an error or shake the box, etc.
-        });
-        button.addEventListener("mouseup", (e) => {
-          if (display.value.length > 2){
-            checkWords();
-          }
-          removeWord();
-        });
-      })
+      // Event handlers
+      board.addEventListener('mousedown', async (e) => {
+        await getWords();
+        if (e.target.classList.contains('letter-button')) {
+          isMouseDown = true;
+          clearSelection();
+          handleSelect(getButtonIndex(e.target));
+        }
+      });
 
-      board.addEventListener("mouseleave", removeWord);
+      board.addEventListener('mouseover', (e) => {
+        if (isMouseDown && e.target.classList.contains('letter-button')) {
+          handleSelect(getButtonIndex(e.target));
+        }
+      });
 
-      function appendToDisplay(input){
-        display.value = input;
-      }
+      board.addEventListener('mouseup', () => {
+        if (path.length > 2) checkWord();
+        else clearSelection();
+        isMouseDown = false;
+      });
+
+      board.addEventListener('mouseleave', () => {
+        clearSelection();
+        isMouseDown = false;
+      });
+
+      // Prevent text selection
+      board.addEventListener('dragstart', e => e.preventDefault());
+      board.addEventListener('selectstart', e => e.preventDefault());
     </script>
   </body>
 </html>

@@ -3,31 +3,151 @@
 {% block title %}Friends{% endblock %}
 
 {% block content %}
-
-
-
-<!DOCTYPE HTML>
-<html>
-<head>
 <style>
-#div1, #div2, #div6, #div3, #div4, #div5{
-  width: 60px;
-  height: 35px;
-  margin: 10px;
-  padding: 60px;
-  border: 1px solid black;
-  display:inline;
+:root {
+  --coyote: #7E6A4C;
+  --timberwolf: #D9D3CA;
+  --khaki: #C8B69A;
+  --lion: #B08952;
+  --coyote-2: #7E5927;
+  --sepia: #653F0C;
+  --caf-noir: #4B3A22;
+  --black: #000200;
+  --pakistan-green: #17310B;
+  --dark-moss-green: #426011;
 }
 
-#seperate {
-display:block;
-margin-top: 30px;}
-
-#img1, #img2, #img3, #img4, #img5, #img6{
-padding:30px;
-font-size:30px;
+.anagram-container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: var(--timberwolf);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(126, 106, 76, 0.13);
+  padding: 32px 36px 36px 36px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  border: 2px solid var(--coyote-2);
 }
 
+#tot {
+  background: var(--lion);
+  color: var(--black);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1.2em;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(176,137,82,0.13);
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+#enterWord {
+  background: var(--dark-moss-green);
+  color: var(--timberwolf);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1.1em;
+  margin-top: 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(66,96,17,0.13);
+}
+#enterWord:hover {
+  background: var(--pakistan-green);
+}
+
+#points {
+  min-height: 24px;
+  font-size: 1.1em;
+  color: var(--lion);
+  margin-bottom: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.seperate, .pls {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.box {
+  width: 70px;
+  height: 70px;
+  background: var(--khaki);
+  border: 2px solid var(--coyote-2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  box-shadow: 0 2px 8px rgba(126, 106, 76, 0.08);
+  min-width: 70px;
+  min-height: 70px;
+}
+
+.box:hover {
+  border: 2px solid var(--sepia);
+  background: var(--timberwolf);
+  box-shadow: 0 4px 16px rgba(101,63,12,0.13);
+}
+
+.letter {
+  background: var(--timberwolf);
+  border: 2px solid var(--lion);
+  color: var(--sepia);
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  font-size: 2em;
+  font-weight: bold;
+  cursor: grab;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  box-shadow: 0 2px 8px rgba(176,137,82,0.13);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+.letter:active {
+  background: var(--lion);
+  color: var(--timberwolf);
+  border: 2px solid var(--sepia);
+}
+
+.letter:focus {
+  outline: 2px solid var(--coyote-2);
+}
+
+.anagram-container {
+  background: linear-gradient(135deg, var(--timberwolf) 80%, var(--khaki) 100%);
+}
+
+@media (max-width: 600px) {
+  .anagram-container {
+    padding: 12px 4px;
+  }
+  .box {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+  }
+  .letter {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2em;
+  }
+}
 </style>
 <script>
 function dragstartHandler(ev) {
@@ -41,19 +161,19 @@ function dragoverHandler(ev) {
 function dropHandler(ev) {
   ev.preventDefault();
   const data = ev.dataTransfer.getData("text");
-  const imgTag = document.getElementById(data)
+  const imgTag = document.getElementById(data);
 
   const dropTarget = ev.target;
   const box = dropTarget.classList.contains("box") ? dropTarget : dropTarget.closest(".box");
+  if (!box) return;
   if (box.querySelector("button")) {
-    console.log(`Box ${boxNumber} already has an letter, cannot overlap`);
     return;
   }
-
-  ev.target.appendChild(imgTag);
+  box.appendChild(imgTag);
 }
 
 var totPoint = 0;
+var usedLetters = [];
 function checkLetters() {
   const boxes = document.querySelectorAll(".seperate .box");
   const boxesAdd = document.querySelectorAll(".pls .addBoxy");
@@ -68,131 +188,87 @@ function checkLetters() {
     }
   });
 
-    
   const messageElement = document.getElementById("points");
   const tot = document.getElementById("tot");
   const enter = document.getElementById("enterWord");
-    let pointsArr = [];
-    let pointsCateg = {
-  3: 100,
-  4: 400,
-  5: 1200,
-  6: 2000
-};
+  let pointsCateg = { 3: 100, 4: 400, 5: 1200, 6: 2000 };
 
   let addLetters = [];
-  let usedLetters = [];
 
-    if (numLetters >= 3) {
-        console.log("true");
-        fetch('https://ankita320.github.io/anagrams_wordList/wordList.json')
-          .then(response => response.json())
-          .then(data => {
-            if (data.includes(letters.toLowerCase())) {
-              if (usedLetters.includes(letters)) {
-                messageElement.innerHTML = `+${letters} ALREADY USED!`;
-              }
-              else if (!usedLetters.includes(letters)) {
-                usedLetters.push(letters);
-                let pointThing = pointsCateg[numLetters];
-                pointsArr.push(pointThing);
-                totPoint += pointThing;
-                messageElement.innerHTML = `+${pointThing} points!`;
-                tot.innerHTML = `Total Points: ${totPoint}`;
-                
-              }
-              else if (!data.includes(letters.toLowerCase())) {
-                messageElement.innerHTML = `+${letters} NOT IN VOCABULARY!`;
-              }
-             
-              
-             
-              boxes.forEach(box => {
-              const button = box.querySelector("button");
-              if (button) {
-                box.removeChild(button);
-                addLetters.push(button);
-                boxesAdd.forEach((box, i) => {
-                if (!box.querySelector("button") && letters[i]) {
-                  box.appendChild(button);
-                }
-              
-            
+  if (numLetters >= 3) {
+    fetch('https://ankita320.github.io/anagrams_wordList/wordList.json')
+      .then(response => response.json())
+      .then(data => {
+        if (data.includes(letters.toLowerCase())) {
+          if (usedLetters.includes(letters)) {
+            messageElement.innerHTML = `&#9888; <b>${letters}</b> already used!`;
+          } else {
+            usedLetters.push(letters);
+            let pointThing = pointsCateg[numLetters];
+            totPoint += pointThing;
+            messageElement.innerHTML = `&#127942; <b>+${pointThing}</b> points!`;
+            tot.innerHTML = `Total Points: ${totPoint}`;
+          }
+          // Move letters back to addBoxy
+          boxes.forEach((box, i) => {
+            const button = box.querySelector("button");
+            if (button) {
+              box.removeChild(button);
+              addLetters.push(button);
+            }
           });
-                
-              }
-              
-            });
-            
-
-              
-        }})
-        
-
-          
-          .catch(error => {
-            console.error('Error!!!!!', error);
-
+          boxesAdd.forEach((box, i) => {
+            if (!box.querySelector("button") && addLetters[i]) {
+              box.appendChild(addLetters[i]);
+            }
           });
-      
-
-    } else {
-        console.log("false");
-        enter.disabled = true;
-    }
+        } else {
+          messageElement.innerHTML = `&#10060; <b>${letters}</b> not in vocabulary!`;
+        }
+      })
+      .catch(error => {
+        messageElement.innerHTML = "Error checking word!";
+      });
+  } else {
+    messageElement.innerHTML = "&#9888; Enter at least 3 letters!";
+    enter.disabled = false;
+  }
 }
-
-
-
 </script>
-</head>
-<body>
 
-<button id="tot">Total Points: </button>
-<div class="seperate">
-<div class = "box" ondrop="dropHandler(event)"  id="div1" ondragover="dragoverHandler(event)"></div>
-<div class = "box"  ondrop="dropHandler(event)" id="div2"  ondragover="dragoverHandler(event)"></div>
-<div class = "box"  ondrop="dropHandler(event)" id="div3"  ondragover="dragoverHandler(event)"></div>
-<div class = "box" id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div class = "box" id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
-<div class = "box" id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"></div>
+<div class="anagram-container">
+  <button id="tot">Total Points: </button>
+  <div class="seperate">
+    <div class="box" ondrop="dropHandler(event)" id="div1" ondragover="dragoverHandler(event)"></div>
+    <div class="box" ondrop="dropHandler(event)" id="div2" ondragover="dragoverHandler(event)"></div>
+    <div class="box" ondrop="dropHandler(event)" id="div3" ondragover="dragoverHandler(event)"></div>
+    <div class="box" ondrop="dropHandler(event)" id="div4" ondragover="dragoverHandler(event)"></div>
+    <div class="box" ondrop="dropHandler(event)" id="div5" ondragover="dragoverHandler(event)"></div>
+    <div class="box" ondrop="dropHandler(event)" id="div6" ondragover="dragoverHandler(event)"></div>
+  </div>
+
+  <button id="enterWord" onclick="checkLetters()">Enter</button>
+  <div id="points"></div>
+
+  <div class="pls">
+    <div class="box addBoxy" id="div1" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img1" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.0 }}</button>
+    </div>
+    <div class="box addBoxy" id="div2" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img2" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.1 }}</button>
+    </div>
+    <div class="box addBoxy" id="div3" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img3" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.2 }}</button>
+    </div>
+    <div class="box addBoxy" id="div4" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img4" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.3 }}</button>
+    </div>
+    <div class="box addBoxy" id="div5" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img5" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.4 }}</button>
+    </div>
+    <div class="box addBoxy" id="div6" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img6" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.5 }}</button>
+    </div>
+  </div>
 </div>
-<br></br>
-<br></br>
-<br></br>
-
-<button id="enterWord" onclick="checkLetters()">Enter</button>
-
-<h3 id = "points"></h3>
-
-<br>
-<br>
-<div class="pls">
-<div class = "box addBoxy" id="div1" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
-<button class="letter" id="img1" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">{{ letters.0 }}</button>
-</div>
-
-<div class = "box addBoxy" id="div2" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
-<button class="letter" id="img2" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">{{ letters.1 }}</button>
-</div>
-
-<div class = "box addBoxy" id="div3" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
-<button class="letter" id="img3" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">{{ letters.2 }}</button>
-</div>
-
-<div class = "box addBoxy" id="div4" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)">
-<button class="letter" id="img4" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">{{ letters.3 }}</button>
-</div>
-
-<div class = "box addBoxy"  id="div5" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><button class="letter" id="img5" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">{{ letters.4 }}</button></div>
-
-
-<div class = "box addBoxy"  id="div6" ondrop="dropHandler(event)"   ondragover="dragoverHandler(event)"><button class="letter" id="img6" draggable="true" ondragstart="dragstartHandler(event)" width="100" height="100">{{ letters.5 }}</button></div>
-</div>
-
-</div>
-
-
-</body>
-</html>
-{% endblock %}
+{% endblock %}</div>
