@@ -25,7 +25,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
       </style>
   </head>
   <body>
-    <div id="letterString">{{letterString}}</div>
+    <div style="display: none;" id="letterString">{{letterString}}</div>
     <input id="display" readonly class="border-4 block mx-auto my-4 p-2 border border-gray-500 rounded w-full max-w-screen-sm">
     <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-blue-200 p-5 rounded-lg">
       <div class="grid grid-cols-4 grid-rows-4 gap-5 h-full">
@@ -64,20 +64,23 @@ After the game, if not already friended, popup asking if you’d like to friend 
             if (!response.ok) {
               throw new Error(`Response status: ${response.status}`);
             }
-            const json = await response.json();
-            wordBank = json.map(item => item.word);
-            console.log(sdfsdfsdfsdfsf)
-            console.log(wordBank);
+            let json = await response.json();
+            wordBank = json.data;
+            wordBank = json.data.map(entry => entry.word);
 
             } catch (error) {
               console.error(error.message);
             }
         }
       }
+      if (wordBank.length === 0){
+        getWords();
+      }
 
       async function checkWords() {
-          getWords();
           displayWord = display.value;
+          console.log(wordBank);
+          console.log(stringLetter);
 
           if (wordBank.includes(displayWord)) {
             console.log(`✅ "${displayWord}" is a valid word!`);
@@ -95,7 +98,6 @@ After the game, if not already friended, popup asking if you’d like to friend 
             })
           }
       }
-
 
       function appendLetter(button) {
         if (!selectedLetters.has(button)) {
@@ -122,7 +124,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
         button.addEventListener("mouseover", (e) => {
           if (e.buttons === 1) {
             appendLetter(button);
-          }// Show an error or shake the box, etc.
+          }
         });
         button.addEventListener("mouseup", (e) => {
           if (display.value.length > 2){
