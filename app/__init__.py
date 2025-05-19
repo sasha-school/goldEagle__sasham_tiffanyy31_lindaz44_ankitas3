@@ -42,10 +42,10 @@ def checkSession():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     build()
-    if 'username' in session:
+    if 'user_id' in session:  # Ensure session is based on user_id, not username
         return redirect("/home")
 
-    if request.method =="POST":
+    if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
 
@@ -53,15 +53,22 @@ def login():
             flash("Missing username or password", "error")
             return redirect("/login")
 
-        if checkPassword(username, password):# if password is correct, given user exists
-            session["username"] = username# adds user to session
-            return redirect("/home")
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT user_id, password_hash FROM users WHERE username=?", (username,))
+        user = cur.fetchone()
+        conn.close()
 
-        else:# if password isnt correct
+        if user and checkPassword(username, password):  # If password matches stored hash
+            session["user_id"] = user["user_id"]  # Store correct ID
+            session["username"] = username  
+            return redirect("/home")
+        else:
             flash("Invalid username or password", "error")
             return redirect("/login")
 
-    return render_template("login.html")# if GET request, just renders login page
+    return render_template("login.html")
+
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -83,11 +90,66 @@ def register():
 
 @app.route('/home')
 def home():
-    return render_template("home.html")
+    notifications = []
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        # Fetch pending friend requests
+        cur.execute("SELECT username FROM users WHERE user_id IN (SELECT user_id1 FROM friends WHERE user_id2 = ?)", (user_id,))
+        friend_requests = [row["username"] for row in cur.fetchall()]
+        for request in friend_requests:
+            notifications.append({"type": "friend_request", "message": f"{request} sent a friend request!"})
+
+        # Fetch pending game invites
+        cur.execute("SELECT game_name FROM challengehistory WHERE user_id2 = ? AND winner_id IS NULL", (user_id,))
+        game_invites = [row["game_name"] for row in cur.fetchall()]
+        for invite in game_invites:
+            notifications.append({"type": "game_invite", "message": f"You have a pending game in {invite}!"})
+
+        conn.close()
+
+    return render_template("home.html", notifications=notifications)
+
+
+
 
 @app.route('/profile')
 def profile():
-    return render_template("profile.html")
+    if 'user_id' not in session or not session['user_id']:
+        return redirect(url_for('login'))  # Redirect to login if session isn't set
+
+    user_id = session['user_id']
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT username FROM users WHERE user_id = ?", (user_id,))
+    user = cur.fetchone()
+
+    if not user:
+        return redirect(url_for('login'))  # Redirect if user not found
+
+    leaderboards = {}
+    for game in ["anagrams", "wordhunt", "wordbites"]:
+        cur.execute(f"SELECT games_played, top_score FROM {game}_leaderboard WHERE user_id = ?", (user_id,))
+        stats = cur.fetchone()
+        if stats:
+            leaderboards[game] = {"games_played": stats["games_played"], "top_score": stats["top_score"]}
+
+    cur.execute("""
+        SELECT u.username AS opponent, ch.game_name, ch.score1, ch.score2, ch.winner_id
+        FROM challengehistory ch
+        LEFT JOIN users u ON (ch.user_id2 = u.user_id)
+        WHERE ch.user_id1 = ?
+    """, (user_id,))
+    
+    challenges = [dict(row) for row in cur.fetchall()]
+    conn.close()
+
+    return render_template('profile.html', user={"username": user["username"], "user_id": user_id}, 
+                           leaderboards=leaderboards, challenges=challenges)
 
 @app.route('/game')
 def game():
