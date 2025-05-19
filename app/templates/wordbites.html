@@ -109,9 +109,11 @@ function dropHandler(ev, boxNumber) {
 
     <div id="sidebar" style="background-color: steelblue; padding: 10px; color: white; margin-left: 30px;">
       <p id="total-score" style="font-weight: bold; font-size: 18px;">Score: {{ score }}</p>
+      {% if found %}
       {% for word, pts in found.items() %}
         <p>{{ word }} - {{pts}}</p>
       {% endfor %}
+      {% endif %}
     </div>
   </div>
 
