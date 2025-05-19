@@ -9,61 +9,68 @@
     --black: #000200;
     --pakistan-green: #17310B;
     --dark-moss-green: #426011;
+    --highlight-blue: #6a88e0;
+    --highlight-green: #75c9b7;
 }
 
 /* General Styling */
 body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #1c1f26, #2a2f3e);
-    color: #f5f5f5;
-    text-align: center;
+    color: var(--timberwolf);
     margin: 0;
     padding: 0;
+    text-align: center;
 }
 
-/* Navigation */
+/* Navigation Bar */
 nav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 15px;
-    background: var(--coyote-2);
+    background: linear-gradient(135deg, var(--caf-noir), var(--coyote-2));
     border-bottom: 2px solid var(--sepia);
 }
 
-nav a,
-.btn,
-button {
-    font-family: inherit;
+/* Navbar Links */
+nav a {
     color: var(--timberwolf);
-    padding: 10px 15px;
+    padding: 12px 18px;
     border-radius: 8px;
-    cursor: pointer;
     text-decoration: none;
+    background: var(--black);
     transition: all 0.3s ease;
 }
 
-nav a {
-    background: var(--caf-noir);
-}
-
 nav a:hover {
-    text-shadow: 0 0 5px var(--khaki), 0 0 10px var(--lion);
+    background: var(--lion);
+    text-shadow: 0 0 5px var(--khaki), 0 0 10px var(--timberwolf);
 }
 
+/* Navbar Buttons */
 button,
 .btn {
-    background: linear-gradient(135deg, #6a88e0, #75c9b7);
+    font-family: inherit;
+    color: var(--black);
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--highlight-blue), var(--highlight-green));
     border: none;
-    text-transform: uppercase;
     font-weight: bold;
-    box-shadow: 0 0 10px #6a88e0, 0 0 20px #75c9b7;
+    box-shadow: 0 0 10px var(--highlight-blue), 0 0 20px var(--highlight-green);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 button:hover,
 .btn:hover {
-    background: linear-gradient(135deg, #75c9b7, #6a88e0);
-    box-shadow: 0 0 15px #75c9b7, 0 0 30px #6a88e0;
+    background: linear-gradient(135deg, var(--highlight-green), var(--highlight-blue));
+    box-shadow: 0 0 15px var(--highlight-green), 0 0 30px var(--highlight-blue);
+    transform: scale(1.05);
 }
+
 
 /* Game Cards */
 .game-card,
@@ -71,8 +78,7 @@ button:hover,
     display: inline-block;
     padding: 20px;
     margin: 10px;
-    border-radius: 10px;
-    justify-content: center;
+    border-radius: 12px;
     background: rgba(42, 47, 62, 0.9);
     box-shadow: 0 0 10px rgba(163, 228, 219, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -90,24 +96,34 @@ button:hover,
     gap: 10px;
 }
 
+/* Responsive Images */
 img {
-    border-radius: 12.5%;
-    justify-content: center;
+    max-width: 100%;
+    height: auto;
+    border-radius: 12%;
 }
 
-/* Animations */
+/* Glow Animation */
 @keyframes glow {
-
     0%,
     100% {
-        box-shadow: 0 0 5px #75c9b7, 0 0 10px #6a88e0;
+        box-shadow: 0 0 5px var(--highlight-green), 0 0 10px var(--highlight-blue);
     }
-
     50% {
-        box-shadow: 0 0 15px #6a88e0, 0 0 30px #75c9b7;
+        box-shadow: 0 0 15px var(--highlight-blue), 0 0 30px var(--highlight-green);
     }
 }
 
 .glow {
     animation: glow 1.5s infinite;
+}
+
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        text-align: center;
+    }
+    .button-container {
+        flex-direction: column;
+    }
 }

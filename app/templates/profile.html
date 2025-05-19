@@ -3,5 +3,56 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
+{% if user %}
+    <h2>Profile: {{ user['username'] }}</h2>
+    
+    <h3>Game Stats</h3>
+    <table>
+        <tr>
+            <th>Game</th>
+            <th>Games Played</th>
+            <th>Highest Score</th>
+        </tr>
+        {% for game, stats in leaderboards.items() %}
+        <tr>
+            <td>{{ game|capitalize }}</td>
+            <td>{{ stats.games_played }}</td>
+            <td>{{ stats.top_score }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 
+    <h3>Recent Challenge History</h3>
+    <table>
+        <tr>
+            <th>Opponent</th>
+            <th>Game</th>
+            <th>Your Score</th>
+            <th>Opponent Score</th>
+            <th>Result</th>
+        </tr>
+        {% for challenge in challenges %}
+        <tr>
+            <td>{{ challenge['opponent'] }}</td>
+            <td>
+                {% set game_names = {1: "Anagrams", 2: "Word Hunt", 3: "Word Bites"} %}
+                {{ game_names[challenge['game_name']] }}
+            </td>
+            <td>{{ challenge['score1'] }}</td>
+            <td>{{ challenge['score2'] or "N/A" }}</td>
+            <td>
+                {% if challenge['winner_id'] == user['user_id'] %}
+                    Win
+                {% elif challenge['winner_id'] %}
+                    Loss
+                {% else %}
+                    Pending
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>You must be logged in to view your profile.</p>
+{% endif %}
 {% endblock %}

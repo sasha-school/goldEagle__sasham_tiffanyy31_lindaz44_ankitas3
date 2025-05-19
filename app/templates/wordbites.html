@@ -1,3 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}WordBites{% endblock %}
+
+{% block content %}
+
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -36,7 +43,7 @@ function dropHandler(ev, boxNumber) {
   //to prevent moving a letter 2 a box w a letter alreadyy
   const dropTarget = ev.target;
   const box = dropTarget.classList.contains("box") ? dropTarget : dropTarget.closest(".box");
-  if (box.querySelector("img")) {
+  if (box.querySelector("h1")) {
     console.log(`Box ${boxNumber} already has an letter, cannot overlap`);
     return;
   }
@@ -63,34 +70,59 @@ function dropHandler(ev, boxNumber) {
   .then(response => response.json())
   .then(data => {
     console.log("Server response:", data);
-  });
+    const sidebar = document.getElementById("sidebar");
+    sidebar.innerHTML = "";
+
+    const scoreElem = document.createElement("p");
+    scoreElem.textContent = `Total Score: ${data.score}`;
+    scoreElem.style.fontSize = "18px";
+    sidebar.appendChild(scoreElem);
+
+    const sorted = Object.entries(data.found_words).sort((a, b) => b[1] - a[1]);
+    for (const [word, points] of sorted) {
+      const p = document.createElement("p");
+      p.textContent = `${word} - ${points}`;
+      sidebar.appendChild(p);
+    }
+      });
 }
 </script>
 </head>
 <body>
-  <table>
-    {% for row in range(9) %}
-      <tr>
-        {% for col in range(8) %}
-          {% set box_number = row * 8 + col + 1 %}
-          <td>
-            <div class="box" id="box{{ box_number }}"
-                 ondrop="dropHandler(event, {{ box_number }})"
-                 ondragover="dragoverHandler(event)">
-                 {% if letters %}
-                 {% if box_number <= letters|length %}
-                   {% set letter = letters[box_number - 1] %}
-                   {% set letter_id = letter ~ "_" ~ (box_number - 1) %}
-                   <h1 id="{{ letter }}" draggable="true"
-                        ondragstart="dragstartHandler(event)" >{{ letter }}</h1>
+  <div style="display: flex; align-items: flex-start;">
+    <div><table>
+      {% for row in range(9) %}
+        <tr>
+          {% for col in range(8) %}
+            {% set box_number = row * 8 + col + 1 %}
+            <td>
+              <div class="box" id="box{{ box_number }}"
+                  ondrop="dropHandler(event, {{ box_number }})"
+                  ondragover="dragoverHandler(event)">
+                  {% if letters %}
+                  {% if box_number <= letters|length %}
+                    {% set letter = letters[box_number - 1] %}
+                    {% set letter_id = letter ~ "_" ~ (box_number - 1) %}
+                    <h1 id="{{ letter }}" draggable="true"
+                          ondragstart="dragstartHandler(event)" >{{ letter }}</h1>
+                    {% endif %}
                   {% endif %}
-                {% endif %}
-            </div>
-          </td>
-        {% endfor %}
-      </tr>
-    {% endfor %}
-  </table>
+              </div>
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table></div>
+
+    <div id="sidebar" style="background-color: steelblue; padding: 10px; color: white; margin-left: 30px;">
+      <p id="total-score" style="font-weight: bold; font-size: 18px;">Score: {{ score }}</p>
+      {% if found %}
+      {% for word, pts in found.items() %}
+        <p>{{ word }} - {{pts}}</p>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
 
 <script>
   const initialPositions = {
@@ -114,3 +146,5 @@ later: (using someone else’s existing) solver to try to approximate number of 
 At the end of game, sends stats to player they are playing w/ and play button for them
 After the game, if not already friended, popup asking if you’d like to friend the user
 -->
+
+{% endblock %}
