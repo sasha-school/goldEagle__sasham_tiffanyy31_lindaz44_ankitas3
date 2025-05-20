@@ -2,10 +2,7 @@ from flask import *
 import random
 import csv
 
-wordbites_letter_positions = {}
-wordbites_words = {}
-wordbites_board = []
-wordbites_score = 0
+
 app = Flask(__name__)
 
 all_words = []
@@ -14,15 +11,7 @@ with open('letters7.txt', 'r') as text:
         all_words += [word[:-1]]
 
 @app.route("/")
-def main():
-    global wordbites_letter_positions
-    global wordbites_words
-    global wordbites_board
-    global wordbites_score
-    wordbites_letter_positions = {} #reset letter positions (for every game)
-    wordbites_words = {} #reset words (for every game)
-    wordbites_board = [['' for _ in range(8)] for _ in range(9)] #reset board (for every game)
-    wordbites_score = 0 #reset score (for every game)
+def wordbites_main(wordbites_letter_positions, wordbites_words, wordbites_board, wordbites_score):
     all_letters = []
     with open('letters_w.csv', 'r') as file:
         reader = csv.reader(file)
@@ -41,20 +30,20 @@ def main():
     for i, letter in enumerate(letters):
         if letter not in wordbites_letter_positions:
             wordbites_letter_positions[letter] = i + 1
-
-    return render_template("wordbites.html", letters = letters, found = wordbites_words, score = wordbites_score)
+    return letters, wordbites_words, wordbites_words, wordbites_letter_positions, wordbites_words, wordbites_board, wordbites_score
 
 @app.route("/wordbites_helper", methods=["POST"]) #happens in the background and ensures that it doesnt need to refresh
-def wordbites_helper():
-    global wordbites_letter_positions
-    global wordbites_words
-    global wordbites_board
-    global wordbites_score
+def wordbites_helper_aux():
 
     data = request.get_json()
+    print(data)
     letter = data.get("letter")
     from_box = data.get("from_box")
     to_box = data.get("to_box")
+    wordbites_letter_positions = data.get("wordbites_letter_positions")
+    wordbites_words = data.get("wordbites_words")
+    wordbites_board = data.get("wordbites_board")
+    wordbites_score = data.get("wordbites_score")
 
     wordbites_letter_positions[letter] = to_box
 
@@ -73,7 +62,7 @@ def wordbites_helper():
                 if (start == 0 or row[start - 1] == '') and (end == len(row) or row[end] == ''):
                     if end - start >= 3:
                         word = ''.join(row[start:end])
-                        if word.lower() in all_words: 
+                        if word.lower() in all_words:
                             if word not in wordbites_words.keys():
                                 wordbites_score += wordbites_score_calc(len(word))
                                 wordbites_words[word] = wordbites_score_calc(len(word))
@@ -91,7 +80,7 @@ def wordbites_helper():
                 if (start == 0 or col_mod[start - 1] == '') and (end == len(col_mod) or col_mod[end] == ''):
                     if end - start >= 3:
                         word = ''.join(col_mod[start:end])
-                        if word.lower() in all_words: 
+                        if word.lower() in all_words:
                             if word not in wordbites_words.keys():
                                 wordbites_score += wordbites_score_calc(len(word))
                                 wordbites_words[word] = wordbites_score_calc(len(word))

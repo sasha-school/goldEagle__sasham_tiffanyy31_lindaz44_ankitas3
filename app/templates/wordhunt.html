@@ -9,6 +9,11 @@ Given that the word is present in our database, user will gain specific number o
 At the end of game, sends stats to player they are playing w/ and play button for them
 After the game, if not already friended, popup asking if you’d like to friend the user
 -->
+{% extends "base.html" %}
+
+{% block title %}Friends{% endblock %}
+
+{% block content %}
 
 <!DOCTYPE html>
 <html lang="en" dir="lir">
@@ -89,14 +94,14 @@ After the game, if not already friended, popup asking if you’d like to friend 
 
             setTimeout(() => {
               display.classList.remove('border-green-500')
-            })
+            }, 1000)
           } else {
             console.log(`❌ "${displayWord}" is NOT in the word bank.`);
             display.classList.add('border-red-500');
 
             setTimeout(() => {
               display.classList.remove('border-red-500');
-            })
+            }, 1000)
           }
       }
 
@@ -143,3 +148,5 @@ After the game, if not already friended, popup asking if you’d like to friend 
     </script>
   </body>
 </html>
+
+{% endblock %}

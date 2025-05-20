@@ -17,7 +17,6 @@ DB_DIR = os.path.join(BASE_DIR, "data")
 os.makedirs(DB_DIR, exist_ok=True)  # Make sure the folder exists
 
 DB_PATH = os.path.join(DB_DIR, 'database.db')
-print("DB_PATH:", DB_PATH)
 
 def build():
     create_tables()
