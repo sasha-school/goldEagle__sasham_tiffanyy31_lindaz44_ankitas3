@@ -188,7 +188,7 @@ function checkLetters() {
     }
   });
 
-  const messageElement = document.getElementById("points");
+  const msg = document.getElementById("points");
   const tot = document.getElementById("tot");
   const enter = document.getElementById("enterWord");
   let pointsCateg = { 3: 100, 4: 400, 5: 1200, 6: 2000 };
@@ -201,36 +201,64 @@ function checkLetters() {
       .then(data => {
         if (data.includes(letters.toLowerCase())) {
           if (usedLetters.includes(letters)) {
-            messageElement.innerHTML = `&#9888; <b>${letters}</b> already used!`;
+            msg.innerHTML = `&#9888; <b>${letters}</b> already used!`;
+            boxes.forEach((box, i) => {
+            const button = box.querySelector("button");
+            if (button) {
+              box.removeChild(button);
+              let addBack = document.querySelector(".pls .addBoxy" + i.toString());
+              if (!addBack.querySelector("button")) {
+                addBack.appendChild(button);
+              }
+            }
+          });
+
+
           } else {
             usedLetters.push(letters);
             let pointThing = pointsCateg[numLetters];
             totPoint += pointThing;
-            messageElement.innerHTML = `&#127942; <b>+${pointThing}</b> points!`;
+            msg.innerHTML = `&#127942; <b>+${pointThing}</b> points!`;
             tot.innerHTML = `Total Points: ${totPoint}`;
+
+            boxes.forEach((box, i) => {
+            const button = box.querySelector("button");
+            if (button) {
+              box.removeChild(button);
+              let addBack = document.querySelector(".pls .addBoxy" + i.toString());
+              if (!addBack.querySelector("button")) {
+                addBack.appendChild(button);
+              }
+            }
+          });
           }
+
           // Move letters back to addBoxy
+          
+         /* boxesAdd.forEach((box, i) => {
+            if (!box.querySelector("button") && addLetters[i]) {
+              box.appendChild(addLetters[i]);
+            }
+          });*/
+        } else {
+          msg.innerHTML = `&#10060; <b>${letters}</b> not in vocabulary!`;
           boxes.forEach((box, i) => {
             const button = box.querySelector("button");
             if (button) {
               box.removeChild(button);
-              addLetters.push(button);
+              let addBack = document.querySelector(".pls .addBoxy" + i.toString());
+              if (!addBack.querySelector("button")) {
+                addBack.appendChild(button);
+              }
             }
           });
-          boxesAdd.forEach((box, i) => {
-            if (!box.querySelector("button") && addLetters[i]) {
-              box.appendChild(addLetters[i]);
-            }
-          });
-        } else {
-          messageElement.innerHTML = `&#10060; <b>${letters}</b> not in vocabulary!`;
         }
       })
       .catch(error => {
-        messageElement.innerHTML = "Error checking word!";
+        msg.innerHTML = "Error checking word!";
       });
   } else {
-    messageElement.innerHTML = "&#9888; Enter at least 3 letters!";
+    msg.innerHTML = "&#9888; Enter at least 3 letters!";
     enter.disabled = false;
   }
 }
@@ -244,29 +272,29 @@ function checkLetters() {
     <div class="box" ondrop="dropHandler(event)" id="div3" ondragover="dragoverHandler(event)"></div>
     <div class="box" ondrop="dropHandler(event)" id="div4" ondragover="dragoverHandler(event)"></div>
     <div class="box" ondrop="dropHandler(event)" id="div5" ondragover="dragoverHandler(event)"></div>
-    <div class="box" ondrop="dropHandler(event)" id="div6" ondragover="dragoverHandler(event)"></div>
+     <div class="box" ondrop="dropHandler(event)" id="div6" ondragover="dragoverHandler(event)"></div>
   </div>
 
   <button id="enterWord" onclick="checkLetters()">Enter</button>
   <div id="points"></div>
 
   <div class="pls">
-    <div class="box addBoxy" id="div1" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+    <div class="addBoxy0 box" id="div1" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
       <button class="letter" id="img1" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.0 }}</button>
     </div>
-    <div class="box addBoxy" id="div2" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+    <div class="box addBoxy1" id="div2" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
       <button class="letter" id="img2" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.1 }}</button>
     </div>
-    <div class="box addBoxy" id="div3" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+    <div class="box addBoxy2" id="div3" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
       <button class="letter" id="img3" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.2 }}</button>
     </div>
-    <div class="box addBoxy" id="div4" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+    <div class="box addBoxy3" id="div4" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
       <button class="letter" id="img4" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.3 }}</button>
     </div>
-    <div class="box addBoxy" id="div5" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+    <div class="box addBoxy4" id="div5" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
       <button class="letter" id="img5" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.4 }}</button>
     </div>
-    <div class="box addBoxy" id="div6" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+  <div class="box addBoxy5" id="div6" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
       <button class="letter" id="img6" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.5 }}</button>
     </div>
   </div>
