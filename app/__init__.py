@@ -16,6 +16,8 @@ from anagrams import *
 
 from wordhunt import *
 
+from wordbites import *
+
 try:
     from app.db_functions import *
 except:
@@ -61,7 +63,7 @@ def login():
 
         if user and checkPassword(username, password):  # If password matches stored hash
             session["user_id"] = user["user_id"]  # Store correct ID
-            session["username"] = username  
+            session["username"] = username
             return redirect("/home")
         else:
             flash("Invalid username or password", "error")
@@ -144,26 +146,39 @@ def profile():
         LEFT JOIN users u ON (ch.user_id2 = u.user_id)
         WHERE ch.user_id1 = ?
     """, (user_id,))
-    
+
     challenges = [dict(row) for row in cur.fetchall()]
     conn.close()
 
-    return render_template('profile.html', user={"username": user["username"], "user_id": user_id}, 
+    return render_template('profile.html', user={"username": user["username"], "user_id": user_id},
                            leaderboards=leaderboards, challenges=challenges)
 
 @app.route('/game')
 def game():
     return render_template("gamepage.html")
 
+
+
 @app.route('/wordbites')
 def wordbites():
-    return render_template("wordbites.html")
+    wordbites_letter_positions = {} #reset letter positions (for every game)
+    wordbites_words = {} #reset words (for every game)
+    wordbites_board = [['' for _ in range(8)] for _ in range(9)] #reset board (for every game)
+    wordbites_score = 0 #reset score (for every game)
+    letters, wordbites_words, wordbites_words, wordbites_letter_positions, wordbites_words, wordbites_board, wordbites_score = wordbites_main(wordbites_letter_positions, wordbites_words, wordbites_board, wordbites_score)
+    return render_template("wordbites.html", letters = letters, found = wordbites_words, score = wordbites_score, wordbites_letter_positions=wordbites_letter_positions, wordbites_words=wordbites_words, wordbites_board=wordbites_board, wordbites_score=wordbites_score)
+
+@app.route("/wordbites_helper", methods=["POST"]) #happens in the background and ensures that it doesnt need to refresh
+def wordbites_helper():
+    return wordbites_helper_aux()
 
 @app.route("/wordhunt", methods=['GET', 'POST'])
 def wordhunt():
     Letters = board()
     print(Letters + "test")
     return render_template('wordhunt.html', letterString=Letters, LetterA=Letters[0], LetterB=Letters[1], LetterC=Letters[2], LetterD=Letters[3], LetterE=Letters[4], LetterF=Letters[5], LetterG=Letters[6], LetterH=Letters[7], LetterI=Letters[8], LetterJ=Letters[9], LetterK=Letters[10], LetterL=Letters[11], LetterM=Letters[12], LetterN=Letters[13], LetterO=Letters[14], LetterP=Letters[15])
+
+
 
 @app.route('/anagrams')
 def anagrams():
