@@ -234,7 +234,7 @@ function checkLetters() {
           }
 
           // Move letters back to addBoxy
-          
+
          /* boxesAdd.forEach((box, i) => {
             if (!box.querySelector("button") && addLetters[i]) {
               box.appendChild(addLetters[i]);
@@ -279,6 +279,7 @@ function checkLetters() {
   <div id="points"></div>
 
   <div class="pls">
+    {% if letters %}
     <div class="addBoxy0 box" id="div1" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
       <button class="letter" id="img1" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.0 }}</button>
     </div>
@@ -297,6 +298,7 @@ function checkLetters() {
   <div class="box addBoxy5" id="div6" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
       <button class="letter" id="img6" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.5 }}</button>
     </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}</div>
