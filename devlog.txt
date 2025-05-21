@@ -72,3 +72,14 @@ tiffanyY -- 2025-5-15 IN CLASS
 sashaM -- 2025-5-15 23:00
 - Wordbites
 - General functionality (word recognition and score) works
+
+sashaM -- 2025-5-19 IN CLASS
+- PM Standup
+- Wordbites
+
+sashaM -- 2025-5-20 IN CLASS
+- Wordbites --attempt to fix
+
+sashaM -- 2025-5-21 IN CLASS
+- Wordbites (working on init minus formatting)
+- Began formatting 

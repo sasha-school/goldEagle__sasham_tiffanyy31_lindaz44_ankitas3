@@ -16,8 +16,6 @@ from anagrams import *
 
 from wordhunt import *
 
-from wordbites import *
-
 try:
     from app.db_functions import *
 except:
@@ -150,8 +148,10 @@ def profile():
     challenges = [dict(row) for row in cur.fetchall()]
     conn.close()
 
-    return render_template('profile.html', user={"username": user["username"], "user_id": user_id},
-                           leaderboards=leaderboards, challenges=challenges)
+    return render_template('profile.html',
+                            user={"username": user["username"], "user_id": user_id},
+                            leaderboards=leaderboards,
+                            challenges=challenges)
 
 @app.route('/game')
 def game():
@@ -189,9 +189,13 @@ def wordbites():
         if letter not in wordbites_letter_positions:
             wordbites_letter_positions[letter] = i + 1
 
-    return render_template("wordbites.html", letters = letters, found = wordbites_words, score = wordbites_score)
+    return render_template("wordbites.html",
+                            letters = letters,
+                            found = wordbites_words,
+                            score = wordbites_score)
 
-@app.route("/wordbites_helper", methods=["POST"]) #happens in the background and ensures that it doesnt need to refresh
+@app.route("/wordbites_helper", methods=["POST"])
+#happens in the background and ensures that it doesnt need to refresh
 def wordbites_helper():
     global wordbites_letter_positions
     global wordbites_words
@@ -217,7 +221,8 @@ def wordbites_helper():
                 while i < len(row) and row[i] != '':
                     i += 1
                 end = i
-                if (start == 0 or row[start - 1] == '') and (end == len(row) or row[end] == ''):
+                if (start == 0 or row[start - 1] == '')
+                        and (end == len(row) or row[end] == ''):
                     if end - start >= 3:
                         word = ''.join(row[start:end])
                         if word.lower() in all_words:
@@ -237,7 +242,8 @@ def wordbites_helper():
                 while i < len(col_mod) and col_mod[i] != '':
                     i += 1
                 end = i
-                if (start == 0 or col_mod[start - 1] == '') and (end == len(col_mod) or col_mod[end] == ''):
+                if (start == 0 or col_mod[start - 1] == '')
+                        and (end == len(col_mod) or col_mod[end] == ''):
                     if end - start >= 3:
                         word = ''.join(col_mod[start:end])
                         if word.lower() in all_words:
@@ -247,13 +253,24 @@ def wordbites_helper():
             else:
                 i += 1
 
-    return jsonify({"status": "received", "found_words": wordbites_words, "score": wordbites_score})
+    return jsonify({"status": "received",
+                    "found_words": wordbites_words,
+                    "score": wordbites_score})
 
 @app.route("/wordhunt", methods=['GET', 'POST'])
 def wordhunt():
     Letters = board()
     print(Letters + "test")
-    return render_template('wordhunt.html', letterString=Letters, LetterA=Letters[0], LetterB=Letters[1], LetterC=Letters[2], LetterD=Letters[3], LetterE=Letters[4], LetterF=Letters[5], LetterG=Letters[6], LetterH=Letters[7], LetterI=Letters[8], LetterJ=Letters[9], LetterK=Letters[10], LetterL=Letters[11], LetterM=Letters[12], LetterN=Letters[13], LetterO=Letters[14], LetterP=Letters[15])
+    return render_template('wordhunt.html',
+                            letterString=Letters,
+                            LetterA=Letters[0], LetterB=Letters[1],
+                            LetterC=Letters[2], LetterD=Letters[3],
+                            LetterE=Letters[4], LetterF=Letters[5],
+                            LetterG=Letters[6], LetterH=Letters[7],
+                            LetterI=Letters[8], LetterJ=Letters[9],
+                            LetterK=Letters[10], LetterL=Letters[11],
+                            LetterM=Letters[12], LetterN=Letters[13],
+                            LetterO=Letters[14], LetterP=Letters[15])
 
 
 
