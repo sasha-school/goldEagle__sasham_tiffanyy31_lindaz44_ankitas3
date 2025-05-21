@@ -56,11 +56,6 @@ function dropHandler(ev, boxNumber) {
   const toBox = boxNumber;
   toFrom[letter_id] = toBox;
 
-  const wordbites_letter_positions = "{{ wordbites_letter_positions }}";
-  const wordbites_words = "{{ wordbites_words }}";
-  const wordbites_board = "{{ wordbites_board }}";
-  const wordbites_score = "{{ wordbites_score }}";
-  console.log("Server wordbites_letter_positions:", wordbites_letter_positions);
   fetch("/wordbites_helper", {
     method: "POST",
     headers: {
@@ -70,10 +65,6 @@ function dropHandler(ev, boxNumber) {
       letter: letter,
       from_box: fromBox,
       to_box: toBox,
-      wordbites_letter_positions: wordbites_letter_positions,
-      wordbites_words: wordbites_words,
-      wordbites_board: wordbites_board,
-      wordbites_score: wordbites_score
     })
   })
   .then(response => response.json())
