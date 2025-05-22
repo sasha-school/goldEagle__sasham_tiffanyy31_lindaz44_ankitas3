@@ -52,7 +52,7 @@ nav a:hover {
 button,
 .btn {
     font-family: inherit;
-    color: var(--black);
+    color: var(--white);
     padding: 12px 18px;
     border-radius: 8px;
     cursor: pointer;
