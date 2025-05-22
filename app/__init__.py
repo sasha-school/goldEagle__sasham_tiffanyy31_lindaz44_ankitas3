@@ -5,6 +5,7 @@ import sqlite3
 import requests
 import datetime
 import calendar
+import csv
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from dateutil.parser import parse
@@ -221,8 +222,7 @@ def wordbites_helper():
                 while i < len(row) and row[i] != '':
                     i += 1
                 end = i
-                if (start == 0 or row[start - 1] == '')
-                        and (end == len(row) or row[end] == ''):
+                if (start == 0 or row[start - 1] == '') and (end == len(row) or row[end] == ''):
                     if end - start >= 3:
                         word = ''.join(row[start:end])
                         if word.lower() in all_words:
@@ -242,8 +242,7 @@ def wordbites_helper():
                 while i < len(col_mod) and col_mod[i] != '':
                     i += 1
                 end = i
-                if (start == 0 or col_mod[start - 1] == '')
-                        and (end == len(col_mod) or col_mod[end] == ''):
+                if (start == 0 or col_mod[start - 1] == '') and (end == len(col_mod) or col_mod[end] == ''):
                     if end - start >= 3:
                         word = ''.join(col_mod[start:end])
                         if word.lower() in all_words:
