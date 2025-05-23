@@ -158,10 +158,7 @@ def profile():
 def game():
     return render_template("gamepage.html")
 
-all_words = []
-with open('letters7.txt', 'r') as text:
-    for word in text:
-        all_words += [word[:-1]]
+
 
 @app.route('/wordbites')
 def wordbites():
@@ -258,12 +255,6 @@ def wordbites_helper():
     return jsonify({"status": "received",
                     "found_words": wordbites_words,
                     "score": wordbites_score})
-
-def wordbites_score_calc(len):
-    key = {3: 100, 4: 400, 5: 800, 6:1400, 7:1800, 8:2200, 9:2600} #from actual game
-    if len in key:
-        return key[len]
-    return 100
 
 @app.route("/wordhunt", methods=['GET', 'POST'])
 def wordhunt():

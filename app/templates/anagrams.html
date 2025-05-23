@@ -41,6 +41,7 @@
   letter-spacing: 1px;
 }
 
+
 #enterWord {
   background: var(--dark-moss-green);
   color: var(--timberwolf);
@@ -67,6 +68,32 @@
   margin-bottom: 12px;
   font-weight: 600;
   text-align: center;
+  animation-name: invisible;
+  animation-duration: 2s;
+}
+
+
+
+@keyframes invisible {
+  0% {
+      opacity: 1;
+      position:relative;
+      top: -15px;
+
+  }
+
+  50% {
+    opacity: 0.5;
+    position:relative;
+    top: -35px;
+
+  }
+  100% {
+    opacity: 0;
+    position:relative;
+    top: -55px;
+
+  }
 }
 
 .seperate, .pls {
@@ -202,16 +229,26 @@ function checkLetters() {
         if (data.includes(letters.toLowerCase())) {
           if (usedLetters.includes(letters)) {
             msg.innerHTML = `&#9888; <b>${letters}</b> already used!`;
+            emptyBoxes = [];
+            for (let i = 0; i < 6; i++) {
+              let addBack = document.querySelector(".pls .addBoxy" + i.toString());
+              if (!addBack.querySelector("button")) {
+                emptyBoxes.push(i);
+              }
+              }
             boxes.forEach((box, i) => {
             const button = box.querySelector("button");
             if (button) {
               box.removeChild(button);
-              let addBack = document.querySelector(".pls .addBoxy" + i.toString());
+              for (let i = 0; i < emptyBoxes.length; i++) {
+                  let addBack = document.querySelector(".pls .addBoxy" + emptyBoxes[i].toString());
               if (!addBack.querySelector("button")) {
                 addBack.appendChild(button);
               }
+                }
             }
           });
+
 
 
           } else {
@@ -220,15 +257,24 @@ function checkLetters() {
             totPoint += pointThing;
             msg.innerHTML = `&#127942; <b>+${pointThing}</b> points!`;
             tot.innerHTML = `Total Points: ${totPoint}`;
-
+            emptyBoxes = [];
+            for (let i = 0; i < 6; i++) {
+              let addBack = document.querySelector(".pls .addBoxy" + i.toString());
+              if (!addBack.querySelector("button")) {
+                emptyBoxes.push(i);
+              }
+              }
             boxes.forEach((box, i) => {
             const button = box.querySelector("button");
             if (button) {
               box.removeChild(button);
-              let addBack = document.querySelector(".pls .addBoxy" + i.toString());
+              for (let i = 0; i < emptyBoxes.length; i++) {
+                  let addBack = document.querySelector(".pls .addBoxy" + emptyBoxes[i].toString());
               if (!addBack.querySelector("button")) {
                 addBack.appendChild(button);
               }
+                }
+
 /*
               else {
                 addBoxes.forEach((add, j) => {
@@ -250,14 +296,24 @@ function checkLetters() {
           });*/
         } else {
           msg.innerHTML = `&#10060; <b>${letters}</b> not in vocabulary!`;
+          emptyBoxes = [];
+          for (let i = 0; i < 6; i++) {
+            let addBack = document.querySelector(".pls .addBoxy" + i.toString());
+            if (!addBack.querySelector("button")) {
+              emptyBoxes.push(i);
+            }
+            }
           boxes.forEach((box, i) => {
             const button = box.querySelector("button");
+
             if (button) {
               box.removeChild(button);
-              let addBack = document.querySelector(".pls .addBoxy" + i.toString());
+              for (let i = 0; i < emptyBoxes.length; i++) {
+                  let addBack = document.querySelector(".pls .addBoxy" + emptyBoxes[i].toString());
               if (!addBack.querySelector("button")) {
                 addBack.appendChild(button);
               }
+                }
             }
           });
         }
