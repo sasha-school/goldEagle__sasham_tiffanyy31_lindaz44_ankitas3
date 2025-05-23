@@ -60,8 +60,10 @@ def login():
             flash("Missing username or password", "error")
             return redirect("/login")
 
+        user_id = get_user_id(username)
+
         if check_password(username, password):  # If password matches stored hash
-            session["user_id"] = user["user_id"]  # Store correct ID
+            session["user_id"] = user_id["user_id"]  # Store correct ID
             session["username"] = username
             return redirect("/home")
         else:

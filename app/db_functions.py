@@ -170,6 +170,14 @@ def get_user(user_id):
     user = cur.fetchone()
     conn.close()
     return user
+
+def get_user_id(username):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT user_id FROM users WHERE username=?", (username,))
+    user_id = cur.fetchone()
+    conn.close()
+    return user_id
 # with open('../letters7.txt', 'r') as file:
 #     lines = [line.strip() for line in file]
 
