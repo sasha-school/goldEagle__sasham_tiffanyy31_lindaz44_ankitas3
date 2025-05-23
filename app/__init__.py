@@ -60,13 +60,7 @@ def login():
             flash("Missing username or password", "error")
             return redirect("/login")
 
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT user_id, password_hash FROM users WHERE username=?", (username,))
-        user = cur.fetchone()
-        conn.close()
-
-        if user and checkPassword(username, password):  # If password matches stored hash
+        if check_password(username, password):  # If password matches stored hash
             session["user_id"] = user["user_id"]  # Store correct ID
             session["username"] = username
             return redirect("/home")
@@ -97,26 +91,9 @@ def register():
 
 @app.route('/home')
 def home():
-    notifications = []
-
     if 'user_id' in session:
         user_id = session['user_id']
-        conn = get_db_connection()
-        cur = conn.cursor()
-
-        # Fetch pending friend requests
-        cur.execute("SELECT username FROM users WHERE user_id IN (SELECT user_id1 FROM friends WHERE user_id2 = ?)", (user_id,))
-        friend_requests = [row["username"] for row in cur.fetchall()]
-        for request in friend_requests:
-            notifications.append({"type": "friend_request", "message": f"{request} sent a friend request!"})
-
-        # Fetch pending game invites
-        cur.execute("SELECT game_name FROM challengehistory WHERE user_id2 = ? AND winner_id IS NULL", (user_id,))
-        game_invites = [row["game_name"] for row in cur.fetchall()]
-        for invite in game_invites:
-            notifications.append({"type": "game_invite", "message": f"You have a pending game in {invite}!"})
-
-        conn.close()
+        notifications = get_notifications(user_id)
 
     return render_template("home.html", notifications=notifications)
 
@@ -129,31 +106,12 @@ def profile():
         return redirect(url_for('login'))  # Redirect to login if session isn't set
 
     user_id = session['user_id']
-    conn = get_db_connection()
-    cur = conn.cursor()
 
-    cur.execute("SELECT username FROM users WHERE user_id = ?", (user_id,))
-    user = cur.fetchone()
-
+    user = get_user(user_id)
     if not user:
         return redirect(url_for('login'))  # Redirect if user not found
 
-    leaderboards = {}
-    for game in ["anagrams", "wordhunt", "wordbites"]:
-        cur.execute(f"SELECT games_played, top_score FROM {game}_leaderboard WHERE user_id = ?", (user_id,))
-        stats = cur.fetchone()
-        if stats:
-            leaderboards[game] = {"games_played": stats["games_played"], "top_score": stats["top_score"]}
-
-    cur.execute("""
-        SELECT u.username AS opponent, ch.game_name, ch.score1, ch.score2, ch.winner_id
-        FROM challengehistory ch
-        LEFT JOIN users u ON (ch.user_id2 = u.user_id)
-        WHERE ch.user_id1 = ?
-    """, (user_id,))
-
-    challenges = [dict(row) for row in cur.fetchall()]
-    conn.close()
+    leaderboards, challenges = get_profile(user_id)
 
     return render_template('profile.html',
                             user={"username": user["username"], "user_id": user_id},
