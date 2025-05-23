@@ -82,7 +82,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
       if (wordBank.length === 0){
         getWords();
       }
-
+      
       async function checkWords() {
           displayWord = display.value;
           console.log(wordBank);
@@ -112,6 +112,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
           appendToDisplay(currentWord);
           button.classList.remove('bg-blue-500');
           button.classList.add('bg-green-500');
+        
         }
       }
 
