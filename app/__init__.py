@@ -13,9 +13,15 @@ from functools import wraps
 from calendar import monthrange, day_name
 
 
-from anagrams import *
+try:
+    from app.anagrams import *
+except:
+    from anagrams import *
 
-from wordhunt import *
+try:
+    from app.wordhunt import *
+except:
+    from wordhunt import *
 
 try:
     from app.db_functions import *
