@@ -9,18 +9,25 @@
 <html>
 <head>
 <style>
+.table, table {
+  border: 2px solid white;
+  border-collapse: collapse;
+}
+td {
+  border: 2px solid white;
+}
 .box {
   width: 70px;
   height: 70px;
   padding: 10px;
-  border: 1px solid black;
+  border: 2px solid yellow;
   text-align: center;
-  display:table;
+  display: table;
 }
 h1 {
   font-size: 48px;
-  vertical-align:middle;
-  display:table-cell;
+  vertical-align: middle;
+  display: table-cell;
 }
 </style>
 <script>
@@ -64,7 +71,7 @@ function dropHandler(ev, boxNumber) {
     body: JSON.stringify({
       letter: letter,
       from_box: fromBox,
-      to_box: toBox,
+      to_box: toBox
     })
   })
   .then(response => response.json())
