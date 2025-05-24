@@ -88,3 +88,7 @@ sashaM -- 2025-5-21 IN CLASS
 - Wordbites (working on init minus formatting)
 - Began formatting Python according to standard conventions
 - Readme
+
+lindaZ -- 2025-05-24 16:18
+- Wordhunt time feature added
+- duplicate words not allowed

@@ -30,37 +30,106 @@ After the game, if not already friended, popup asking if you’d like to friend 
       </style>
   </head>
   <body>
+    <p id="score" class="text-white text-3xl">Score: 0</p>
+    <p id="timer" class="text-white text-3xl"> 10</p>
     <div style="display: none;" id="letterString">{{letterString}}</div>
     <input id="display" readonly class="border-4 block mx-auto my-4 p-2 border border-gray-500 rounded w-full max-w-screen-sm">
+    <button class="rounded-lg" onclick="startGame(this)">Start</button>
     <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-blue-200 p-5 rounded-lg">
       <div class="grid grid-cols-4 grid-rows-4 gap-5 h-full">
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterA}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterB}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterC}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterD}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterE}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterF}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterG}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterH}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterI}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterJ}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterK}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterL}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterM}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterN}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterO}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-white text-8xl pb-4">{{LetterP}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-8xl text-transparent pb-4">{{LetterA}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterB}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterC}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterD}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterE}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterF}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterG}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterH}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterI}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterJ}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterK}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterL}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterM}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterN}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterO}}</button>
+        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterP}}</button>
       </div>
     </div>
     <script>
       const display = document.getElementById("display");
-      const buttons = document.querySelectorAll(".letter-button");
+      let buttons = document.querySelectorAll(".letter-button");
       const board = document.getElementById("board");
       const stringLetter = document.getElementById("letterString").textContent;
+      const score = document.getElementById("score");
+      const time = document.getElementById("timer");
       let selectedLetters = new Set();
       let currentWord = "";
-      let wordBank = []
+      let wordBank = [];
+      let selectedWords = [];
+      let game = false;
 
+      //starts game once startbutton is clicked
+      function startGame(startButton) {
+        startButton.style.display = "none";
+
+        game = true;
+
+        buttonBehavior();
+
+        window.setInterval(() => {
+          //const currentTime = parseInt(time.textContent.match(/\d+/)[0])
+          if (time.textContent>0){
+            time.textContent -= 1;
+          }
+        }, 1000);
+
+        setTimeout(() => {
+          endGame();
+        }, 10000);
+      }
+
+      function endGame() {
+        game = false;
+        buttonBehavior();
+      }
+      
+      //button behavior when users select them
+      function buttonBehavior() {
+        buttons = document.querySelectorAll(".letter-button");
+        if (game == true){
+          buttons = document.querySelectorAll(".letter-button");
+          buttons.forEach(button => {
+            button.classList.remove('text-transparent');
+            button.classList.add('text-white');
+
+            button.addEventListener("mousedown", () => appendLetter(button));
+            button.addEventListener("mouseover", (e) => {
+              if (e.buttons === 1) {
+                appendLetter(button);
+              }
+            })
+            button.addEventListener("mouseup", (e) => {
+              if (display.value.length > 2){
+                checkWords();
+              }
+              removeWord();
+            })
+          })
+        } else {
+          buttons.forEach(button => {
+            const newButton = button.cloneNode(true);
+            newButton.classList.remove('text-white');
+            newButton.classList.remove('bg-green-500');
+            newButton.classList.add('text-transparent');
+            newButton.classList.add('bg-blue-500');
+            button.replaceWith(newButton);
+
+          })
+        }
+
+      }
+
+      //get valid words of a board from api
       async function getWords() {
         if (wordBank.length === 0) {
           const url = "https://api.whsolver.ajayganesh.com/solve?board=" + stringLetter
@@ -82,20 +151,48 @@ After the game, if not already friended, popup asking if you’d like to friend 
       if (wordBank.length === 0){
         getWords();
       }
+
+      //score function depending on length of word
+      function addScore(word) {
+        if(word.length === 3){
+          appendToScore(100);
+        }
+        if(word.length === 4){
+          appendToScore(400);
+        }
+        if(word.length === 5){
+          appendToScore(800);
+        }
+        if(word.length === 6){
+          appendToScore(1400);
+        }
+        if(word.length === 7){
+          appendToScore(1800);
+        }
+        if(word.length === 8){
+          appendToScore(2200);
+        }
+      }
       
+      //check if word is in array of valid words
       async function checkWords() {
           displayWord = display.value;
           console.log(wordBank);
           console.log(stringLetter);
 
-          if (wordBank.includes(displayWord)) {
+          if (wordBank.includes(displayWord) && !selectedWords.includes(displayWord)) {
             console.log(`✅ "${displayWord}" is a valid word!`);
             display.classList.add('border-green-500');
+
+            addScore(displayWord);
+            selectedWords.push(displayWord)
 
             setTimeout(() => {
               display.classList.remove('border-green-500')
             }, 1000)
-          } else {
+          } else if(wordBank.includes(displayWord) && selectedWords.includes(displayWord)){ //prevents dupes
+            console.log(`"${displayWord}" already`);
+          } else if (!wordBank.includes(displayWord)) {
             console.log(`❌ "${displayWord}" is NOT in the word bank.`);
             display.classList.add('border-red-500');
 
@@ -113,6 +210,25 @@ After the game, if not already friended, popup asking if you’d like to friend 
           button.classList.remove('bg-blue-500');
           button.classList.add('bg-green-500');
         
+        } else { //if user selected just previously selected button, deselects proceeding letters
+          const iterator = selectedLetters.values();
+          let lastVal;
+          let secondLast;
+
+          let current = iterator.next();
+          while (!current.done) {
+            secondLast = lastVal;
+            lastVal = current.value;
+            current = iterator.next();
+          }
+
+          if(button === secondLast) {
+            selectedLetters.delete(lastVal);
+            lastVal.classList.remove('bg-green-500');
+            lastVal.classList.add('bg-blue-500');
+            currentWord = currentWord.slice(0, -1);
+            appendToDisplay(currentWord);
+          }
         }
       }
 
@@ -126,26 +242,15 @@ After the game, if not already friended, popup asking if you’d like to friend 
         })
       }
 
-      buttons.forEach(button => {
-        button.addEventListener("mousedown", () => appendLetter(button));
-        button.addEventListener("mouseover", (e) => {
-          if (e.buttons === 1) {
-            appendLetter(button);
-          }
-        });
-        button.addEventListener("mouseup", (e) => {
-          if (display.value.length > 2){
-            checkWords();
-          }
-          removeWord();
-        });
-      })
-
-      board.addEventListener("mouseleave", removeWord);
-
       function appendToDisplay(input){
         display.value = input;
       }
+
+      function appendToScore(input){
+        let num = parseInt(score.textContent.match(/\d+/)[0]) + input;
+        score.textContent = "Score: " + num;
+      }
+      
     </script>
   </body>
 </html>
