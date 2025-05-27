@@ -36,7 +36,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
     <input id="display" readonly class="border-4 block mx-auto my-4 p-2 border border-gray-500 rounded w-full max-w-screen-sm">
     <button class="rounded-lg" onclick="startGame(this)">Start</button>
     <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-blue-200 p-5 rounded-lg">
-      <div class="grid grid-cols-4 grid-rows-4 gap-5 h-full">
+      <div class="grid grid-cols-4 grid-rows-4 gap-6 h-full">
         <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-8xl text-transparent pb-4">{{LetterA}}</button>
         <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterB}}</button>
         <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterC}}</button>
@@ -67,6 +67,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
       let wordBank = [];
       let selectedWords = [];
       let game = false;
+      let addLetters = true;
 
       //starts game once startbutton is clicked
       function startGame(startButton) {
@@ -85,7 +86,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
 
         setTimeout(() => {
           endGame();
-        }, 10000);
+        }, 100000);
       }
 
       function endGame() {
@@ -114,6 +115,9 @@ After the game, if not already friended, popup asking if you’d like to friend 
               }
               removeWord();
             })
+          })
+          board.addEventListener("mouseleave", (e) => {
+            removeWord();
           })
         } else {
           buttons.forEach(button => {
@@ -202,15 +206,16 @@ After the game, if not already friended, popup asking if you’d like to friend 
           }
       }
 
+      //display will show word with selected letters
       function appendLetter(button) {
-        if (!selectedLetters.has(button)) {
+        if (!selectedLetters.has(button) && addLetters) {
           selectedLetters.add(button);
           currentWord += button.textContent;
           appendToDisplay(currentWord);
           button.classList.remove('bg-blue-500');
           button.classList.add('bg-green-500');
         
-        } else { //if user selected just previously selected button, deselects proceeding letters
+        } else {
           const iterator = selectedLetters.values();
           let lastVal;
           let secondLast;
@@ -222,12 +227,23 @@ After the game, if not already friended, popup asking if you’d like to friend 
             current = iterator.next();
           }
 
-          if(button === secondLast) {
+          if(button === secondLast) { //if user selected just previously selected button, deselects proceeding letters
             selectedLetters.delete(lastVal);
             lastVal.classList.remove('bg-green-500');
             lastVal.classList.add('bg-blue-500');
             currentWord = currentWord.slice(0, -1);
             appendToDisplay(currentWord);
+          }
+          else{
+            addLetters = false; //prevents users from hopping spaces by retracing already selected letters
+          }
+
+          if(button === lastVal){
+            addLetters = true;
+          }
+
+          if(display.value.length === 0){
+            addLetters = true;
           }
         }
       }
