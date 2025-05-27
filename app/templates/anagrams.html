@@ -177,6 +177,8 @@
 }
 </style>
 <script>
+let time = document.getElementById("timer");
+let game = false;
 function dragstartHandler(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
 }
@@ -199,9 +201,11 @@ function dropHandler(ev) {
   box.appendChild(imgTag);
 }
 
+
 var totPoint = 0;
 var usedLetters = [];
 function checkLetters() {
+  reset();
   const boxes = document.querySelectorAll(".seperate .box");
   const boxesAdd = document.querySelectorAll(".pls .addBoxy");
   let letters = "";
@@ -329,6 +333,8 @@ function checkLetters() {
 </script>
 
 <div class="anagram-container">
+  <p id="timer" class="text-white text-3xl"> 10</p>
+  <button class="rounded-lg" onclick="startGame(this)">Start</button>
   <button id="tot">Total Points: </button>
   <div class="seperate">
     <div class="box" ondrop="dropHandler(event)" id="div1" ondragover="dragoverHandler(event)"></div>

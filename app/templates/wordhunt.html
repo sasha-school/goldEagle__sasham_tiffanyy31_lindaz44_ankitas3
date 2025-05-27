@@ -92,7 +92,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
         game = false;
         buttonBehavior();
       }
-      
+
       //button behavior when users select them
       function buttonBehavior() {
         buttons = document.querySelectorAll(".letter-button");
@@ -173,7 +173,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
           appendToScore(2200);
         }
       }
-      
+
       //check if word is in array of valid words
       async function checkWords() {
           displayWord = display.value;
@@ -209,7 +209,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
           appendToDisplay(currentWord);
           button.classList.remove('bg-blue-500');
           button.classList.add('bg-green-500');
-        
+
         } else { //if user selected just previously selected button, deselects proceeding letters
           const iterator = selectedLetters.values();
           let lastVal;
@@ -250,7 +250,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
         let num = parseInt(score.textContent.match(/\d+/)[0]) + input;
         score.textContent = "Score: " + num;
       }
-      
+
     </script>
   </body>
 </html>
