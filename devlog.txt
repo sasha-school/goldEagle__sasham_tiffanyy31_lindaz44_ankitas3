@@ -84,6 +84,9 @@ sashaM -- 2025-5-15 23:00
 - Wordbites
 - General functionality (word recognition and score) works
 
+tiffanyy -- 2025 - 5 -16 
+- minor changes to css
+
 sashaM -- 2025-5-19 IN CLASS
 - PM Standup
 - Wordbites
@@ -91,18 +94,14 @@ sashaM -- 2025-5-19 IN CLASS
 sashaM -- 2025-5-20 IN CLASS
 - Wordbites --attempt to fix
 
-ankitaS -- 2025-5-17
-- added function to check if word is true and add points
-- create game functionality to play anagrams and conditionals
-- duplicates not allowed
-- words less than three letters not allowed
-- false words not allowed
-- shows individual points and total points
-
 sashaM -- 2025-5-21 IN CLASS
 - Wordbites (working on init minus formatting)
 - Began formatting Python according to standard conventions
 - Readme
+
+
+tiffanyy -- 2025 - 5 -22
+- fixed tables for wordbites(?)
 
 lindaZ -- 2025-05-24 16:18
 - Wordhunt time feature added
@@ -110,3 +109,7 @@ lindaZ -- 2025-05-24 16:18
 
 ankitaS -- 2025-05-23
 - worked on time functionality 
+
+
+tiffanyy -- 2025 - 5 -27 
+- minor changes to css
