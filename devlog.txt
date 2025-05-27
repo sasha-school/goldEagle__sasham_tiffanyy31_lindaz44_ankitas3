@@ -57,6 +57,10 @@ sashaM -- 2025-5-14 IN CLASS
 - Wordbites
 - created letter set functionality to generate randome letters to use for anagrams
 
+ankitaS -- 2025-05-14
+- fixed drag and drop issue
+- ensured each button can only drop into one
+
 lindaZ -- 2025-05-14
 - fixed issue with letters not showing up on wordhunt
 - working on checking words
@@ -68,6 +72,9 @@ sashaM -- 2025-5-15 IN CLASS
 tiffanyY -- 2025-5-15 IN CLASS
 - fixed CSS to match flag (Brown looks bad tho)
 - fixed logout
+
+ankitaS -- 2025-5-15
+- created function to generate random 6 letters
 
 lindaZ -- 2025-5-15 IN CLASS
 - Wordhunt work checks functioning
@@ -84,6 +91,14 @@ sashaM -- 2025-5-19 IN CLASS
 sashaM -- 2025-5-20 IN CLASS
 - Wordbites --attempt to fix
 
+ankitaS -- 2025-5-17
+- added function to check if word is true and add points
+- create game functionality to play anagrams and conditionals
+- duplicates not allowed
+- words less than three letters not allowed
+- false words not allowed
+- shows individual points and total points
+
 sashaM -- 2025-5-21 IN CLASS
 - Wordbites (working on init minus formatting)
 - Began formatting Python according to standard conventions
@@ -92,3 +107,6 @@ sashaM -- 2025-5-21 IN CLASS
 lindaZ -- 2025-05-24 16:18
 - Wordhunt time feature added
 - duplicate words not allowed
+
+ankitaS -- 2025-05-23
+- worked on time functionality 
