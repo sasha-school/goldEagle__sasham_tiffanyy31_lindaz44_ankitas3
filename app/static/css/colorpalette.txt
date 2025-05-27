@@ -18,7 +18,7 @@
 --coyote-2: hsla(34, 53%, 32%, 1);
 --sepia: hsla(34, 79%, 22%, 1);
 --caf-noir: hsla(35, 38%, 21%, 1);
---black: hsla(120, 100%, 0%, 1);
+--black: rgba(0, 0, 0, 0.1);
 --pakistan-green: hsla(101, 63%, 12%, 1);
 --dark-moss-green: hsla(83, 70%, 22%, 1);
 
