@@ -95,9 +95,8 @@ def register():
 def home():
     if 'user_id' in session:
         user_id = session['user_id']
-        notifications = get_notifications(user_id)
 
-    return render_template("home.html", notifications=notifications)
+    return render_template("home.html")
 
 
 
