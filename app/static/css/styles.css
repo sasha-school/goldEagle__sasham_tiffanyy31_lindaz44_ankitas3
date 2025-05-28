@@ -1,23 +1,24 @@
 :root {
-    --coyote: #7E6A4C;
-    --timberwolf: #D9D3CA;
-    --khaki: #C8B69A;
-    --lion: #B08952;
-    --coyote-2: #7E5927;
-    --sepia: #653F0C;
-    --caf-noir: #4B3A22;
-    --black: #000200;
-    --pakistan-green: #17310B;
-    --dark-moss-green: #426011;
-    --highlight-blue: #6a88e0;
-    --highlight-green: #75c9b7;
+    /* New Primary Colors */
+    --gold: #f1c277;
+    --yellow: #f3d87e;
+    --olive: #b4b86a;
+    --green: #3d6a1f;
+    --dark-green: #033503;
+
+    /* Sand Palette (secondary/accents) */
+    --sand-light: #f9c36d;
+    --sand: #f3c478;
+    --sand-medium: #e8b769;
+    --sand-dark: #c08d3b;
+    --sand-deep: #8b5d13;
 }
 
 /* General Styling */
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #1c1f26, #2a2f3e);
-    color: var(--timberwolf);
+    background: linear-gradient(135deg, var(--gold), var(--yellow), var(--olive));
+    color: var(--dark-green);
     margin: 0;
     padding: 0;
     text-align: center;
@@ -29,48 +30,47 @@ nav {
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    background: linear-gradient(135deg, var(--caf-noir), var(--coyote-2));
-    border-bottom: 2px solid var(--sepia);
+    background: linear-gradient(135deg, var(--olive), var(--green));
+    border-bottom: 2px solid var(--gold);
 }
 
 /* Navbar Links */
 nav a {
-    color: var(--timberwolf);
+    color: var(--dark-green);
     padding: 12px 18px;
     border-radius: 8px;
     text-decoration: none;
-    background: var(--coyote);
+    background: var(--yellow);
     transition: all 0.3s ease;
 }
 
 nav a:hover {
-    background: var(--lion);
-    text-shadow: 0 0 5px var(--khaki), 0 0 10px var(--timberwolf);
+    background: var(--gold);
+    text-shadow: 0 0 5px var(--olive), 0 0 10px var(--yellow);
 }
 
 /* Navbar Buttons */
 button,
 .btn {
     font-family: inherit;
-    color: var(--white);
+    color: var(--dark-green);
     padding: 12px 18px;
     border-radius: 8px;
     cursor: pointer;
     text-decoration: none;
-    background: linear-gradient(135deg, var(--highlight-blue), var(--highlight-green));
+    background: linear-gradient(135deg, var(--gold), var(--olive));
     border: none;
     font-weight: bold;
-    box-shadow: 0 0 10px var(--highlight-blue), 0 0 20px var(--highlight-green);
+    box-shadow: 0 0 10px var(--yellow), 0 0 20px var(--gold);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 button:hover,
 .btn:hover {
-    background: linear-gradient(135deg, var(--highlight-green), var(--highlight-blue));
-    box-shadow: 0 0 15px var(--highlight-green), 0 0 30px var(--highlight-blue);
+    background: linear-gradient(135deg, var(--olive), var(--gold));
+    box-shadow: 0 0 15px var(--olive), 0 0 30px var(--gold);
     transform: scale(1.05);
 }
-
 
 /* Game Cards */
 .game-card,
@@ -79,14 +79,14 @@ button:hover,
     padding: 20px;
     margin: 10px;
     border-radius: 12px;
-    background: rgba(42, 47, 62, 0.9);
-    box-shadow: 0 0 10px rgba(163, 228, 219, 0.4);
+    background: rgba(249, 166, 32, 0.9); /* gold */
+    box-shadow: 0 0 10px rgba(170, 176, 60, 0.4); /* olive */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 0 20px rgba(163, 228, 219, 0.6), 0 0 30px rgba(106, 136, 224, 0.5);
+    box-shadow: 0 0 20px rgba(255, 212, 73, 0.6), 0 0 30px rgba(84, 140, 47, 0.5);
 }
 
 /* Button Container */
@@ -107,10 +107,10 @@ img {
 @keyframes glow {
     0%,
     100% {
-        box-shadow: 0 0 5px var(--highlight-green), 0 0 10px var(--highlight-blue);
+        box-shadow: 0 0 5px var(--gold), 0 0 10px var(--olive);
     }
     50% {
-        box-shadow: 0 0 15px var(--highlight-blue), 0 0 30px var(--highlight-green);
+        box-shadow: 0 0 15px var(--olive), 0 0 30px var(--gold);
     }
 }
 

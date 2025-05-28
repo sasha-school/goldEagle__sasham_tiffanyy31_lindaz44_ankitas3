@@ -1,16 +1,12 @@
-
 import json
 import sqlite3
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
-#DB_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'database.db')
-
-#corresponding integers
-anagrams =1
-wordhunt =2
-wordbites =3
-
+# corresponding integers
+anagrams = 1
+wordhunt = 2
+wordbites = 3
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DB_DIR = os.path.join(BASE_DIR, "data")
@@ -69,13 +65,6 @@ def create_tables():
     ''')
 
     cur.execute('''
-        CREATE TABLE IF NOT EXISTS friends(
-            user_id1 INTEGER NOT NULL,
-            user_id2 INTEGER NOT NULL
-        );
-    ''')
-
-    cur.execute('''
         CREATE TABLE IF NOT EXISTS challengehistory(
             challenge_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id1 INTEGER NOT NULL,
@@ -88,10 +77,16 @@ def create_tables():
         );
     ''')
 
-#store letters so they stay same upon reload
+    # You may want to create the friend_requests table if not already present
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS friend_requests(
+            from_user_id INTEGER NOT NULL,
+            to_user_id INTEGER NOT NULL
+        );
+    ''')
+
     conn.commit()
     conn.close()
-
 
 def addUser(username, password):
     users = sqlite3.connect(DB_PATH)
@@ -104,7 +99,6 @@ def addUser(username, password):
         users.commit()
         return
     return "Username taken."
-
 
 def check_password(username, password):
     users = sqlite3.connect(DB_PATH)
@@ -161,11 +155,9 @@ def get_profile(user_id):
     conn.close()
     return leaderboards, challenges
 
-
 def get_user(user_id):
     conn = get_db_connection()
     cur = conn.cursor()
-
     cur.execute("SELECT username FROM users WHERE user_id = ?", (user_id,))
     user = cur.fetchone()
     conn.close()
@@ -178,8 +170,77 @@ def get_user_id(username):
     user_id = cur.fetchone()
     conn.close()
     return user_id
-# with open('../letters7.txt', 'r') as file:
-#     lines = [line.strip() for line in file]
 
-# with open("wordList.json", "w") as f:
-#     json.dump(lines, f)
+def send_friend_request(from_user_id, to_user_id):
+    if from_user_id == to_user_id:
+        return "You cannot send a friend request to yourself."
+    conn = get_db_connection()
+    c = conn.cursor()
+    # Check if already friends
+    c.execute("SELECT 1 FROM friends WHERE (user_id1=? AND user_id2=?) OR (user_id1=? AND user_id2=?)",
+              (from_user_id, to_user_id, to_user_id, from_user_id))
+    if c.fetchone():
+        conn.close()
+        return "You are already friends."
+    # Check if request already sent
+    c.execute("SELECT 1 FROM friend_requests WHERE from_user_id=? AND to_user_id=?", (from_user_id, to_user_id))
+    if c.fetchone():
+        conn.close()
+        return "Friend request already sent."
+    # Insert friend request
+    c.execute("INSERT INTO friend_requests (from_user_id, to_user_id) VALUES (?, ?)", (from_user_id, to_user_id))
+    conn.commit()
+    conn.close()
+    return None
+
+def get_friends(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("""
+        SELECT u.user_id, u.username FROM users u
+        WHERE u.user_id IN (
+            SELECT CASE
+                WHEN user_id1=? THEN user_id2
+                WHEN user_id2=? THEN user_id1
+            END
+            FROM friends
+            WHERE user_id1=? OR user_id2=?
+        )
+    """, (user_id, user_id, user_id, user_id))
+    friends = [{"user_id": row["user_id"], "username": row["username"]} for row in c.fetchall()]
+    conn.close()
+    return friends
+
+def get_pending_friend_requests(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("""
+        SELECT fr.from_user_id, u.username
+        FROM friend_requests fr
+        JOIN users u ON fr.from_user_id = u.user_id
+        WHERE fr.to_user_id=?
+    """, (user_id,))
+    requests = [{"user_id": row["from_user_id"], "username": row["username"]} for row in c.fetchall()]
+    conn.close()
+    return requests
+
+def respond_to_friend_request(user_id, from_user_id, accept):
+    conn = get_db_connection()
+    c = conn.cursor()
+    if accept:
+        # Add to friends table
+        c.execute("INSERT INTO friends (user_id1, user_id2) VALUES (?, ?)", (user_id, from_user_id))
+    # Remove the friend request
+    c.execute("DELETE FROM friend_requests WHERE from_user_id=? AND to_user_id=?", (from_user_id, user_id))
+    conn.commit()
+    conn.close()
+
+def remove_friend(user_id, friend_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("""
+        DELETE FROM friends
+        WHERE (user_id1=? AND user_id2=?) OR (user_id1=? AND user_id2=?)
+    """, (user_id, friend_id, friend_id, user_id))
+    conn.commit()
+    conn.close()

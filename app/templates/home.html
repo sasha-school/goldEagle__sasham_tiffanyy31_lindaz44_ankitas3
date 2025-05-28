@@ -2,82 +2,124 @@
 {% block title %}Games{% endblock %}
 
 {% block content %}
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>goldEagles</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<!-- home.html
-Nav bar (see above)done
-Profile info if logged in redirect done
-Highest score for each game
-Number of games played for each mode
-Recent challenge history/log 
-Friends list if logged in
-Sort by most recent?
-Friends requests if logged in (Accept/Decline)
-If not logged in, brief blurb about how guest mode is only single player and will not be saved
--->
 
 <body>
     <header>
-        <h1>
-            {% if session.get('username') %}
-            <h2 class="text-sm font-mono text-white-700">Hi, {{ session['username'] }}!</li>
-                <br>
-                <br>
-                <div class="button-container">
-                    <form action="/profile">
-                        <button type="submit" class="button1">Profile</button>
-                    </form>
-                    <form action="/logout">
-                        <button type="submit" class="button">Log Out</button>
-                    </form>
-                </div>
-                <br>
-                <hr>
-                {% else %} You are currently in guest mode. Please log in or register!
-        </h1>
-
-        <br>
-
-        Please note that playing any games in guest mode does not save your results.
-
-        <br> <br>
-        <div class="button-container">
-            <form action="/login">
-                <button type="submit" class="button1">Login</button>
-            </form>
-            <form action="/register">
-                <button type="submit" class="button">Register</button>
-            </form>
-        </div>
-
-        <br> {% endif %}
+        {% if session.get('username') %}
+            <h2 class="text-sm font-mono text-white-700">Hi, {{ session['username'] }}!</h2>
+            <div class="button-container">
+                <form action="/profile"><button type="submit" class="button1">Profile</button></form>
+                <form action="/logout"><button type="submit" class="button">Log Out</button></form>
+            </div>
+            <hr>
+        {% else %}
+            <h2>Welcome to goldEagles!</h2>
+            <p>You are currently in guest mode. Please log in or register!</p>
+            <p>Playing any games in guest mode does not save your results.</p>
+            <div class="button-container">
+                <form action="/login"><button type="submit" class="button1">Login</button></form>
+                <form action="/register"><button type="submit" class="button">Register</button></form>
+            </div>
+            <hr>
+        {% endif %}
     </header>
-    <hr>
 
-    <br></br>
+    <section class="welcome-section">
+        <h3>Welcome to goldEagles!</h3>
+        <p>Challenge yourself with fun word games, track your progress, and connect with friends!</p>
+    </section>
 
+    <section class="stats-section">
+        <div class="stats-card">
+            <h4>Highest Scores</h4>
+            <ul>
+                <li>Anagrams: {{ highest_scores.anagrams if highest_scores.anagrams is not none else 'No score yet' }}</li>
+                <li>Word Hunt: {{ highest_scores.wordhunt if highest_scores.wordhunt is not none else 'No score yet' }}</li>
+                <li>Word Bites: {{ highest_scores.wordbites if highest_scores.wordbites is not none else 'No score yet' }}</li>
+            </ul>
+        </div>
+        <div class="stats-card">
+            <h4>Games Played</h4>
+            <ul>
+                <li>Anagrams: {{ games_played.anagrams if games_played.anagrams is not none else 'No games played' }}</li>
+                <li>Word Hunt: {{ games_played.wordhunt if games_played.wordhunt is not none else 'No games played' }}</li>
+                <li>Word Bites: {{ games_played.wordbites if games_played.wordbites is not none else 'No games played' }}</li>
+            </ul>
+        </div>
+    </section>
 
+    <section class="recent-activity">
+        <h4>Recent Challenge History</h4>
+        <ul>
+            {% if recent_challenges %}
+                {% for challenge in recent_challenges %}
+                    <li>{{ challenge }}</li>
+                {% endfor %}
+            {% else %}
+                <li>No recent challenges. Play a game to see your history here!</li>
+            {% endif %}
+        </ul>
+    </section>
 
+    {% if session.get('username') %}
+    <section class="friends-section">
+        <h4>Your Friends</h4>
+        <ul>
+            {% if friends_list %}
+                {% for friend in friends_list %}
+                    <li>{{ friend }}</li>
+                {% endfor %}
+            {% else %}
+                <li>No friends yet. Add some friends to get started!</li>
+            {% endif %}
+        </ul>
+        <h4>Friend Requests</h4>
+        <ul>
+<h4>Friend Requests</h4>
+<ul>
+    {% if friend_requests %}
+        {% for request in friend_requests %}
+            {% if request and request.user_id is defined and request.username is defined %}
+            <li>
+                {{ request.username }}
+                <form action="{{ url_for('respond_request', from_user_id=request.user_id, action='accept') }}" method="post" style="display:inline;">
+                    <button type="submit">Accept</button>
+                </form>
+                <form action="{{ url_for('respond_request', from_user_id=request.user_id, action='decline') }}" method="post" style="display:inline;">
+                    <button type="submit">Decline</button>
+                </form>
+            </li>
+            {% endif %}
+        {% endfor %}
+        {% if friend_requests|selectattr('user_id', 'defined')|list|length == 0 %}
+            <li>No friend requests.</li>
+        {% endif %}
+    {% else %}
+        <li>No friend requests.</li>
+    {% endif %}
+</ul>
 
+        </ul>
+    </section>
+    {% endif %}
 
-    <div class="button-container">
-        <form action="/anagrams">
-            <button>Anagrams</button>
-        </form>
-        <form action="/wordhunt">
-            <button>Word Hunt</button>
-        </form>
-        <form action="/wordbites">
-            <button>Word Bites</button>
-        </form>
-    </div>
+    
 
+    
+
+    <section class="games-section">
+        <h4>Play a Game</h4>
+        <div class="button-container">
+            <form action="/anagrams"><button>Anagrams</button></form>
+            <form action="/wordhunt"><button>Word Hunt</button></form>
+            <form action="/wordbites"><button>Word Bites</button></form>
+        </div>
+    </section>
 </body>
-
-
 {% endblock %}

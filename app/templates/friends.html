@@ -4,49 +4,31 @@
 
 {% block content %}
 
-{% endblock %}
-{% extends "base.html" %}
+<h1>Friends</h1>
+<h2>Your Friends</h2>
+<ul>
+{% for friend in friends %}
+    <li>{{ friend.username }} <a href="{{ url_for('remove_friend_route', friend_id=friend.user_id) }}">Remove</a></li>
+{% endfor %}
+</ul>
 
-{% block title %}Friends{% endblock %}
+<h2>Friend Requests</h2>
+<ul>
+{% for req in requests %}
+    <li>{{ req.username }}
+        <a href="{{ url_for('respond_request', from_user_id=req.user_id, action='accept') }}">Accept</a>
+        <a href="{{ url_for('respond_request', from_user_id=req.user_id, action='decline') }}">Decline</a>
+    </li>
+{% endfor %}
+</ul>
 
-{% block content %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Friends</title>
-</head>
-<body>
-    <h1>Friends</h1>
-    <h2>Your Friends</h2>
-    <ul>
-    {% for friend in friends %}
-        <li>{{ friend.username }} <a href="{{ url_for('remove_friend_route', friend_id=friend.user_id) }}">Remove</a></li>
-    {% endfor %}
-    </ul>
-
-    <h2>Friend Requests</h2>
-    <ul>
-    {% for req in requests %}
-        <li>{{ req.username }}
-            <a href="{{ url_for('respond_request', from_user_id=req.user_id, action='accept') }}">Accept</a>
-            <a href="{{ url_for('respond_request', from_user_id=req.user_id, action='decline') }}">Decline</a>
-        </li>
-    {% endfor %}
-    </ul>
-
-    <h2>Send Friend Request</h2>
+<h2>Send Friend Request</h2>
 <form method="post" action="{{ url_for('send_request_dynamic') }}">
     <label for="to_user_id">User ID:</label>
     <input type="number" name="to_user_id" id="to_user_id" required>
     <button type="submit">Send Request</button>
 </form>
 
-
-    <a href="{{ url_for('home') }}">Back to Home</a>
-</body>
-</html>
-
+<a href="{{ url_for('home') }}">Back to Home</a>
 
 {% endblock %}

@@ -5,6 +5,7 @@
 {% block content %}
 {% if user %}
     <h2>Profile: {{ user['username'] }}</h2>
+    <p><strong>User ID:</strong> {{ user['user_id'] }}</p>
     
     <h3>Game Stats</h3>
     <table>

@@ -93,33 +93,69 @@ def register():
 
     return render_template("register.html")  # Ensures a response is returned for GET requests
 
-@app.route('/home')
+
+
+
+@app.route("/home")
 def home():
-    if 'user_id' in session:
-        user_id = session['user_id']
+    # Assume user_id is fetched from session if logged in
+    user_id = session.get("user_id")
+    if user_id:
+        # Fetch stats from DB
+        leaderboards, _ = get_profile(user_id)
+        highest_scores = {
+            "anagrams": leaderboards.get("anagrams", {}).get("top_score"),
+            "wordhunt": leaderboards.get("wordhunt", {}).get("top_score"),
+            "wordbites": leaderboards.get("wordbites", {}).get("top_score"),
+        }
+        games_played = {
+            "anagrams": leaderboards.get("anagrams", {}).get("games_played"),
+            "wordhunt": leaderboards.get("wordhunt", {}).get("games_played"),
+            "wordbites": leaderboards.get("wordbites", {}).get("games_played"),
+        }
+        # Fetch friends and requests
+        friends_list = [...]  # Query your DB
+        friend_requests = [...]  # Query your DB
+        recent_challenges = [...]  # Query your DB
+    else:
+        highest_scores = {"anagrams": None, "wordhunt": None, "wordbites": None}
+        games_played = {"anagrams": None, "wordhunt": None, "wordbites": None}
+        friends_list = []
+        friend_requests = []
+        recent_challenges = []
 
-    return render_template("home.html")
-
-
+    return render_template(
+        "home.html",
+        highest_scores=highest_scores,
+        games_played=games_played,
+        friends_list=friends_list,
+        friend_requests=friend_requests,
+        recent_challenges=recent_challenges,
+    )
 
 
 @app.route('/profile')
 def profile():
     if 'user_id' not in session or not session['user_id']:
-        return redirect(url_for('login'))  # Redirect to login if session isn't set
+        return redirect(url_for('login'))
 
     user_id = session['user_id']
-
     user = get_user(user_id)
     if not user:
-        return redirect(url_for('login'))  # Redirect if user not found
+        return redirect(url_for('login'))
 
     leaderboards, challenges = get_profile(user_id)
 
-    return render_template('profile.html',
-                            user={"username": user["username"], "user_id": user_id},
-                            leaderboards=leaderboards,
-                            challenges=challenges)
+    # Ensure leaderboards is a dict of dicts with keys 'games_played' and 'top_score'
+    # Ensure challenges is a list of dicts with keys: opponent, game_name, score1, score2, winner_id
+
+    return render_template(
+        'profile.html',
+        user={"username": user["username"], "user_id": user_id},
+        leaderboards=leaderboards,
+        challenges=challenges
+    )
+
 
 @app.route('/game')
 def game():
