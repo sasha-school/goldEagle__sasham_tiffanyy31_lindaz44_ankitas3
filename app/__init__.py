@@ -123,7 +123,11 @@ def profile():
 def game():
     return render_template("gamepage.html")
 
-
+wordbites_letter_positions = {}
+wordbites_words = {}
+wordbites_board = [['' for _ in range(8)] for _ in range(9)]
+wordbites_score = 0 
+all_letters = []
 
 @app.route('/wordbites')
 def wordbites():
