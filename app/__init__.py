@@ -62,7 +62,7 @@ def login():
 
         user_id = get_user_id(username)
 
-        if check_password(username, password):  # If password matches stored hash
+        if user_id is not None and check_password(username, password):  # If user exists and password matches stored hash
             session["user_id"] = user_id["user_id"]  # Store correct ID
             session["username"] = username
             return redirect("/home")
@@ -73,7 +73,6 @@ def login():
     return render_template("login.html")
 
 
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -81,12 +80,15 @@ def register():
         password = request.form.get("password")
 
         if not username or not password:
-            return render_template("register.html", warning="Empty field(s)")
+            flash("Empty field(s)", "error")
+            return render_template("register.html")
 
         message = addUser(username, password)
         if message:
-            return render_template("register.html", warning=message)  # Make sure it renders the register page with error
+            flash(message, "error")
+            return render_template("register.html")  # Make sure it renders the register page with error
         else:
+            flash("Registration successful! Please log in.", "success")
             return redirect(url_for("login"))  # Proper redirect after successful registration
 
     return render_template("register.html")  # Ensures a response is returned for GET requests
