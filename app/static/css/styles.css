@@ -39,7 +39,7 @@ nav a {
     padding: 12px 18px;
     border-radius: 8px;
     text-decoration: none;
-    background: var(--black);
+    background: var(--coyote);
     transition: all 0.3s ease;
 }
 
