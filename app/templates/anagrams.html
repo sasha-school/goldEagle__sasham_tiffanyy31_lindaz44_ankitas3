@@ -201,11 +201,19 @@ function dropHandler(ev) {
   box.appendChild(imgTag);
 }
 
+document.getElementById("plsStart").addEventListener("click", startGame);
+
+function startGame() {
+  let timerId = setInterval(() => alert('tick'), 2000);
+
+  setTimeout(() => { clearInterval(timerId); alert('stop'); }, 60000);
+}
+
 
 var totPoint = 0;
 var usedLetters = [];
 function checkLetters() {
-  reset();
+  if (game==true) {
   const boxes = document.querySelectorAll(".seperate .box");
   const boxesAdd = document.querySelectorAll(".pls .addBoxy");
   let letters = "";
@@ -329,12 +337,14 @@ function checkLetters() {
     msg.innerHTML = "&#9888; Enter at least 3 letters!";
     enter.disabled = false;
   }
-}
+}}
+
 </script>
 
 <div class="anagram-container">
-  <p id="timer" class="text-white text-3xl"> 10</p>
-  <button class="rounded-lg" onclick="startGame(this)">Start</button>
+  <p id="timer" class="text-black text-3xl">10</p>
+  <button id="plsStart" class="rounded-lg" onclick="startGame()">Start</button>
+  <br>
   <button id="tot">Total Points: </button>
   <div class="seperate">
     <div class="box" ondrop="dropHandler(event)" id="div1" ondragover="dragoverHandler(event)"></div>
