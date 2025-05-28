@@ -62,7 +62,7 @@ def login():
 
         user_id = get_user_id(username)
 
-        if check_password(username, password):  # If password matches stored hash
+        if user_id is not None and check_password(username, password):  # If user exists and password matches stored hash
             session["user_id"] = user_id["user_id"]  # Store correct ID
             session["username"] = username
             return redirect("/home")
@@ -73,7 +73,6 @@ def login():
     return render_template("login.html")
 
 
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -81,12 +80,15 @@ def register():
         password = request.form.get("password")
 
         if not username or not password:
-            return render_template("register.html", warning="Empty field(s)")
+            flash("Empty field(s)", "error")
+            return render_template("register.html")
 
         message = addUser(username, password)
         if message:
-            return render_template("register.html", warning=message)  # Make sure it renders the register page with error
+            flash(message, "error")
+            return render_template("register.html")  # Make sure it renders the register page with error
         else:
+            flash("Registration successful! Please log in.", "success")
             return redirect(url_for("login"))  # Proper redirect after successful registration
 
     return render_template("register.html")  # Ensures a response is returned for GET requests
@@ -126,8 +128,12 @@ def game():
 wordbites_letter_positions = {}
 wordbites_words = {}
 wordbites_board = [['' for _ in range(8)] for _ in range(9)]
-wordbites_score = 0 
+wordbites_score = 0
 all_letters = []
+all_words = []
+with open('letters7.txt', 'r') as text:
+    for word in text:
+        all_words += [word[:-1]]
 
 @app.route('/wordbites')
 def wordbites():
@@ -224,6 +230,12 @@ def wordbites_helper():
     return jsonify({"status": "received",
                     "found_words": wordbites_words,
                     "score": wordbites_score})
+
+def wordbites_score_calc(len):
+    key = {3: 100, 4: 400, 5: 800, 6:1400, 7:1800, 8:2200, 9:2600} #from actual game
+    if len in key:
+        return key[len]
+    return 100
 
 @app.route("/wordhunt", methods=['GET', 'POST'])
 def wordhunt():
@@ -323,6 +335,6 @@ def get_notifications(user_id):
 
     conn.close()
     return notifications
-    
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

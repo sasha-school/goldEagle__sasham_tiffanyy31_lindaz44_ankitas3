@@ -93,9 +93,44 @@ function dropHandler(ev, boxNumber) {
     }
       });
 }
+
+function startGame(startButton) {
+  const time = document.getElementById("timer");
+  startButton.style.display = "none";
+  console.log("start");
+  lets = document.querySelectorAll(".h1");
+  lets.forEach(h1 => {
+    h1.classList.remove('text-transparent');
+    h1.classList.add('text-white');
+  })
+  window.setInterval(() => {
+    //const currentTime = parseInt(time.textContent.match(/\d+/)[0])
+    if (time.textContent>0){
+      time.textContent -= 1;
+    }
+  }, 1000);
+
+  setTimeout(() => {
+    endGame();
+    console.log("end");
+  }, 50000);
+}
+
+function endGame() {
+  lets = document.querySelectorAll(".h1");
+  lets.forEach(h1 => {
+    h1.classList.remove('text-white');
+    h1.classList.add('text-transparent');
+  })
+
+}
+
+
 </script>
 </head>
 <body>
+  <p id="timer" class="text-white text-3xl">50</p>
+  <button class="rounded-lg" onclick="startGame(this)">Start</button>
   <div style="display: flex; align-items: flex-start;">
     <div><table>
       {% for row in range(9) %}
@@ -111,7 +146,7 @@ function dropHandler(ev, boxNumber) {
                     {% set letter = letters[box_number - 1] %}
                     {% set letter_id = letter ~ "_" ~ (box_number - 1) %}
                     <h1 id="{{ letter }}" draggable="true"
-                          ondragstart="dragstartHandler(event)" >{{ letter }}</h1>
+                          ondragstart="dragstartHandler(event)" class="h1 text-transparent" >{{ letter }}</h1>
                     {% endif %}
                   {% endif %}
               </div>
