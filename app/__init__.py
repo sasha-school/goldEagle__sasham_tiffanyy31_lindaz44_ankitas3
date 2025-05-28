@@ -247,5 +247,78 @@ def anagrams():
 def logout():
     session.clear()
     return redirect(url_for('home'))
+
+
+@app.route('/friends')
+def friends():
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+    friends_list = get_friends(user_id)
+    pending_requests = get_pending_friend_requests(user_id)
+    return render_template('friends.html', friends=friends_list, requests=pending_requests)
+
+@app.route('/send_request/<int:to_user_id>')
+def send_request(to_user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    from_user_id = session['user_id']
+    message = send_friend_request(from_user_id, to_user_id)
+    if message:
+        flash(message)
+    return redirect(url_for('friends'))
+
+@app.route('/send_request', methods=['POST'])
+def send_request_dynamic():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    from_user_id = session['user_id']
+    to_user_id = request.form.get('to_user_id', type=int)
+    if to_user_id is None:
+        flash("Invalid user ID")
+        return redirect(url_for('friends'))
+    message = send_friend_request(from_user_id, to_user_id)
+    if message:
+        flash(message)
+    return redirect(url_for('friends'))
+
+
+@app.route('/respond_request/<int:from_user_id>/<action>')
+def respond_request(from_user_id, action):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+    accept = (action == 'accept')
+    respond_to_friend_request(user_id, from_user_id, accept)
+    return redirect(url_for('friends'))
+
+@app.route('/remove_friend/<int:friend_id>')
+def remove_friend_route(friend_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+    remove_friend(user_id, friend_id)
+    return redirect(url_for('friends'))
+
+
+
+def get_notifications(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    notifications = []
+    c.execute("SELECT username FROM users WHERE user_id IN (SELECT user_id1 FROM friends WHERE user_id2 = ?)", (user_id,))
+    friend_requests = [row["username"] for row in c.fetchall()]
+    for request in friend_requests:
+        notifications.append({"type": "friend_request", "message": f"{request} sent a friend request!"})
+
+    # Fetch pending game invites
+    c.execute("SELECT game_name FROM challengehistory WHERE user_id2 = ? AND winner_id IS NULL", (user_id,))
+    game_invites = [row["game_name"] for row in c.fetchall()]
+    for invite in game_invites:
+        notifications.append({"type": "game_invite", "message": f"You have a pending game in {invite}!"})
+
+    conn.close()
+    return notifications
+    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
