@@ -292,7 +292,7 @@ def wordhunt():
 
 @app.route('/anagrams')
 def anagrams():
-
+    
     letters = getWordSelectionAnagrams()
     return render_template("anagrams.html", letters = letters)
 @app.route('/logout')
