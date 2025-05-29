@@ -177,8 +177,10 @@
 }
 </style>
 <script>
-let time = document.getElementById("timer");
+let time = 60;
 let game = false;
+var words = []
+
 function dragstartHandler(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
 }
@@ -201,17 +203,51 @@ function dropHandler(ev) {
   box.appendChild(imgTag);
 }
 
-document.getElementById("plsStart").addEventListener("click", startGame);
-
 function startGame() {
-  let timerId = setInterval(() => alert('tick'), 2000);
+  game = true;
+    document.getElementById("timer").textContent = time;
+        let ID = window.setInterval(() => {
+          if (time > 0){
+            time -= 1;
+            document.getElementById("timer").textContent = time;
+          }
+          else {
+            clearInterval(ID);
+            game=false;
+            reset();
+            scoreBoard();
+            $("#myModal").modal();
+            
 
-  setTimeout(() => { clearInterval(timerId); alert('stop'); }, 60000);
-}
+            
+          }
+        }, 1000);
 
+       
+      }
+
+  function scoreBoard() {
+    for (let i = 0; i < words.length; i++) {
+      let w = document.createElement('p');
+      w.textContent = words[i];
+      document.getElementById("disp").appendChild(w);
+    }
+  }
+
+  function reset() {
+    for (let i = 0; i < 6; i++) {
+      document.getElementById('img' + (i+1).toString()).innerHTML = "";
+     document.getElementById('img' + (i+1).toString()).disabled = true;
+      document.getElementById('img' + (i+1).toString()).style.opacity = 0.5;
+
+
+    }
+    document.getElementById('enterWord').disabled = true;
+  }
 
 var totPoint = 0;
 var usedLetters = [];
+
 function checkLetters() {
   if (game==true) {
   const boxes = document.querySelectorAll(".seperate .box");
@@ -260,11 +296,14 @@ function checkLetters() {
                 }
             }
           });
+          
+
 
 
 
           } else {
             usedLetters.push(letters);
+            words.push(letters);
             let pointThing = pointsCateg[numLetters];
             totPoint += pointThing;
             msg.innerHTML = `&#127942; <b>+${pointThing}</b> points!`;
@@ -287,25 +326,12 @@ function checkLetters() {
               }
                 }
 
-/*
-              else {
-                addBoxes.forEach((add, j) => {
-                  if (!add.querySelector("button")) {
-                    add.appendChild(add);
-                        }
-                });}
-*/
+
             }
           });
           }
 
-          // Move letters back to addBoxy
-
-         /* boxesAdd.forEach((box, i) => {
-            if (!box.querySelector("button") && addLetters[i]) {
-              box.appendChild(addLetters[i]);
-            }
-          });*/
+       
         } else {
           msg.innerHTML = `&#10060; <b>${letters}</b> not in vocabulary!`;
           emptyBoxes = [];
@@ -340,9 +366,13 @@ function checkLetters() {
 }}
 
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 
 <div class="anagram-container">
-  <p id="timer" class="text-black text-3xl">10</p>
+  <p id="timer" class="text-black text-3xl">60</p>
   <button id="plsStart" class="rounded-lg" onclick="startGame()">Start</button>
   <br>
   <button id="tot">Total Points: </button>
@@ -379,6 +409,24 @@ function checkLetters() {
       <button class="letter" id="img6" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.5 }}</button>
     </div>
     {% endif %}
+  </div>
+</div>
+
+<div id= "myModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Score Board</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="disp">
+<p></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}</div>
