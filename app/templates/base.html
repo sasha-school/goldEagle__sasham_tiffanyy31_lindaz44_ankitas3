@@ -18,61 +18,74 @@
 
             <ul class="flex space-x-6 items-center">
                 {% if session.get('user_id') %}
-                    <li class="text-sm font-mono text-gray-700">Hi, {{ session.get('username') }}!</li>
+                <li class="text-sm font-mono text-gray-700">Hi, {{ session.get('username') }}!</li>
 
-                    <!-- Notifications Dropdown -->
-                    <li class="relative">
-                        {% if notifications and notifications|length > 0 %}
-                        <button id="notifBtn" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition">
-                            Notifications ({{ notifications|length }})
-                        </button>
-                        <div id="notifDropdown" class="hidden absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-64">
-                            {% for notif in notifications %}
-                            <div class="p-3 border-b">
-                                {{ notif.message }}
-                                {% if notif.type == 'friend_request' %}
-                                    <button class="text-blue-500 text-sm">Accept</button>
-                                    <button class="text-red-500 text-sm">Decline</button>
-                                {% elif notif.type == 'game_invite' %}
-                                    <a href="{{ url_for('game') }}" class="text-green-500 text-sm">Join</a>
-                                {% endif %}
-                            </div>
-                            {% endfor %}
+                <!-- Notifications Dropdown -->
+                <li class="relative">
+                    {% if notifications and notifications|length > 0 %}
+                    <button id="notifBtn"
+                        class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition">
+                        Notifications ({{ notifications|length }})
+                    </button>
+                    <div id="notifDropdown" class="hidden absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-64">
+                        {% for notif in notifications %}
+                        <div class="p-3 border-b">
+                            {{ notif.message }}
+                            {% if notif.type == 'friend_request' %}
+                            <button class="text-blue-500 text-sm">Accept</button>
+                            <button class="text-red-500 text-sm">Decline</button>
+                            {% elif notif.type == 'game_invite' %}
+                            <a href="{{ url_for('game') }}" class="text-green-500 text-sm">Join</a>
+                            {% endif %}
                         </div>
-                        {% endif %}
-                    </li>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </li>
 
-                    <li>
-                        <a href="{{ url_for('game') }}" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">
-                            Games
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('profile') }}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
-                            Profile
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('logout') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                            Log out
-                        </a>
-                    </li>
+                <li>
+                    <a href="{{ url_for('game') }}"
+                        class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">
+                        Games
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('friends') }}"
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                        Friends
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('profile') }}"
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                        Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('logout') }}"
+                        class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                        Log out
+                    </a>
+                </li>
                 {% else %}
-                    <li>
-                        <a href="{{ url_for('game') }}" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">
-                            Games
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('login') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-                            Login
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('register') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-                            Sign Up
-                        </a>
-                    </li>
+                <li>
+                    <a href="{{ url_for('game') }}"
+                        class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">
+                        Games
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('login') }}"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                        Login
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('register') }}"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                        Sign Up
+                    </a>
+                </li>
                 {% endif %}
             </ul>
         </div>
@@ -93,9 +106,9 @@
     <!-- Scripts -->
     {% block scripts %}
     <script>
-    document.getElementById("notifBtn")?.addEventListener("click", function() {
-        document.getElementById("notifDropdown").classList.toggle("hidden");
-    });
+        document.getElementById("notifBtn")?.addEventListener("click", function () {
+            document.getElementById("notifDropdown").classList.toggle("hidden");
+        });
     </script>
     {% endblock %}
 
