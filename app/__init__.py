@@ -292,9 +292,16 @@ def wordhunt():
 
 @app.route('/anagrams')
 def anagrams():
-    
+    if 'user_id' not in session or not session['user_id']:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    userName = get_user(user_id)
+    if not userName:
+        return redirect(url_for('login'))
     letters = getWordSelectionAnagrams()
-    return render_template("anagrams.html", letters = letters)
+    return render_template("anagrams.html", letters = letters, userName = userName)
+
 @app.route('/logout')
 def logout():
     session.clear()

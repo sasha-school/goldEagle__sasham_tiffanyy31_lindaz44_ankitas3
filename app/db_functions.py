@@ -159,7 +159,7 @@ def get_user(user_id):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("SELECT username FROM users WHERE user_id = ?", (user_id,))
-    user = cur.fetchone()
+    user = "".join(cur.fetchone())
     conn.close()
     return user
 
