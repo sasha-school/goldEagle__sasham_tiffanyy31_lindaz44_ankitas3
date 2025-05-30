@@ -85,6 +85,32 @@ def create_tables():
         );
     ''')
 
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS wordhunt_boards(
+            game_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            board_string TEXT NOT NULL
+        );
+    ''')
+
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS wordhunt_found_words(
+            game_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            word TEXT NOT NULL
+        );
+    ''')
+
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS wordhunt_challenge_requests(
+            game_id INTEGER NOT NULL,
+            from_user_id INTEGER NOT NULL,
+            to_user_id INTEGER NOT NULL,
+            from_user_score INTEGER,
+            to_user_score INTEGER
+        );
+    ''')
+
     conn.commit()
     conn.close()
 
@@ -244,3 +270,57 @@ def remove_friend(user_id, friend_id):
     """, (user_id, friend_id, friend_id, user_id))
     conn.commit()
     conn.close()
+
+def add_wordhunt_challenge(from_id, to_id, game_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("INSERT INTO wordhunt_challenge_requests (game_id, from_id, to_id) VALUES (?, ?, ?)", (game_id, from_id, to_id))
+    conn.commit()
+    conn.close()
+
+#inital first user score after sending
+def update_challenge_score_A(game_id, from_user_score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("UPDATE wordhunt_challenge_requests SET from_user_score = ? WHERE game_id = ?", (from_user_score, game_id))
+    conn.commit()
+    conn.close()
+
+#updates second user score after recieving
+def update_challenge_score_B(game_id, to_user_score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("UPDATE wordhunt_challenge_requests SET to_user_score = ? WHERE game_id = ?", (to_user_score, game_id))
+    conn.commit()
+    conn.close()
+
+def add_wordhunt_board(user_id, board_string):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("INSERT INTO wordhunt_boards (board_string, user_id) VALUES (?, ?)", (board_string, user_id))
+    conn.commit()
+    conn.close()
+
+def get_wordhunt_id(board_string):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id FROM wordhunt_boards WHERE board_string = ?", (board_string,))
+    row = c.fetchone()
+    conn.close()
+    return row["game_id"] if row else None
+
+def add_wordhunt_word(game_id, user_id, word):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("INSERT INTO wordhunt_found_words (game_id, user_id, word) VALUES (?, ?, ?)", (game_id, user_id, word))
+    conn.commit()
+    conn.close()
+
+def get_all_words (game_id, user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT word FROM wordhunt_found_words WHERE game_id = ? AND user_id = ?", (game_id, user_id))
+    rows = c.fetchall()
+    words = [row['word'] for row in rows] #gets the word from each row, lists of words
+    conn.close()
+    return words

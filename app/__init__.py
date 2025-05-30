@@ -140,8 +140,8 @@ def profile():
         return redirect(url_for('login'))
 
     user_id = session['user_id']
-    user = get_user(user_id)
-    if not user:
+    user_data = get_user(user_id)
+    if not user_data:
         return redirect(url_for('login'))
 
     leaderboards, challenges = get_profile(user_id)
@@ -151,7 +151,7 @@ def profile():
 
     return render_template(
         'profile.html',
-        user={"username": user["username"], "user_id": user_id},
+        user={"username": user_data["username"], "user_id": user_id},
         leaderboards=leaderboards,
         challenges=challenges
     )
@@ -292,9 +292,16 @@ def wordhunt():
 
 @app.route('/anagrams')
 def anagrams():
-    
+    if 'user_id' not in session or not session['user_id']:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    userName = get_user(user_id)
+    if not userName:
+        return redirect(url_for('login'))
     letters = getWordSelectionAnagrams()
-    return render_template("anagrams.html", letters = letters)
+    return render_template("anagrams.html", letters = letters, userName = userName)
+
 @app.route('/logout')
 def logout():
     session.clear()
@@ -352,6 +359,26 @@ def remove_friend_route(friend_id):
     remove_friend(user_id, friend_id)
     return redirect(url_for('friends'))
 
+@app.route('/send_wordhunt_challenge', methods=['POST'])
+def send_challenge():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+    friend_id = request.form.get('friend_id')
+    board_string = request.form.get('board_string')
+    game_id = get_wordhunt_id(board_string)
+    add_wordhunt_challenge(user_id, friend_id, game_id)
+
+
+@app.route('/add_wh_board', methods=['POST'])
+def add_wh_board():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+    board_string = request.form.get('board_string')
+    add_wordhunt_board(user_id, board_string)
+    print(get_wordhunt_board(user_id))
+    return "saved board"
 
 
 def get_notifications(user_id):
@@ -373,4 +400,5 @@ def get_notifications(user_id):
     return notifications
 
 if __name__ == "__main__":
+    build()
     app.run(host="0.0.0.0", port=8000, debug=True)

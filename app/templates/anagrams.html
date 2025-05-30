@@ -72,6 +72,11 @@
   animation-duration: 2s;
 }
 
+#firstUser {
+  background-color: orange;
+  margin:30px;
+  display:block;
+}
 
 
 @keyframes invisible {
@@ -217,13 +222,13 @@ function startGame() {
             reset();
             scoreBoard();
             $("#myModal").modal();
-            
 
-            
+
+
           }
         }, 1000);
 
-       
+
       }
 
   function scoreBoard() {
@@ -296,7 +301,7 @@ function checkLetters() {
                 }
             }
           });
-          
+
 
 
 
@@ -331,7 +336,7 @@ function checkLetters() {
           });
           }
 
-       
+
         } else {
           msg.innerHTML = `&#10060; <b>${letters}</b> not in vocabulary!`;
           emptyBoxes = [];
@@ -419,9 +424,18 @@ function checkLetters() {
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Score Board</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div id="firstUser">
+      <h3>{{ userName }}</h3>
       <div class="modal-body" id="disp">
 <p></p>
       </div>
+      <div id="firstUser">
+      <h3>second user</h3>
+      <div class="modal-body" id="disp">
+<p></p>
+      </div>
+    </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Understood</button>
