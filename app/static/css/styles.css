@@ -72,6 +72,23 @@ button:hover,
     transform: scale(1.05);
 }
 
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 24px;
+    background: #f8fafc;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+.button-container {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 12px 0;
+}
+
 /* Game Cards */
 .game-card,
 .card {
@@ -79,8 +96,10 @@ button:hover,
     padding: 20px;
     margin: 10px;
     border-radius: 12px;
-    background: rgba(249, 166, 32, 0.9); /* gold */
-    box-shadow: 0 0 10px rgba(170, 176, 60, 0.4); /* olive */
+    background: rgba(249, 166, 32, 0.9);
+    /* gold */
+    box-shadow: 0 0 10px rgba(170, 176, 60, 0.4);
+    /* olive */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -105,10 +124,12 @@ img {
 
 /* Glow Animation */
 @keyframes glow {
+
     0%,
     100% {
         box-shadow: 0 0 5px var(--gold), 0 0 10px var(--olive);
     }
+
     50% {
         box-shadow: 0 0 15px var(--olive), 0 0 30px var(--gold);
     }
@@ -123,6 +144,7 @@ img {
         flex-direction: column;
         text-align: center;
     }
+
     .button-container {
         flex-direction: column;
     }

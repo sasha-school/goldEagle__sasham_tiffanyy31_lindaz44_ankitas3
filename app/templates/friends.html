@@ -4,31 +4,135 @@
 
 {% block content %}
 
-<h1>Friends</h1>
-<h2>Your Friends</h2>
-<ul>
-{% for friend in friends %}
-    <li>{{ friend.username }} <a href="{{ url_for('remove_friend_route', friend_id=friend.user_id) }}">Remove</a></li>
-{% endfor %}
-</ul>
+<style>
+    .friends-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        padding: 2rem;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    h1, h2 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        text-align: center;
+        width: 100%;
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 2rem;
+        width: 100%;
+    }
+    li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+    li:last-child {
+        border-bottom: none;
+    }
+    .friend-actions a, .request-actions a {
+        margin-left: 0.5rem;
+        text-decoration: none;
+        color: #3498db;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        transition: background 0.2s;
+        font-size: 0.95em;
+    }
+    .friend-actions a:hover, .request-actions a:hover {
+        background: #ecf0f1;
+    }
+    form {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    label {
+        font-weight: bold;
+    }
+    input[type="number"] {
+        padding: 0.3rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100px;
+    }
+    button {
+        background: #27ae60;
+        color: #fff;
+        border: none;
+        padding: 0.4rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    button:hover {
+        background: #219150;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 1rem;
+        color: #7f8c8d;
+        text-decoration: none;
+        font-size: 1em;
+        transition: color 0.2s;
+    }
+    .back-link:hover {
+        color: #2c3e50;
+    }
+</style>
 
-<h2>Friend Requests</h2>
-<ul>
-{% for req in requests %}
-    <li>{{ req.username }}
-        <a href="{{ url_for('respond_request', from_user_id=req.user_id, action='accept') }}">Accept</a>
-        <a href="{{ url_for('respond_request', from_user_id=req.user_id, action='decline') }}">Decline</a>
-    </li>
-{% endfor %}
-</ul>
+<div class="friends-container">
+    <h1>Friends</h1>
 
-<h2>Send Friend Request</h2>
-<form method="post" action="{{ url_for('send_request_dynamic') }}">
-    <label for="to_user_id">User ID:</label>
-    <input type="number" name="to_user_id" id="to_user_id" required>
-    <button type="submit">Send Request</button>
-</form>
+    <h2>Your Friends</h2>
+    <ul>
+    {% for friend in friends %}
+        <li>
+            <span>{{ friend.username }}</span>
+            <span class="friend-actions">
+                <a href="{{ url_for('remove_friend_route', friend_id=friend.user_id) }}">Remove</a>
+            </span>
+        </li>
+    {% else %}
+        <li><em>No friends yet.</em></li>
+    {% endfor %}
+    </ul>
 
-<a href="{{ url_for('home') }}">Back to Home</a>
+    <h2>Friend Requests</h2>
+    <ul>
+    {% for req in requests %}
+        <li>
+            <span>{{ req.username }}</span>
+            <span class="request-actions">
+                <a href="{{ url_for('respond_request', from_user_id=req.user_id, action='accept') }}">Accept</a>
+                <a href="{{ url_for('respond_request', from_user_id=req.user_id, action='decline') }}">Decline</a>
+            </span>
+        </li>
+    {% else %}
+        <li><em>No pending requests.</em></li>
+    {% endfor %}
+    </ul>
+
+    <h2>Send Friend Request</h2>
+    <form method="post" action="{{ url_for('send_request_dynamic') }}">
+        <label for="to_user_id">User ID:</label>
+        <input type="number" name="to_user_id" id="to_user_id" required>
+        <button type="submit">Send Request</button>
+    </form>
+
+    <a class="back-link" href="{{ url_for('home') }}">&#8592; Back to Home</a>
+</div>
 
 {% endblock %}
