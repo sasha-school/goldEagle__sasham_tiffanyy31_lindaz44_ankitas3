@@ -7,27 +7,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>goldEagles</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 24px;
+            background: #f8fafc;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .button-container {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 12px 0;
+        }
+        .button1, .button {
+            padding: 8px 18px;
+            border-radius: 6px;
+            border: none;
+            background: #2563eb;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .button1 { background: #22c55e; }
+        .button:hover, .button1:hover { opacity: 0.85; }
+        .stats-section {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin: 24px 0;
+        }
+        .stats-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            padding: 18px 24px;
+            min-width: 200px;
+        }
+        .stats-card h4 {
+            margin-bottom: 10px;
+            color: #2563eb;
+        }
+        .stats-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .stats-card li {
+            margin-bottom: 6px;
+        }
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .recent-activity, .friends-section, .games-section {
+            margin: 24px 0;
+        }
+        .recent-activity ul, .friends-section ul {
+            background: #fff;
+            border-radius: 8px;
+            padding: 14px 20px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            list-style: none;
+            margin: 0;
+        }
+        .recent-activity h4, .friends-section h4, .games-section h4 {
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+        .friends-section ul li, .recent-activity ul li {
+            margin-bottom: 8px;
+        }
+        .games-section .button-container form {
+            flex: 1;
+        }
+        @media (max-width: 700px) {
+            .stats-section {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 
 <body>
+<div class="container">
     <header>
         {% if session.get('username') %}
-            <h2 class="text-sm font-mono text-white-700">Hi, {{ session['username'] }}!</h2>
+            <h2 class="text-sm font-mono text-gray-800">Hi, {{ session['username'] }}!</h2>
             <div class="button-container">
                 <form action="/profile"><button type="submit" class="button1">Profile</button></form>
                 <form action="/logout"><button type="submit" class="button">Log Out</button></form>
             </div>
-            <hr>
         {% else %}
             <h2>Welcome to goldEagles!</h2>
             <p>You are currently in guest mode. Please log in or register!</p>
-            <p>Playing any games in guest mode does not save your results.</p>
+            <p style="color:#ef4444;">Playing any games in guest mode does not save your results.</p>
             <div class="button-container">
                 <form action="/login"><button type="submit" class="button1">Login</button></form>
                 <form action="/register"><button type="submit" class="button">Register</button></form>
             </div>
-            <hr>
         {% endif %}
+        <hr style="margin: 18px 0;">
     </header>
 
     <section class="welcome-section">
@@ -39,17 +130,17 @@
         <div class="stats-card">
             <h4>Highest Scores</h4>
             <ul>
-                <li>Anagrams: {{ highest_scores.anagrams if highest_scores.anagrams is not none else 'No score yet' }}</li>
-                <li>Word Hunt: {{ highest_scores.wordhunt if highest_scores.wordhunt is not none else 'No score yet' }}</li>
-                <li>Word Bites: {{ highest_scores.wordbites if highest_scores.wordbites is not none else 'No score yet' }}</li>
+                <li>Anagrams: <strong>{{ highest_scores.anagrams if highest_scores.anagrams is not none else 'No score yet' }}</strong></li>
+                <li>Word Hunt: <strong>{{ highest_scores.wordhunt if highest_scores.wordhunt is not none else 'No score yet' }}</strong></li>
+                <li>Word Bites: <strong>{{ highest_scores.wordbites if highest_scores.wordbites is not none else 'No score yet' }}</strong></li>
             </ul>
         </div>
         <div class="stats-card">
             <h4>Games Played</h4>
             <ul>
-                <li>Anagrams: {{ games_played.anagrams if games_played.anagrams is not none else 'No games played' }}</li>
-                <li>Word Hunt: {{ games_played.wordhunt if games_played.wordhunt is not none else 'No games played' }}</li>
-                <li>Word Bites: {{ games_played.wordbites if games_played.wordbites is not none else 'No games played' }}</li>
+                <li>Anagrams: <strong>{{ games_played.anagrams if games_played.anagrams is not none else 'No games played' }}</strong></li>
+                <li>Word Hunt: <strong>{{ games_played.wordhunt if games_played.wordhunt is not none else 'No games played' }}</strong></li>
+                <li>Word Bites: <strong>{{ games_played.wordbites if games_played.wordbites is not none else 'No games played' }}</strong></li>
             </ul>
         </div>
     </section>
@@ -81,45 +172,38 @@
         </ul>
         <h4>Friend Requests</h4>
         <ul>
-<h4>Friend Requests</h4>
-<ul>
-    {% if friend_requests %}
-        {% for request in friend_requests %}
-            {% if request and request.user_id is defined and request.username is defined %}
-            <li>
-                {{ request.username }}
-                <form action="{{ url_for('respond_request', from_user_id=request.user_id, action='accept') }}" method="post" style="display:inline;">
-                    <button type="submit">Accept</button>
-                </form>
-                <form action="{{ url_for('respond_request', from_user_id=request.user_id, action='decline') }}" method="post" style="display:inline;">
-                    <button type="submit">Decline</button>
-                </form>
-            </li>
+            {% if friend_requests %}
+                {% set valid_requests = friend_requests|selectattr('user_id', 'defined')|selectattr('username', 'defined')|list %}
+                {% if valid_requests %}
+                    {% for request in valid_requests %}
+                        <li>
+                            {{ request.username }}
+                            <form action="{{ url_for('respond_request', from_user_id=request.user_id, action='accept') }}" method="post" style="display:inline;">
+                                <button type="submit" class="button1" style="padding:2px 10px;font-size:0.95em;">Accept</button>
+                            </form>
+                            <form action="{{ url_for('respond_request', from_user_id=request.user_id, action='decline') }}" method="post" style="display:inline;">
+                                <button type="submit" class="button" style="padding:2px 10px;font-size:0.95em;">Decline</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No friend requests.</li>
+                {% endif %}
+            {% else %}
+                <li>No friend requests.</li>
             {% endif %}
-        {% endfor %}
-        {% if friend_requests|selectattr('user_id', 'defined')|list|length == 0 %}
-            <li>No friend requests.</li>
-        {% endif %}
-    {% else %}
-        <li>No friend requests.</li>
-    {% endif %}
-</ul>
-
         </ul>
     </section>
     {% endif %}
 
-    
-
-    
-
     <section class="games-section">
         <h4>Play a Game</h4>
         <div class="button-container">
-            <form action="/anagrams"><button>Anagrams</button></form>
-            <form action="/wordhunt"><button>Word Hunt</button></form>
-            <form action="/wordbites"><button>Word Bites</button></form>
+            <form action="/anagrams"><button class="button1">Anagrams</button></form>
+            <form action="/wordhunt"><button class="button">Word Hunt</button></form>
+            <form action="/wordbites"><button class="button">Word Bites</button></form>
         </div>
     </section>
+</div>
 </body>
-{% endblock %}
+{% endblock %}</section>

@@ -18,7 +18,11 @@ def build():
     create_tables()
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    try:
+        conn = sqlite3.connect(DB_PATH)
+    except:
+        DB_DIR_droplet = os.path.join(BASE_DIR, "app.data")
+        conn = sqlite3.connect(DB_DIR_droplet)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -115,7 +119,7 @@ def create_tables():
     conn.close()
 
 def addUser(username, password):
-    users = sqlite3.connect(DB_PATH)
+    users = get_db_connection()
     goodcharas = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678910._-")
     if set(username).difference(goodcharas) or set(password).difference(goodcharas):
         return "There are special characters in the username or password."
@@ -127,7 +131,7 @@ def addUser(username, password):
     return "Username taken."
 
 def check_password(username, password):
-    users = sqlite3.connect(DB_PATH)
+    users = get_db_connection()
     c = users.cursor()
     c.execute("SELECT password_hash FROM users WHERE username=?", (username,))
     res = c.fetchone()
