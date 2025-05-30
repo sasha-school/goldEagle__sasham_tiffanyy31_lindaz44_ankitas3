@@ -110,6 +110,12 @@ lindaZ -- 2025-05-24 16:18
 ankitaS -- 2025-05-23
 - worked on time functionality 
 
-
 tiffanyy -- 2025 - 5 -27 
 - minor changes to css
+
+lindaZ -- 2025-05-29 23:52
+- Fixed dict issue with profile
+- Wordhunt bug fix
+- Wordhunt db additions
+- wordhunt board will be added upon start of the game
+- working on challenge requests for wordhunt

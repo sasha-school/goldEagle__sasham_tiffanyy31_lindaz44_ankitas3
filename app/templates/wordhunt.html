@@ -30,11 +30,22 @@ After the game, if not already friended, popup asking if you’d like to friend 
       </style>
   </head>
   <body>
-    <p id="score" class="text-white text-3xl">Score: 0</p>
-    <p id="timer" class="text-white text-3xl"> 60</p>
+    <div class="absolute w-[170px] h-[100px] bg-blue-200 rounded-lg" style="top: 40vh; left: 15vw;">
+      <p id="score" class=" p-1 text-white text-3xl">Score: 0</p>
+      <p id="timer" class="text-white text-3xl"> 60</p>
+      <button id="startButton" class="w-[250px] rounded-lg p-5 text-3xl bg-blue-200 mt-10" onclick="startGame(this)">Single Player Mode</button>
+    </div>
+    
     <div style="display: none;" id="letterString">{{letterString}}</div>
-    <input id="display" readonly class="bg-transparent border-4 block mx-auto my-4 p-2 border border-transparent rounded w-full max-w-screen-sm text-center text-5xl">
-    <button class="rounded-lg" onclick="startGame(this)">Start</button>
+    <input style="display: none;" id="display" readonly class="bg-transparent border-4 block mx-auto my-4 p-2 border border-transparent rounded w-full max-w-screen-sm text-center text-5xl">
+    <!--<button class="absolute top-[130px] transform -translate-x-1/2 rounded-lg p-5 text-3xl bg-blue-200" onclick="startGame(this)">Single Player Mode</button>-->
+
+    <div id="send_challenge" class="bg-blue-300 inline-block rounded-lg p-3">
+      <label>User ID:</label>
+      <input id="friend_id" type="number" min="0" class="my-4 p-2">
+      <button type="submit" class="bg-blue-200 p-3" onclick="sendChallenge()">Send Challenge</button>
+    </div>
+
     <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-blue-200 p-5 rounded-lg">
       <div class="grid grid-cols-4 grid-rows-4 gap-6 h-full">
         <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-8xl text-transparent pb-4">{{LetterA}}</button>
@@ -55,12 +66,15 @@ After the game, if not already friended, popup asking if you’d like to friend 
         <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterP}}</button>
       </div>
     </div>
+    
     <script>
       const display = document.getElementById("display");
       const board = document.getElementById("board");
       const stringLetter = document.getElementById("letterString").textContent;
       const score = document.getElementById("score");
       const time = document.getElementById("timer");
+      const challenge = document.getElementById("send_challenge");
+      const startButton = document.getElementById('startButton');
       let buttons = document.querySelectorAll(".letter-button");
       let selectedLetters = new Set();
       let currentWord = "";
@@ -72,26 +86,54 @@ After the game, if not already friended, popup asking if you’d like to friend 
       //starts game once startbutton is clicked
       function startGame(startButton) {
         startButton.style.display = "none";
+        challenge.style.display="none";
+        display.style.display="";
+
+        const stringData = new FormData();
+        stringData.append('board_string', stringLetter);
+        //using js to send to backend to prevent page reload
+        fetch('/add_wh_board', {
+          method: 'POST',
+          body: stringData
+        })
+        .then(response => response.text())
+        //.then(data => {
+        //  console.log(data);
+        //})
+        .catch(error => console.error(error));
 
         game = true;
-
         buttonBehavior();
-
         window.setInterval(() => {
           //const currentTime = parseInt(time.textContent.match(/\d+/)[0])
           if (time.textContent>0){
             time.textContent -= 1;
           }
         }, 1000);
-
         setTimeout(() => {
           endGame();
-        }, 60000);
+        }, 60000); //60 sec game time
       }
 
       function endGame() {
         game = false;
         buttonBehavior();
+      }
+
+      function sendChallenge() {
+        const inputVal = document.getElementById("friend_id");
+        const friend_id = inputVal.value;
+        const challengeData = new FormData();
+        challengeData.append('board_string', stringLetter);
+        challengeData.append('friend_id', friend_id);
+
+        fetch('/send_wordhunt_challenge', {
+          method: 'POST',
+          body: challengeData
+        })
+        .then(response => response.text())
+        .then(startGame(startButton))
+        .catch(error => console.error(error));
       }
 
       //button behavior when users select them
@@ -108,7 +150,8 @@ After the game, if not already friended, popup asking if you’d like to friend 
               if (e.buttons === 1) {
                 appendLetter(button);
               }
-            })
+            });
+
             button.addEventListener("mouseup", (e) => {
               if (display.value.length > 2){
                 checkWords();
@@ -117,12 +160,20 @@ After the game, if not already friended, popup asking if you’d like to friend 
                 removeWord();
               }, 500);
             })
-          })
-          board.addEventListener("mouseup" || "mouseleave", (e) => {
+          });
+
+          board.addEventListener("mouseup", (e) => {
             setTimeout(() => {
                 removeWord();
-            }, 500);
-          })
+            }, 100);
+          });
+
+          board.addEventListener("mouseleave", (e) => {
+            setTimeout(() => {
+                removeWord();
+            }, 100);
+          });
+
         } else {
           buttons.forEach(button => {
             const newButton = button.cloneNode(true);
