@@ -31,9 +31,9 @@ After the game, if not already friended, popup asking if you’d like to friend 
   </head>
   <body>
     <p id="score" class="text-white text-3xl">Score: 0</p>
-    <p id="timer" class="text-white text-3xl"> 10</p>
+    <p id="timer" class="text-white text-3xl"> 60</p>
     <div style="display: none;" id="letterString">{{letterString}}</div>
-    <input id="display" readonly class="border-4 block mx-auto my-4 p-2 border border-gray-500 rounded w-full max-w-screen-sm">
+    <input id="display" readonly class="bg-transparent border-4 block mx-auto my-4 p-2 border border-transparent rounded w-full max-w-screen-sm text-center text-5xl">
     <button class="rounded-lg" onclick="startGame(this)">Start</button>
     <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-blue-200 p-5 rounded-lg">
       <div class="grid grid-cols-4 grid-rows-4 gap-6 h-full">
@@ -57,11 +57,11 @@ After the game, if not already friended, popup asking if you’d like to friend 
     </div>
     <script>
       const display = document.getElementById("display");
-      let buttons = document.querySelectorAll(".letter-button");
       const board = document.getElementById("board");
       const stringLetter = document.getElementById("letterString").textContent;
       const score = document.getElementById("score");
       const time = document.getElementById("timer");
+      let buttons = document.querySelectorAll(".letter-button");
       let selectedLetters = new Set();
       let currentWord = "";
       let wordBank = [];
@@ -86,7 +86,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
 
         setTimeout(() => {
           endGame();
-        }, 100000);
+        }, 60000);
       }
 
       function endGame() {
@@ -113,11 +113,15 @@ After the game, if not already friended, popup asking if you’d like to friend 
               if (display.value.length > 2){
                 checkWords();
               }
-              removeWord();
+              setTimeout(() => {
+                removeWord();
+              }, 500);
             })
           })
-          board.addEventListener("mouseleave", (e) => {
-            removeWord();
+          board.addEventListener("mouseup" || "mouseleave", (e) => {
+            setTimeout(() => {
+                removeWord();
+            }, 500);
           })
         } else {
           buttons.forEach(button => {
