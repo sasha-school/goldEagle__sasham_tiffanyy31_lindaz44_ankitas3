@@ -271,10 +271,10 @@ def remove_friend(user_id, friend_id):
     conn.commit()
     conn.close()
 
-def add_wordhunt_challenge(from_id, to_id, game_id):
+def add_wordhunt_challenge(from_user_id, to_user_id, game_id):
     conn = get_db_connection()
     c = conn.cursor()
-    c.execute("INSERT INTO wordhunt_challenge_requests (game_id, from_id, to_id) VALUES (?, ?, ?)", (game_id, from_id, to_id))
+    c.execute("INSERT INTO wordhunt_challenge_requests (game_id, from_user_id, to_user_id) VALUES (?, ?, ?)", (game_id, from_user_id, to_user_id))
     conn.commit()
     conn.close()
 
@@ -307,7 +307,7 @@ def get_wordhunt_id(board_string):
     c.execute("SELECT game_id FROM wordhunt_boards WHERE board_string = ?", (board_string,))
     row = c.fetchone()
     conn.close()
-    return row["game_id"] if row else None
+    return row["game_id"]
 
 def add_wordhunt_word(game_id, user_id, word):
     conn = get_db_connection()

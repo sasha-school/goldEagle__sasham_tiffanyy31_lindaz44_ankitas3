@@ -368,18 +368,18 @@ def send_challenge():
     board_string = request.form.get('board_string')
     game_id = get_wordhunt_id(board_string)
     add_wordhunt_challenge(user_id, friend_id, game_id)
-
+    return "sent request"
 
 @app.route('/add_wh_board', methods=['POST'])
 def add_wh_board():
     if 'user_id' not in session:
-        return redirect(url_for('login'))
-    user_id = session['user_id']
-    board_string = request.form.get('board_string')
-    add_wordhunt_board(user_id, board_string)
-    print(get_wordhunt_board(user_id))
-    return "saved board"
-
+        return "not logged in"
+    else:
+        user_id = session['user_id']
+        board_string = request.form.get('board_string')
+        add_wordhunt_board(user_id, board_string)
+        #print(get_wordhunt_board(user_id))
+        return "saved board"
 
 def get_notifications(user_id):
     conn = get_db_connection()

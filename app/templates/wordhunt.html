@@ -33,7 +33,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
     <div class="absolute w-[170px] h-[100px] bg-blue-200 rounded-lg" style="top: 40vh; left: 15vw;">
       <p id="score" class=" p-1 text-white text-3xl">Score: 0</p>
       <p id="timer" class="text-white text-3xl"> 60</p>
-      <button id="startButton" class="w-[250px] rounded-lg p-5 text-3xl bg-blue-200 mt-10" onclick="startGame(this)">Single Player Mode</button>
+      <button id="startButton" class="w-[250px] rounded-lg p-5 text-3xl bg-blue-200 mt-10" onclick="saveBoard()">Single Player Mode</button>
     </div>
     
     <div style="display: none;" id="letterString">{{letterString}}</div>
@@ -84,23 +84,10 @@ After the game, if not already friended, popup asking if you’d like to friend 
       let addLetters = true;
 
       //starts game once startbutton is clicked
-      function startGame(startButton) {
+      function startGame() {
         startButton.style.display = "none";
         challenge.style.display="none";
         display.style.display="";
-
-        const stringData = new FormData();
-        stringData.append('board_string', stringLetter);
-        //using js to send to backend to prevent page reload
-        fetch('/add_wh_board', {
-          method: 'POST',
-          body: stringData
-        })
-        .then(response => response.text())
-        //.then(data => {
-        //  console.log(data);
-        //})
-        .catch(error => console.error(error));
 
         game = true;
         buttonBehavior();
@@ -120,20 +107,50 @@ After the game, if not already friended, popup asking if you’d like to friend 
         buttonBehavior();
       }
 
+      function saveBoard() {
+        const stringData = new FormData();
+        stringData.append('board_string', stringLetter);
+        //using js to send to backend to prevent page reload
+        fetch('/add_wh_board', {
+          method: 'POST',
+          body: stringData
+        })
+        .then(response => response.text())
+        .then(data => {
+          console.log(data);
+        })
+        .then(() => startGame())
+        .catch(error => console.error(error));
+      }
+
       function sendChallenge() {
         const inputVal = document.getElementById("friend_id");
         const friend_id = inputVal.value;
-        const challengeData = new FormData();
-        challengeData.append('board_string', stringLetter);
-        challengeData.append('friend_id', friend_id);
 
-        fetch('/send_wordhunt_challenge', {
+        const stringData = new FormData();
+        stringData.append('board_string', stringLetter);
+
+        fetch('/add_wh_board', {
           method: 'POST',
-          body: challengeData
+          body: stringData
         })
         .then(response => response.text())
-        .then(startGame(startButton))
+        .then(data => {
+          console.log(data);
+          const challengeData = new FormData();
+          challengeData.append('board_string', stringLetter);
+          challengeData.append('friend_id', friend_id);
+          fetch('/send_wordhunt_challenge', {
+            method: 'POST',
+            body: challengeData
+          })
+          .then(response => response.text())
+        })
+        .then(data => {
+          startGame()
+        })
         .catch(error => console.error(error));
+
       }
 
       //button behavior when users select them
