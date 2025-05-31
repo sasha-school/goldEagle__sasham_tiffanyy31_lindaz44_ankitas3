@@ -42,6 +42,23 @@
 }
 
 
+#plsStart {
+  background: #794d15;
+  color: white;
+  border: none;
+  
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1.1em;
+  margin-top: 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(66,96,17,0.13);
+}
+
 #enterWord {
   background: var(--dark-moss-green);
   color: var(--timberwolf);
@@ -60,7 +77,10 @@
 #enterWord:hover {
   background: var(--pakistan-green);
 }
-
+#timer {
+  font-weight: 600;
+  color: #4B3A22;
+}
 #points {
   min-height: 24px;
   font-size: 1.1em;
@@ -73,7 +93,14 @@
 }
 
 #firstUser {
-  background-color: orange;
+  background-color: var(--lion);
+  margin:30px;
+  display:block;
+}
+
+
+#secondUser {
+  background-color: var(--lion);
   margin:30px;
   display:block;
 }
@@ -180,11 +207,39 @@
     font-size: 1.2em;
   }
 }
+
+#both {
+  display: flex;
+}
+
+#disp {
+  display: block;
+}
 </style>
 <script>
 let time = 60;
 let game = false;
-var words = []
+
+/*
+json structure:
+user
+scramble letters
+dict of words with correspoending points
+total points
+*/
+
+var words = [];
+var pointsPerWord = [];
+
+var dictWords = {};
+for (let i = 0; i < words.length; i++) {
+  dictWords[words[i]] = pointsPerWord[i];
+}
+
+var totPoint = 0;
+var usedLetters = [];
+
+document.getElementById("tt").textContent = userName
 
 function dragstartHandler(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
@@ -234,8 +289,10 @@ function startGame() {
   function scoreBoard() {
     for (let i = 0; i < words.length; i++) {
       let w = document.createElement('p');
-      w.textContent = words[i];
+      let p = document.createElement('p');
+      w.textContent = words[i] + "      " + pointsPerWord[i].toString();
       document.getElementById("disp").appendChild(w);
+     
     }
   }
 
@@ -243,6 +300,7 @@ function startGame() {
     for (let i = 0; i < 6; i++) {
       document.getElementById('img' + (i+1).toString()).innerHTML = "";
      document.getElementById('img' + (i+1).toString()).disabled = true;
+     document.getElementById('div' + (i+1).toString()).disabled = true;
       document.getElementById('img' + (i+1).toString()).style.opacity = 0.5;
 
 
@@ -250,8 +308,7 @@ function startGame() {
     document.getElementById('enterWord').disabled = true;
   }
 
-var totPoint = 0;
-var usedLetters = [];
+
 
 function checkLetters() {
   if (game==true) {
@@ -310,6 +367,7 @@ function checkLetters() {
             usedLetters.push(letters);
             words.push(letters);
             let pointThing = pointsCateg[numLetters];
+            pointsPerWord.push(pointThing);
             totPoint += pointThing;
             msg.innerHTML = `&#127942; <b>+${pointThing}</b> points!`;
             tot.innerHTML = `Total Points: ${totPoint}`;
@@ -377,10 +435,10 @@ function checkLetters() {
 
 
 <div class="anagram-container">
-  <p id="timer" class="text-black text-3xl">60</p>
-  <button id="plsStart" class="rounded-lg" onclick="startGame()">Start</button>
+<div class="text-center">  <p id="timer" class="text-black text-3xl">60</p></div>
+<div class="text-center"><button id="plsStart" class="rounded-lg" onclick="startGame()">Start</button></div>
   <br>
-  <button id="tot">Total Points: </button>
+  <div class="text-center"><button id="tot">Total Points: </button></div>
   <div class="seperate">
     <div class="box" ondrop="dropHandler(event)" id="div1" ondragover="dragoverHandler(event)"></div>
     <div class="box" ondrop="dropHandler(event)" id="div2" ondragover="dragoverHandler(event)"></div>
@@ -390,7 +448,8 @@ function checkLetters() {
      <div class="box" ondrop="dropHandler(event)" id="div6" ondragover="dragoverHandler(event)"></div>
   </div>
 
-  <button id="enterWord" onclick="checkLetters()">Enter</button>
+  <div class="text-center"><button id="enterWord" onclick="checkLetters()">Enter</button></div>
+
   <div id="points"></div>
 
   <div class="pls">
@@ -424,23 +483,30 @@ function checkLetters() {
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Score Board</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+    <div id="both">
       <div id="firstUser">
       <h3>{{ userName }}</h3>
-      <div class="modal-body" id="disp">
-<p></p>
+      <div class="modal-body" id="disp"> 
+        <p></p> <p></p> <br>
       </div>
-      <div id="firstUser">
-      <h3>second user</h3>
-      <div class="modal-body" id="disp">
-<p></p>
+      </div>
+
+
+      <div id="secondUser">
+        <h3 id="u">second user</h3>
+        <div class="modal-body" id="disp">
+          <p></p>
+        </div>
       </div>
     </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
+       <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+          Close
+        </button>
       </div>
-    </div>
+    </div>   
   </div>
 </div>
 {% endblock %}</div>
