@@ -34,7 +34,7 @@
   border: none;
   border-radius: 8px;
   padding: 10px 28px;
-  font-size: 1.2em;
+  font-size: 1em;
   margin-bottom: 18px;
   box-shadow: 0 2px 8px rgba(176,137,82,0.13);
   font-weight: bold;
@@ -46,10 +46,10 @@
   background: #794d15;
   color: white;
   border: none;
-  
+  margin: 20px;
   border-radius: 8px;
   padding: 10px 28px;
-  font-size: 1.1em;
+  font-size: 1em;
   margin-top: 18px;
   margin-bottom: 10px;
   cursor: pointer;
@@ -83,7 +83,7 @@
 }
 #points {
   min-height: 24px;
-  font-size: 1.1em;
+  font-size: 1em;
   color: var(--lion);
   margin-bottom: 12px;
   font-weight: 600;
@@ -128,6 +128,11 @@
   }
 }
 
+#send_challenge_ana {
+  display: block;
+   vertical-align: middle;
+   margin-left: -50px;
+}
 .seperate, .pls {
   display: flex;
   justify-content: center;
@@ -196,8 +201,8 @@
     padding: 12px 4px;
   }
   .box {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     min-width: 48px;
     min-height: 48px;
   }
@@ -207,6 +212,11 @@
     font-size: 1.2em;
   }
 }
+
+#start-but {
+  display: flex;
+}
+
 
 #both {
   display: flex;
@@ -231,6 +241,7 @@ total points
 var words = [];
 var pointsPerWord = [];
 
+
 var dictWords = {};
 for (let i = 0; i < words.length; i++) {
   dictWords[words[i]] = pointsPerWord[i];
@@ -239,7 +250,7 @@ for (let i = 0; i < words.length; i++) {
 var totPoint = 0;
 var usedLetters = [];
 
-document.getElementById("tt").textContent = userName
+
 
 function dragstartHandler(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
@@ -262,6 +273,38 @@ function dropHandler(ev) {
   }
   box.appendChild(imgTag);
 }
+
+
+function sendChallenge() {
+        const inputVal = document.getElementById("friend_id");
+        const friend_id = inputVal.value;
+
+        const stringData = new FormData();
+        stringData.append('ana_string', scrm);
+
+        fetch('/add_ana_string', {
+          method: 'POST',
+          body: stringData
+        })
+        .then(response => response.text())
+        .then(data => {
+          console.log(data);
+          const challengeData = new FormData();
+          challengeData.append('ana_string', scrm);
+          challengeData.append('friend_id', friend_id);
+          fetch('/send_anagrams_challenge', {
+            method: 'POST',
+            body: challengeData
+          })
+          .then(response => response.text())
+        })
+        .then(data => {
+          startGame()
+        })
+        .catch(error => console.error(error));
+
+      }
+
 
 function startGame() {
   game = true;
@@ -310,6 +353,7 @@ function startGame() {
 
 
 
+ 
 function checkLetters() {
   if (game==true) {
   const boxes = document.querySelectorAll(".seperate .box");
@@ -428,6 +472,14 @@ function checkLetters() {
   }
 }}
 
+ var scrm = "";
+
+for (let i = 1; i < 6; i++) {
+  scrm += document.getElementById('img' + (i+1).toString()).textContent;
+}
+
+
+
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -436,7 +488,13 @@ function checkLetters() {
 
 <div class="anagram-container">
 <div class="text-center">  <p id="timer" class="text-black text-3xl">60</p></div>
-<div class="text-center"><button id="plsStart" class="rounded-lg" onclick="startGame()">Start</button></div>
+<div class="text-center" id="start-but"> 
+<div id="send_challenge_ana">
+    <input placeholder="User ID" id="friend_id" class="form-control w-auto d-inline-block"  type="number">
+    <button id= "plsStart" type="submit" onclick="sendChallenge()">Send Challenge: Start</button>
+  </div>
+<div><button id="plsStart" onclick="startGame()">Single-Player Mode: Start</button></div>
+</div>
   <br>
   <div class="text-center"><button id="tot">Total Points: </button></div>
   <div class="seperate">
@@ -500,13 +558,7 @@ function checkLetters() {
       </div>
     </div>
 
-      <div class="modal-footer">
-       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>   
+      
   </div>
 </div>
 {% endblock %}</div>
