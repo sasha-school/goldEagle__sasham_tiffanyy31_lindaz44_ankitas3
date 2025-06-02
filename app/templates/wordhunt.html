@@ -150,7 +150,6 @@ After the game, if not already friended, popup asking if you’d like to friend 
           startGame()
         })
         .catch(error => console.error(error));
-
       }
 
       //button behavior when users select them
@@ -202,7 +201,6 @@ After the game, if not already friended, popup asking if you’d like to friend 
 
           })
         }
-
       }
 
       //get valid words of a board from api
@@ -262,6 +260,20 @@ After the game, if not already friended, popup asking if you’d like to friend 
 
             addScore(displayWord);
             selectedWords.push(displayWord)
+
+            const wordData = new FormData();
+            wordData.append('word', displayWord);
+            wordData.append('board_string', stringLetter);
+
+            fetch('/add_wh_words', {
+              method: 'POST',
+              body: wordData
+            })
+            .then(response => response.text())
+            .then(data => {
+              console.log(data);
+            })
+            .catch(error => console.error(error));
 
             setTimeout(() => {
               display.classList.remove('border-green-500')

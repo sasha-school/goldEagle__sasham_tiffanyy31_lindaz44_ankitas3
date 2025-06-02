@@ -93,7 +93,8 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS wordhunt_boards(
             game_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
-            board_string TEXT NOT NULL
+            board_string TEXT NOT NULL,
+            score INTEGER
         );
     ''')
 
