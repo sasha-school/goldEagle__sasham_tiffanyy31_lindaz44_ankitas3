@@ -393,6 +393,28 @@ def add_wh_words():
         add_wordhunt_word(game_id, user_id, word)
         return "added word"
 
+@app.route('/send_anagrams_challenge', methods=['POST'])
+def send_challenge_ana():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+    friend_id = request.form.get('friend_id')
+    ana_string = request.form.get('ana_string')
+    game_id = get_anagrams_id(ana_string)
+    add_anagrams_challenge(user_id, friend_id, game_id)
+    return "sent request"
+
+@app.route('/add_ana_string', methods=['POST'])
+def add_ana_board():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        user_id = session['user_id']
+        ana_string = request.form.get('ana_string')
+        add_anagrams_list(user_id, ana_string)
+        #print(get_wordhunt_board(user_id))
+        return "saved board"
+
 def get_notifications(user_id):
     conn = get_db_connection()
     c = conn.cursor()

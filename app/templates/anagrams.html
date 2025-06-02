@@ -34,13 +34,30 @@
   border: none;
   border-radius: 8px;
   padding: 10px 28px;
-  font-size: 1.2em;
+  font-size: 1em;
   margin-bottom: 18px;
   box-shadow: 0 2px 8px rgba(176,137,82,0.13);
   font-weight: bold;
   letter-spacing: 1px;
 }
 
+
+#plsStart {
+  background: #794d15;
+  color: white;
+  border: none;
+  margin: 20px;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1em;
+  margin-top: 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(66,96,17,0.13);
+}
 
 #enterWord {
   background: var(--dark-moss-green);
@@ -60,10 +77,13 @@
 #enterWord:hover {
   background: var(--pakistan-green);
 }
-
+#timer {
+  font-weight: 600;
+  color: #4B3A22;
+}
 #points {
   min-height: 24px;
-  font-size: 1.1em;
+  font-size: 1em;
   color: var(--lion);
   margin-bottom: 12px;
   font-weight: 600;
@@ -73,7 +93,14 @@
 }
 
 #firstUser {
-  background-color: orange;
+  background-color: var(--lion);
+  margin:30px;
+  display:block;
+}
+
+
+#secondUser {
+  background-color: var(--lion);
   margin:30px;
   display:block;
 }
@@ -101,6 +128,11 @@
   }
 }
 
+#send_challenge_ana {
+  display: block;
+   vertical-align: middle;
+   margin-left: -50px;
+}
 .seperate, .pls {
   display: flex;
   justify-content: center;
@@ -169,8 +201,8 @@
     padding: 12px 4px;
   }
   .box {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     min-width: 48px;
     min-height: 48px;
   }
@@ -180,11 +212,45 @@
     font-size: 1.2em;
   }
 }
+
+#start-but {
+  display: flex;
+}
+
+
+#both {
+  display: flex;
+}
+
+#disp {
+  display: block;
+}
 </style>
 <script>
 let time = 60;
 let game = false;
-var words = []
+
+/*
+json structure:
+user
+scramble letters
+dict of words with correspoending points
+total points
+*/
+
+var words = [];
+var pointsPerWord = [];
+
+
+var dictWords = {};
+for (let i = 0; i < words.length; i++) {
+  dictWords[words[i]] = pointsPerWord[i];
+}
+
+var totPoint = 0;
+var usedLetters = [];
+
+
 
 function dragstartHandler(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
@@ -207,6 +273,48 @@ function dropHandler(ev) {
   }
   box.appendChild(imgTag);
 }
+
+function clickMove(img){
+  for (let i = 1; i < 7; i++) {
+    if (!document.getElementById("div" + i.toString()).contains(img)) {
+      $( ".div" + i.toString()).append(img);
+      break;
+    }
+  
+  }
+  
+}
+
+function sendChallenge() {
+        const inputVal = document.getElementById("friend_id");
+        const friend_id = inputVal.value;
+
+        const stringData = new FormData();
+        stringData.append('ana_string', scrm);
+
+        fetch('/add_ana_string', {
+          method: 'POST',
+          body: stringData
+        })
+        .then(response => response.text())
+        .then(data => {
+          console.log(data);
+          const challengeData = new FormData();
+          challengeData.append('ana_string', scrm);
+          challengeData.append('friend_id', friend_id);
+          fetch('/send_anagrams_challenge', {
+            method: 'POST',
+            body: challengeData
+          })
+          .then(response => response.text())
+        })
+        .then(data => {
+          startGame()
+        })
+        .catch(error => console.error(error));
+
+      }
+
 
 function startGame() {
   game = true;
@@ -234,8 +342,10 @@ function startGame() {
   function scoreBoard() {
     for (let i = 0; i < words.length; i++) {
       let w = document.createElement('p');
-      w.textContent = words[i];
+      let p = document.createElement('p');
+      w.textContent = words[i] + "      " + pointsPerWord[i].toString();
       document.getElementById("disp").appendChild(w);
+     
     }
   }
 
@@ -243,6 +353,7 @@ function startGame() {
     for (let i = 0; i < 6; i++) {
       document.getElementById('img' + (i+1).toString()).innerHTML = "";
      document.getElementById('img' + (i+1).toString()).disabled = true;
+     document.getElementById('div' + (i+1).toString()).disabled = true;
       document.getElementById('img' + (i+1).toString()).style.opacity = 0.5;
 
 
@@ -250,9 +361,9 @@ function startGame() {
     document.getElementById('enterWord').disabled = true;
   }
 
-var totPoint = 0;
-var usedLetters = [];
 
+
+ 
 function checkLetters() {
   if (game==true) {
   const boxes = document.querySelectorAll(".seperate .box");
@@ -310,6 +421,7 @@ function checkLetters() {
             usedLetters.push(letters);
             words.push(letters);
             let pointThing = pointsCateg[numLetters];
+            pointsPerWord.push(pointThing);
             totPoint += pointThing;
             msg.innerHTML = `&#127942; <b>+${pointThing}</b> points!`;
             tot.innerHTML = `Total Points: ${totPoint}`;
@@ -370,6 +482,14 @@ function checkLetters() {
   }
 }}
 
+ var scrm = "";
+
+for (let i = 1; i < 6; i++) {
+  scrm += document.getElementById('img' + (i+1).toString()).textContent;
+}
+
+
+
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -377,10 +497,17 @@ function checkLetters() {
 
 
 <div class="anagram-container">
-  <p id="timer" class="text-black text-3xl">60</p>
-  <button id="plsStart" class="rounded-lg" onclick="startGame()">Start</button>
+<div class="text-center">  <p id="timer" class="text-black text-3xl">60</p></div>
+<div class="text-center" id="start-but"> 
+<div id="send_challenge_ana">
+    <input placeholder="User ID" id="friend_id" class="form-control w-auto d-inline-block"  type="number">
+    <button id= "plsStart" type="submit" onclick="sendChallenge()">Send Challenge: Start</button>
+  </div>
+<div><button id="plsStart" onclick="startGame()">Single-Player Mode: Start</button></div>
+</div>
   <br>
-  <button id="tot">Total Points: </button>
+  <div class="text-center"><button id="tot">Total Points: </button></div>
+  <!--
   <div class="seperate">
     <div class="box" ondrop="dropHandler(event)" id="div1" ondragover="dragoverHandler(event)"></div>
     <div class="box" ondrop="dropHandler(event)" id="div2" ondragover="dragoverHandler(event)"></div>
@@ -390,7 +517,8 @@ function checkLetters() {
      <div class="box" ondrop="dropHandler(event)" id="div6" ondragover="dragoverHandler(event)"></div>
   </div>
 
-  <button id="enterWord" onclick="checkLetters()">Enter</button>
+  <div class="text-center"><button id="enterWord" onclick="checkLetters()">Enter</button></div>
+
   <div id="points"></div>
 
   <div class="pls">
@@ -424,23 +552,62 @@ function checkLetters() {
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Score Board</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+    <div id="both">
       <div id="firstUser">
       <h3>{{ userName }}</h3>
-      <div class="modal-body" id="disp">
-<p></p>
+      <div class="modal-body" id="disp"> 
+        <p></p> <p></p> <br>
       </div>
-      <div id="firstUser">
-      <h3>second user</h3>
-      <div class="modal-body" id="disp">
-<p></p>
+      </div>
+    -->
+      <div class="text-center"><button id="tot">Total Points: </button></div>
+  <div class="seperate">
+    <div class="box"  id="div1" ></div>
+    <div class="box"  id="div2" ></div>
+    <div class="box"  id="div3" ></div>
+    <div class="box" id="div4" ></div>
+    <div class="box"  id="div5" ></div>
+     <div class="box" id="div6" ></div>
+  </div>
+
+  <div class="text-center"><button id="enterWord" onclick="checkLetters()">Enter</button></div>
+
+  <div id="points"></div>
+
+  <div class="pls">
+    {% if letters %}
+    <div class="addBoxy0 box" id="div1" onclick="clickMove('img1')">
+      <button class="letter" id="img1" onclick="clickMove('img1')">{{ letters.0 }}</button>
+    </div>
+    <div class="box addBoxy1" id="div2" onclick="clickMove('img2')">
+      <button class="letter" id="img2" onclick="clickMove('img2')" >{{ letters.1 }}</button>
+    </div>
+    <div class="box addBoxy2" id="div3" onclick="clickMove('img3')">
+      <button class="letter" id="img3" onclick="clickMove('img3')">{{ letters.2 }}</button>
+    </div>
+    <div class="box addBoxy3" id="div4" onclick="clickMove('img4')">
+      <button class="letter" id="img4" onclick="clickMove('img4')">{{ letters.3 }}</button>
+    </div>
+    <div class="box addBoxy4" id="div5" onclick="clickMove('img5')">
+      <button class="letter" id="img5" onclick="clickMove('img5')" >{{ letters.4 }}</button>
+    </div>
+  <div class="box addBoxy5" id="div6" onclick="clickMove('img6')">
+      <button class="letter" id="img6" onclick="clickMove('img6')">{{ letters.5 }}</button>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+
+      <div id="secondUser">
+        <h3 id="u">second user</h3>
+        <div class="modal-body" id="disp">
+          <p></p>
+        </div>
       </div>
     </div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
-    </div>
+      
   </div>
 </div>
 {% endblock %}</div>
