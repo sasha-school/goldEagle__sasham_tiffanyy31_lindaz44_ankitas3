@@ -253,6 +253,9 @@ def wordbites_helper():
     letter = data.get("letter")
     from_box = data.get("from_box")
     to_box = data.get("to_box")
+    if data.get("final_score"):
+        final_score = data.get("final_score") ###FINAL SCORE FOR ROUND TO SEND LATER
+        return jsonify({"status": "received"})
 
     wordbites_letter_positions[letter] = to_box
 

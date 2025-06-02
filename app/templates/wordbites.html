@@ -84,6 +84,7 @@ function dropHandler(ev, boxNumber) {
 
     const scoreElem = document.createElement("p");
     scoreElem.textContent = `Total Score: ${data.score}`;
+    total_score = data.score;
     scoreElem.style.fontSize = "18px";
     sidebar.appendChild(scoreElem);
 
@@ -103,7 +104,7 @@ function startGame(startButton) {
   lets = document.querySelectorAll(".h1");
   lets.forEach(h1 => {
     h1.classList.remove('text-transparent');
-    h1.classList.add('text-white');
+    h1.classList.add('text-black');
   })
   window.setInterval(() => {
     //const currentTime = parseInt(time.textContent.match(/\d+/)[0])
@@ -115,13 +116,27 @@ function startGame(startButton) {
   setTimeout(() => {
     endGame();
     console.log("end");
+
+    // const final_score = {data.score}
+    fetch("/wordbites_helper", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        final_score: total_score,
+        letter: 'A',
+        from_box: 1,
+        to_box: 1
+      })
+    })
   }, 50000);
 }
 
 function endGame() {
   lets = document.querySelectorAll(".h1");
   lets.forEach(h1 => {
-    h1.classList.remove('text-white');
+    h1.classList.remove('text-black');
     h1.classList.add('text-transparent');
   })
 
@@ -131,7 +146,7 @@ function endGame() {
 </script>
 </head>
 <body>
-  <p id="timer" class="text-white text-3xl">50</p>
+  <p id="timer" class="text-black text-3xl">50</p>
   <button class="rounded-lg" onclick="startGame(this)">Start</button>
   <div style="display: flex; align-items: flex-start;">
     <div><table>
