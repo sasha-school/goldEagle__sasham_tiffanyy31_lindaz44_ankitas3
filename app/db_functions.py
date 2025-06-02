@@ -8,7 +8,7 @@ anagrams = 1
 wordhunt = 2
 wordbites = 3
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DB_DIR = os.path.join(BASE_DIR, "data")
 os.makedirs(DB_DIR, exist_ok=True)  # Make sure the folder exists
 
@@ -93,7 +93,8 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS wordhunt_boards(
             game_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
-            board_string TEXT NOT NULL
+            board_string TEXT NOT NULL,
+            score INTEGER
         );
     ''')
 
