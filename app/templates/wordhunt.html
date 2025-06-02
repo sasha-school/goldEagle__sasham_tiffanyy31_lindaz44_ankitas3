@@ -38,41 +38,41 @@ After the game, if not already friended, popup asking if you’d like to friend 
       </svg>
       <div class="ps-4 text-sm font-normal"></div>
     </div>
+    <div class="flex flex-wrap items-center justify-center gap-4 w-full max-w-5xl mx-auto mt-4 p-4 bg-[#b4b86a] rounded-lg">
+      <p id="score" class="text-black text-2xl text-center min-w-[110px]">Score: 0</p>
+      <p id="timer" class="text-black text-2xl text-center min-w-[60px]">Time: 60</p>
+      <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" id="startButton" class="rounded-lg text-2xl bg-[url(/static/img/wood.png)] px-6 py-3 transition" onclick="saveBoard()">Single Player Mode</button>
+      <!--<button class="absolute top-[130px] transform -translate-x-1/2 rounded-lg p-5 text-3xl bg-blue-200" onclick="startGame(this)">Single Player Mode</button>-->
 
-    <div class="absolute w-[170px] h-[100px] bg-blue-200 rounded-lg" style="top: 40vh; left: 15vw;">
-      <p id="score" class=" p-1 text-white text-3xl">Score: 0</p>
-      <p id="timer" class="text-white text-3xl"> 60</p>
-      <button id="startButton" class="w-[250px] rounded-lg p-5 text-3xl bg-blue-200 mt-10" onclick="saveBoard()">Single Player Mode</button>
+      <div style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" id="send_challenge" class="flex items-center gap-2 bg-[url(/static/img/wood.png)] rounded-lg p-3">
+        <label>User ID:</label>
+        <input id="friend_id" type="number" min="0" class="text-black text-lg">
+        <button type="submit" class="bg-[#b4b86a] p-3 rounded" onclick="sendChallenge()">Send Challenge</button>
+      </div>
     </div>
-    
+
+    <input style="display: none;" id="display" readonly class="flex justify-content bg-transparent border-4 block mx-auto my-4 p-2 border border-transparent rounded w-full max-w-screen-sm text-center text-5xl">
+
+
     <div style="display: none;" id="letterString">{{letterString}}</div>
-    <input style="display: none;" id="display" readonly class="bg-transparent border-4 block mx-auto my-4 p-2 border border-transparent rounded w-full max-w-screen-sm text-center text-5xl">
-    <!--<button class="absolute top-[130px] transform -translate-x-1/2 rounded-lg p-5 text-3xl bg-blue-200" onclick="startGame(this)">Single Player Mode</button>-->
-
-    <div id="send_challenge" class="bg-blue-300 inline-block rounded-lg p-3">
-      <label>User ID:</label>
-      <input id="friend_id" type="number" min="0" class="my-4 p-2">
-      <button type="submit" class="bg-blue-200 p-3" onclick="sendChallenge()">Send Challenge</button>
-    </div>
-
-    <div id="board" class="w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-blue-200 p-5 rounded-lg">
+    <div id="board" class="border-[15px] border-[#b4b86a] w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-[#475c47] p-7 rounded-lg">
       <div class="grid grid-cols-4 grid-rows-4 gap-6 h-full">
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-8xl text-transparent pb-4">{{LetterA}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterB}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterC}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterD}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterE}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterF}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterG}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterH}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterI}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterJ}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterK}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterL}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterM}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterN}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterO}}</button>
-        <button type="button" class="letter-button bg-blue-500 hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterP}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-8xl text-transparent pb-4">{{LetterA}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterB}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterC}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterD}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterE}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterF}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterG}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterH}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterI}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterJ}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterK}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterL}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterM}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterN}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterO}}</button>
+        <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterP}}</button>
       </div>
     </div>
     
@@ -86,6 +86,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
       const startButton = document.getElementById('startButton');
       let buttons = document.querySelectorAll(".letter-button");
       let selectedLetters = new Set(); //set to prevent same button to be selected twice
+      let letterOrder = [];
       let currentWord = "";
       let wordBank = [];
       let selectedWords = []; //prevents repeats of words
@@ -99,15 +100,20 @@ After the game, if not already friended, popup asking if you’d like to friend 
         startButton.style.display = "none";
         challenge.style.display="none";
         display.style.display="";
+        currentWord = "";
+        selectedLetters = new Set();
+        letterOrder = [];
+        addLetters = true;
 
         game = true;
         buttonBehavior();
         window.setInterval(() => {
-          //const currentTime = parseInt(time.textContent.match(/\d+/)[0])
-          if (time.textContent>0){
-            time.textContent -= 1;
+          const currentTime = parseInt(time.textContent.match(/\d+/)[0]) - 1;
+          if (currentTime>0){
+            time.textContent = "Time: " + (currentTime);
           }
         }, 1000);
+
         setTimeout(() => {
           endGame();
         }, 60000);
@@ -225,15 +231,16 @@ After the game, if not already friended, popup asking if you’d like to friend 
       //button behavior when users select them
       function buttonBehavior() {
         buttons = document.querySelectorAll(".letter-button");
-        if (game == true){
-          buttons = document.querySelectorAll(".letter-button");
-          buttons.forEach(button => {
-            button.classList.remove('text-transparent');
-            button.classList.add('text-white');
+        let haveListener = false;
 
-            button.addEventListener("mousedown", () => appendLetter(button));
+        if (!haveListener){
+          buttons.forEach(button => {
+            button.addEventListener("mousedown", (e) => {
+              appendLetter(button);
+              console.log('mouse is down');
+            });
             button.addEventListener("mouseover", (e) => {
-              if (e.buttons === 1) {
+              if (e.buttons === 1 && selectedLetters.size > 0) {
                 appendLetter(button);
               }
             });
@@ -244,32 +251,37 @@ After the game, if not already friended, popup asking if you’d like to friend 
               }
               setTimeout(() => {
                 removeWord();
-              }, 500);
-            })
+              }, 100);
+            });
           });
-
-          board.addEventListener("mouseup", (e) => {
+          board.addEventListener("pointerup", (e) => {
             setTimeout(() => {
                 removeWord();
             }, 100);
           });
 
-          board.addEventListener("mouseleave", (e) => {
+          board.addEventListener("pointerleave", (e) => {
             setTimeout(() => {
                 removeWord();
             }, 100);
           });
+          haveListener = true;
+        }
 
+        if (game) {
+          buttons.forEach(button => {
+            button.classList.remove('text-transparent');
+            button.classList.add('text-black');
+            button.disabled = false;
+          });
         } else {
           buttons.forEach(button => {
-            const newButton = button.cloneNode(true);
-            newButton.classList.remove('text-white');
-            newButton.classList.remove('bg-green-500');
-            newButton.classList.add('text-transparent');
-            newButton.classList.add('bg-blue-500');
-            button.replaceWith(newButton);
-
-          })
+            button.classList.remove('text-black');
+            button.classList.remove('bg-green-500');
+            button.classList.add('text-transparent');
+            button.classList.add('bg-[url(/static/img/wood.png)]');
+            button.disabled = true;
+          });
         }
       }
 
@@ -364,52 +376,49 @@ After the game, if not already friended, popup asking if you’d like to friend 
       function appendLetter(button) {
         if (!selectedLetters.has(button) && addLetters) {
           selectedLetters.add(button);
+          letterOrder.push(button);
           currentWord += button.textContent;
           appendToDisplay(currentWord);
-          button.classList.remove('bg-blue-500');
+          button.classList.remove('bg-[url(/static/img/wood.png)]');
           button.classList.add('bg-green-500');
+          return;
 
-        } else { //if user selected just previously selected button, deselects proceeding letters
-          const iterator = selectedLetters.values();
-          let lastVal;
-          let secondLast;
+        }
 
-          let current = iterator.next();
-          while (!current.done) {
-            secondLast = lastVal;
-            lastVal = current.value;
-            current = iterator.next();
-          }
-
-          if(button === secondLast) { //if user selected just previously selected button, deselects proceeding letters
+        if (selectedLetters.size > 1 && button === letterOrder[letterOrder.length - 2]){
+          //if user selected just previously selected button, deselects proceeding letters
+            const lastVal = letterOrder.pop();
             selectedLetters.delete(lastVal);
             lastVal.classList.remove('bg-green-500');
-            lastVal.classList.add('bg-blue-500');
+            lastVal.classList.add('bg-[url(/static/img/wood.png)]');
             currentWord = currentWord.slice(0, -1);
             appendToDisplay(currentWord);
-          }
-          else{
-            addLetters = false; //prevents users from hopping spaces by retracing already selected letters
-          }
-
-          if(button === lastVal){
             addLetters = true;
-          }
-
-          if(display.value.length === 0){
-            addLetters = true;
-          }
+            console.log("backtrack");
+            return;
         }
+
+        if (selectedLetters.has(button)) {
+          addLetters = false; //prevents users from hopping spaces by retracing already selected letters
+        }
+
+        if(display.value.length === 0){
+          addLetters = true;
+        }
+        
       }
 
       function removeWord() {
         currentWord = "";
         selectedLetters.clear();
+        letterOrder = [];
+        addLetters = true;
         appendToDisplay(currentWord);
         buttons.forEach(button => {
           button.classList.remove('bg-green-500');
-          button.classList.add('bg-blue-500');
+          button.classList.add('bg-[url(/static/img/wood.png)]');
         })
+        console.log("_________________");
       }
 
       function appendToDisplay(input){
