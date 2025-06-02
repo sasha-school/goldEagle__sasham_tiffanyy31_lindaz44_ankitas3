@@ -119,3 +119,9 @@ lindaZ -- 2025-05-29 23:52
 - Wordhunt db additions
 - wordhunt board will be added upon start of the game
 - working on challenge requests for wordhunt
+
+lindaZ -- 2025-06-02 02:18
+- Working challenges function for wordhunt
+- fixed login/registration flash messages
+- edited db return for user and user_id
+- Working on ending page for wh

@@ -23,14 +23,20 @@ def getWordSelectionAnagrams():
         print(f"An error occurred: {e}")
 
     
+
     vowelSet = random.sample(bigV, 3)
+    while len(set(vowelSet)) != len(vowelSet) or "" in vowelSet:
+        vowelSet = random.sample(bigV, 3)
+
     conSet = random.sample(bigC, 3)
+    while len(set(conSet)) != len(conSet) or "" in conSet:
+        conSet = random.sample(bigC, 3)
 
     letterSet = vowelSet + conSet
     random.shuffle(letterSet)
     return letterSet
 
-print(getWordSelectionAnagrams())
+
 
 #get 3 random vowels
 #get 3 random consonants

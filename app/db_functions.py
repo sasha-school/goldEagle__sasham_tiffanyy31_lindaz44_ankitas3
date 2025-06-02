@@ -8,7 +8,7 @@ anagrams = 1
 wordhunt = 2
 wordbites = 3
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DB_DIR = os.path.join(BASE_DIR, "data")
 os.makedirs(DB_DIR, exist_ok=True)  # Make sure the folder exists
 
@@ -18,7 +18,11 @@ def build():
     create_tables()
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    try:
+        conn = sqlite3.connect(DB_PATH)
+    except:
+        DB_DIR_droplet = os.path.join(BASE_DIR, "app.data")
+        conn = sqlite3.connect(DB_DIR_droplet)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -89,7 +93,8 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS wordhunt_boards(
             game_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
-            board_string TEXT NOT NULL
+            board_string TEXT NOT NULL,
+            score INTEGER
         );
     ''')
 
@@ -111,11 +116,37 @@ def create_tables():
         );
     ''')
 
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS anagrams_boards(
+            game_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            ana_string TEXT NOT NULL
+        );
+    ''')
+
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS anagrams_found_words(
+            game_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            word TEXT NOT NULL
+        );
+    ''')
+
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS anagrams_challenge_requests(
+            game_id INTEGER NOT NULL,
+            from_user_id INTEGER NOT NULL,
+            to_user_id INTEGER NOT NULL,
+            from_user_score INTEGER,
+            to_user_score INTEGER
+        );
+    ''')
+
     conn.commit()
     conn.close()
 
 def addUser(username, password):
-    users = sqlite3.connect(DB_PATH)
+    users = get_db_connection()
     goodcharas = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678910._-")
     if set(username).difference(goodcharas) or set(password).difference(goodcharas):
         return "There are special characters in the username or password."
@@ -127,7 +158,7 @@ def addUser(username, password):
     return "Username taken."
 
 def check_password(username, password):
-    users = sqlite3.connect(DB_PATH)
+    users = get_db_connection()
     c = users.cursor()
     c.execute("SELECT password_hash FROM users WHERE username=?", (username,))
     res = c.fetchone()
@@ -187,7 +218,9 @@ def get_user(user_id):
     cur.execute("SELECT username FROM users WHERE user_id = ?", (user_id,))
     user = cur.fetchone()
     conn.close()
-    return user
+    if user is None:
+        return None
+    return user['username']
 
 def get_user_id(username):
     conn = get_db_connection()
@@ -195,7 +228,9 @@ def get_user_id(username):
     cur.execute("SELECT user_id FROM users WHERE username=?", (username,))
     user_id = cur.fetchone()
     conn.close()
-    return user_id
+    if user_id is None:
+        return None
+    return user_id['user_id']
 
 def send_friend_request(from_user_id, to_user_id):
     if from_user_id == to_user_id:
@@ -271,12 +306,36 @@ def remove_friend(user_id, friend_id):
     conn.commit()
     conn.close()
 
-def add_wordhunt_challenge(from_id, to_id, game_id):
+def add_wordhunt_challenge(from_user_id, to_user_id, game_id):
     conn = get_db_connection()
     c = conn.cursor()
-    c.execute("INSERT INTO wordhunt_challenge_requests (game_id, from_id, to_id) VALUES (?, ?, ?)", (game_id, from_id, to_id))
+    c.execute("INSERT INTO wordhunt_challenge_requests (game_id, from_user_id, to_user_id) VALUES (?, ?, ?)", (game_id, from_user_id, to_user_id))
     conn.commit()
     conn.close()
+
+def get_sent_wordhunt_challenges(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM wordhunt_challenge_requests WHERE from_user_id = ?", (user_id,))
+    row = c.fetchall()
+    conn.close()
+    return [list(row) for row in row]
+
+def get_received_wordhunt_challenges(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM wordhunt_challenge_requests WHERE to_user_id = ?", (user_id,))
+    row = c.fetchall()
+    conn.close()
+    return [list(row) for row in row]
+
+def get_wordhunt_boardstring(game_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT board_string FROM wordhunt_boards WHERE game_id = ?", (game_id,))
+    row = c.fetchone()
+    conn.close()
+    return row["board_string"]
 
 #inital first user score after sending
 def update_challenge_score_A(game_id, from_user_score):
@@ -301,13 +360,20 @@ def add_wordhunt_board(user_id, board_string):
     conn.commit()
     conn.close()
 
+def update_wordhunt_score(user_id, game_id, score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("UPDATE wordhunt_boards SET score = ? WHERE game_id = ? AND user_id = ?", (score, game_id, user_id))
+    conn.commit()
+    conn.close()
+
 def get_wordhunt_id(board_string):
     conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT game_id FROM wordhunt_boards WHERE board_string = ?", (board_string,))
     row = c.fetchone()
     conn.close()
-    return row["game_id"] if row else None
+    return row["game_id"]
 
 def add_wordhunt_word(game_id, user_id, word):
     conn = get_db_connection()
@@ -324,3 +390,73 @@ def get_all_words (game_id, user_id):
     words = [row['word'] for row in rows] #gets the word from each row, lists of words
     conn.close()
     return words
+
+def update_wordhunt_lb (user_id, score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT games_played, top_score FROM wordhunt_leaderboard WHERE user_id = ?", (user_id,))
+    row = c.fetchone()
+    if row is None:
+        c.execute("INSERT INTO wordhunt_leaderboard (user_id, games_played, top_score) VALUES (?, ?, ?)", (user_id, 1, score))
+    else:
+        games_played, top_score = row["games_played"], row["top_score"]
+        c.execute("UPDATE wordhunt_leaderboard SET games_played = games_played + 1 WHERE user_id = ?", (user_id,))
+        if (score >= top_score):
+                c.execute("UPDATE wordhunt_leaderboard SET top_score = ? WHERE user_id = ?", (score, user_id))
+    conn.commit()
+    conn.close()
+
+
+def add_anagrams_challenge(from_user_id, to_user_id, game_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("INSERT INTO anagrams_challenge_requests (game_id, from_user_id, to_user_id) VALUES (?, ?, ?)", (game_id, from_user_id, to_user_id))
+    conn.commit()
+    conn.close()
+
+def update_challenge_score_AnaA(game_id, from_user_score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("UPDATE anagrams_challenge_requests SET from_user_score = ? WHERE game_id = ?", (from_user_score, game_id))
+    conn.commit()
+    conn.close()
+
+#updates second user score after recieving
+def update_challenge_score_AnaB(game_id, to_user_score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("UPDATE anagrams_challenge_requests SET to_user_score = ? WHERE game_id = ?", (to_user_score, game_id))
+    conn.commit()
+    conn.close()
+
+def add_anagrams_list(user_id, ana_string):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("INSERT INTO anagrams_boards (ana_string, user_id) VALUES (?, ?)", (ana_string, user_id))
+    conn.commit()
+    conn.close()
+
+def get_anagrams_id(ana_string):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id FROM anagrams_boards WHERE ana_string = ?", (ana_string,))
+    row = c.fetchone()
+    conn.close()
+    return row["game_id"]
+
+def add_anagrams_word(game_id, user_id, word):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("INSERT INTO anagrams_found_words (game_id, user_id, word) VALUES (?, ?, ?)", (game_id, user_id, word))
+    conn.commit()
+    conn.close()
+
+def get_all_words (game_id, user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT word FROM anagrams_found_words WHERE game_id = ? AND user_id = ?", (game_id, user_id))
+    rows = c.fetchall()
+    words = [row['word'] for row in rows] #gets the word from each row, lists of words
+    conn.close()
+    return words
+

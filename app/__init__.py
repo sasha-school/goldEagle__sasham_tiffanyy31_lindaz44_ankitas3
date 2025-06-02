@@ -62,10 +62,14 @@ def login():
 
         user_id = get_user_id(username)
 
-        if user_id is not None and check_password(username, password):  # If user exists and password matches stored hash
-            session["user_id"] = user_id["user_id"]  # Store correct ID
-            session["username"] = username
-            return redirect("/home")
+        if user_id is not None:
+            if check_password(username, password):  # If user exists and password matches stored hash
+                session["user_id"] = user_id  # Store correct ID
+                session["username"] = username
+                return redirect("/home")
+            else:
+                flash("Invalid username or password", "error")
+                return redirect("/login")
         else:
             flash("Invalid username or password", "error")
             return redirect("/login")
@@ -151,7 +155,7 @@ def profile():
 
     return render_template(
         'profile.html',
-        user={"username": user_data["username"], "user_id": user_id},
+        user={"username": user_data, "user_id": user_id},
         leaderboards=leaderboards,
         challenges=challenges
     )
@@ -159,7 +163,38 @@ def profile():
 
 @app.route('/game')
 def game():
-    return render_template("gamepage.html")
+
+    #html for challenge table -- could add challenges for anagrams and wordbite as well
+    received_challenge = ""
+    sent_challenge = ""
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+        all_wh_received = get_received_wordhunt_challenges(user_id) #received wordhunt challenges
+        all_wh_sent = get_sent_wordhunt_challenges(user_id)
+        for row in all_wh_received:
+            game_id = row[0]
+            game_id = int(game_id)
+            board_string = get_wordhunt_boardstring(game_id)
+            link= f"/wordhunt?board={board_string}"
+            sent_username = get_user(int(row[1]))
+            received_score = row[4]
+            if received_score is None: #if user hasn't played the game yet
+                received_challenge += f'''<tr><td>Wordhunt</td><td>{sent_username} (#{row[1]})</td><td><a href="{link}"><button>Play</button></a></td></tr>'''
+        for row in all_wh_sent:
+            game_id = row[0]
+            game_id = int(game_id)
+            board_string = get_wordhunt_boardstring(game_id)
+            received_user = get_user(int(row[2]))
+            sent_score = row[3]
+            received_score = row[4]
+            if received_score is None:
+                received_score = "awaiting score..."
+            sent_challenge += f'''<tr><td>Wordhunt to {received_user}</td><td>{sent_score}</td><td>{received_score}</td></tr>'''
+
+    return render_template("gamepage.html", received_challenge = received_challenge, sent_challenge = sent_challenge)
+
+
 
 wordbites_letter_positions = {}
 wordbites_words = {}
@@ -275,7 +310,12 @@ def wordbites_score_calc(len):
 
 @app.route("/wordhunt", methods=['GET', 'POST'])
 def wordhunt():
-    Letters = board()
+    board_string = request.args.get('board')
+    if board_string and len(board_string) == 16:
+        Letters = board_string
+    else:
+        Letters = board()
+
     print(Letters + "test")
     return render_template('wordhunt.html',
                             letterString=Letters,
@@ -359,27 +399,111 @@ def remove_friend_route(friend_id):
     remove_friend(user_id, friend_id)
     return redirect(url_for('friends'))
 
+@app.route('/add_wh_board', methods=['POST'])
+def add_wh_board():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        user_id = session['user_id']
+        board_string = request.form.get('board_string')
+        add_wordhunt_board(user_id, board_string)
+        #print(get_wordhunt_board(user_id))
+        return "saved board"
+
 @app.route('/send_wordhunt_challenge', methods=['POST'])
 def send_challenge():
+    if 'user_id' not in session:
+        return jsonify({'redirect': url_for('login')})
+    user_id = session['user_id']
+    friend_id = request.form.get('friend_id')
+    friend_username = get_user(friend_id)
+    print(type(user_id), user_id)
+    print(type(friend_id), friend_id)
+    if int(friend_id) == int(user_id):
+        return jsonify({'message': "you can't challenge yourself"})
+    elif friend_username is None:
+        return jsonify({'message': "user does not exist"})
+
+    board_string = request.form.get('board_string')
+    add_wordhunt_board(user_id, board_string)
+    game_id = get_wordhunt_id(board_string)
+    add_wordhunt_challenge(user_id, friend_id, game_id)
+    return jsonify({'message' : "challenge request sent"})
+
+#solo game
+@app.route('/update_wh_score', methods=['POST'])
+def update_wh_score():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        user_id = session['user_id']
+        board_string = request.form.get('board_string')
+        game_id = get_wordhunt_id(board_string)
+        score = request.form.get('score')
+        score = int(score)
+        update_wordhunt_score(user_id, game_id, score)
+        update_wordhunt_lb(user_id, score)
+        return "saved score"
+
+#challenge game (sender score)
+@app.route('/update_whc_score_A', methods=['POST'])
+def update_whc_score_A():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        board_string = request.form.get('board_string')
+        game_id = get_wordhunt_id(board_string)
+        score = request.form.get('score')
+        score = int(score)
+        update_challenge_score_A(game_id, score)
+        return "saved score"
+
+#receiver game (receiver score)
+@app.route('/update_whc_score_B', methods=['POST'])
+def update_whc_score_B():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        board_string = request.form.get('board_string')
+        game_id = get_wordhunt_id(board_string)
+        score = request.form.get('score')
+        score = int(score)
+        update_challenge_score_B(game_id, score)
+        return "saved score"
+
+@app.route('/add_wh_words', methods=['POST'])
+def add_wh_words():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        user_id = session['user_id']
+        board_string = request.form.get('board_string')
+        game_id = get_wordhunt_id(board_string)
+        word = request.form.get('word')
+        add_wordhunt_word(game_id, user_id, word)
+        return "added word"
+
+@app.route('/send_anagrams_challenge', methods=['POST'])
+def send_challenge_ana():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     user_id = session['user_id']
     friend_id = request.form.get('friend_id')
-    board_string = request.form.get('board_string')
-    game_id = get_wordhunt_id(board_string)
-    add_wordhunt_challenge(user_id, friend_id, game_id)
+    ana_string = request.form.get('ana_string')
+    game_id = get_anagrams_id(ana_string)
+    add_anagrams_challenge(user_id, friend_id, game_id)
+    return "sent request"
 
-
-@app.route('/add_wh_board', methods=['POST'])
-def add_wh_board():
+@app.route('/add_ana_string', methods=['POST'])
+def add_ana_board():
     if 'user_id' not in session:
-        return redirect(url_for('login'))
-    user_id = session['user_id']
-    board_string = request.form.get('board_string')
-    add_wordhunt_board(user_id, board_string)
-    print(get_wordhunt_board(user_id))
-    return "saved board"
-
+        return "not logged in"
+    else:
+        user_id = session['user_id']
+        ana_string = request.form.get('ana_string')
+        add_anagrams_list(user_id, ana_string)
+        #print(get_wordhunt_board(user_id))
+        return "saved board"
 
 def get_notifications(user_id):
     conn = get_db_connection()
