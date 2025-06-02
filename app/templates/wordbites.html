@@ -169,12 +169,9 @@ function dropHandler(ev, boxNumber) {
 
     const scoreElem = document.createElement("p");
     scoreElem.textContent = `Total Score: ${data.score}`;
-<<<<<<< HEAD
     total_score = data.score;
     scoreElem.style.fontSize = "18px";
-=======
     scoreElem.id = "total-score";
->>>>>>> 5199c1390fe4305d1641175357660ec00722167b
     sidebar.appendChild(scoreElem);
 
     const sorted = Object.entries(data.found_words).sort((a, b) => b[1] - a[1]);
@@ -193,11 +190,7 @@ function startGame(startButton) {
   lets.forEach(h1 => {
     h1.classList.remove('text-transparent');
     h1.classList.add('text-black');
-<<<<<<< HEAD
-  })
-=======
   });
->>>>>>> 5199c1390fe4305d1641175357660ec00722167b
   window.setInterval(() => {
     if (parseInt(time.textContent) > 0){
       time.textContent = parseInt(time.textContent) - 1;
@@ -206,7 +199,6 @@ function startGame(startButton) {
 
   setTimeout(() => {
     endGame();
-<<<<<<< HEAD
     console.log("end");
 
     // const final_score = {data.score}
@@ -222,8 +214,6 @@ function startGame(startButton) {
         to_box: 1
       })
     })
-=======
->>>>>>> 5199c1390fe4305d1641175357660ec00722167b
   }, 50000);
 }
 
