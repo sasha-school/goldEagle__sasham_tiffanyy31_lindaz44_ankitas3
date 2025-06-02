@@ -274,6 +274,16 @@ function dropHandler(ev) {
   box.appendChild(imgTag);
 }
 
+function clickMove(img){
+  for (let i = 1; i < 7; i++) {
+    if (!document.getElementById("div" + i.toString()).contains(img)) {
+      $( ".div" + i.toString()).append(img);
+      break;
+    }
+  
+  }
+  
+}
 
 function sendChallenge() {
         const inputVal = document.getElementById("friend_id");
@@ -497,6 +507,7 @@ for (let i = 1; i < 6; i++) {
 </div>
   <br>
   <div class="text-center"><button id="tot">Total Points: </button></div>
+  <!--
   <div class="seperate">
     <div class="box" ondrop="dropHandler(event)" id="div1" ondragover="dragoverHandler(event)"></div>
     <div class="box" ondrop="dropHandler(event)" id="div2" ondragover="dragoverHandler(event)"></div>
@@ -548,6 +559,44 @@ for (let i = 1; i < 6; i++) {
         <p></p> <p></p> <br>
       </div>
       </div>
+    -->
+      <div class="text-center"><button id="tot">Total Points: </button></div>
+  <div class="seperate">
+    <div class="box"  id="div1" ></div>
+    <div class="box"  id="div2" ></div>
+    <div class="box"  id="div3" ></div>
+    <div class="box" id="div4" ></div>
+    <div class="box"  id="div5" ></div>
+     <div class="box" id="div6" ></div>
+  </div>
+
+  <div class="text-center"><button id="enterWord" onclick="checkLetters()">Enter</button></div>
+
+  <div id="points"></div>
+
+  <div class="pls">
+    {% if letters %}
+    <div class="addBoxy0 box" id="div1" onclick="clickMove('img1')">
+      <button class="letter" id="img1" onclick="clickMove('img1')">{{ letters.0 }}</button>
+    </div>
+    <div class="box addBoxy1" id="div2" onclick="clickMove('img2')">
+      <button class="letter" id="img2" onclick="clickMove('img2')" >{{ letters.1 }}</button>
+    </div>
+    <div class="box addBoxy2" id="div3" onclick="clickMove('img3')">
+      <button class="letter" id="img3" onclick="clickMove('img3')">{{ letters.2 }}</button>
+    </div>
+    <div class="box addBoxy3" id="div4" onclick="clickMove('img4')">
+      <button class="letter" id="img4" onclick="clickMove('img4')">{{ letters.3 }}</button>
+    </div>
+    <div class="box addBoxy4" id="div5" onclick="clickMove('img5')">
+      <button class="letter" id="img5" onclick="clickMove('img5')" >{{ letters.4 }}</button>
+    </div>
+  <div class="box addBoxy5" id="div6" onclick="clickMove('img6')">
+      <button class="letter" id="img6" onclick="clickMove('img6')">{{ letters.5 }}</button>
+    </div>
+    {% endif %}
+  </div>
+</div>
 
 
       <div id="secondUser">
