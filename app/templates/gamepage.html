@@ -49,4 +49,36 @@
         </div>
     </div>
 </div>
+
+{% if session.get('user_id') %}
+    <table class="table-auto w-full border-separate border-spacing-x-6 border-spacing-y-4 mb-8">
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Challenger</th>
+                <th>Play</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ received_challenge | safe }}
+        </tbody>
+    </table>
+
+    <table class="table-auto w-full border-separate border-spacing-x-6 border-spacing-y-4 mb-8">
+        <thead>
+            <tr>
+                <th>Sent Challenges</th>
+                <th>Your Score</th>
+                <th>Opponent Score</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ sent_challenge | safe }}
+        </tbody>
+    </table>
+{% else %}
+  <p class="text-center text-gray-600 mt-6">Please log in to see your challenges.</p>
+{% endif %}
+
 {% endblock %}

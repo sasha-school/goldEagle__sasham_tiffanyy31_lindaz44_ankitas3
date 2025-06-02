@@ -30,6 +30,15 @@ After the game, if not already friended, popup asking if you’d like to friend 
       </style>
   </head>
   <body>
+
+    <!--from tailwind tutorial: https://flowbite.com/docs/components/toast/-->
+    <div id="toast-simple" style="display: none;" class="flex items-center w-full max-w-screen mx-auto p-4 space-x-4 rtl:space-x-reverse text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow-sm dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800" role="alert">
+      <svg class="w-5 h-5 text-blue-600 dark:text-blue-500 rotate-45" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 17 8 2L9 1 1 19l8-2Zm0 0V9"/>
+      </svg>
+      <div class="ps-4 text-sm font-normal"></div>
+    </div>
+
     <div class="absolute w-[170px] h-[100px] bg-blue-200 rounded-lg" style="top: 40vh; left: 15vw;">
       <p id="score" class=" p-1 text-white text-3xl">Score: 0</p>
       <p id="timer" class="text-white text-3xl"> 60</p>
@@ -76,12 +85,14 @@ After the game, if not already friended, popup asking if you’d like to friend 
       const challenge = document.getElementById("send_challenge");
       const startButton = document.getElementById('startButton');
       let buttons = document.querySelectorAll(".letter-button");
-      let selectedLetters = new Set();
+      let selectedLetters = new Set(); //set to prevent same button to be selected twice
       let currentWord = "";
       let wordBank = [];
-      let selectedWords = [];
+      let selectedWords = []; //prevents repeats of words
       let game = false;
       let addLetters = true;
+      let challengeGame = false; //determine if score needs to be saved into challenge db too
+      let receivedGame = false; //determine if this is user #2 playing
 
       //starts game once startbutton is clicked
       function startGame() {
@@ -99,12 +110,53 @@ After the game, if not already friended, popup asking if you’d like to friend 
         }, 1000);
         setTimeout(() => {
           endGame();
-        }, 60000); //60 sec game time
+        }, 60000);
       }
 
       function endGame() {
         game = false;
         buttonBehavior();
+
+        //fetch method to save score
+        let num = parseInt(score.textContent.match(/\d+/)[0])
+        const gameData = new FormData();
+        gameData.append('score', num);
+        gameData.append('board_string', stringLetter);
+
+        const soloUpdate = fetch('/update_wh_score', {
+          method: 'POST',
+          body: gameData
+        }).then(response => response.text());
+
+        const challengeUpdateA = challengeGame ? fetch('/update_whc_score_A', {
+          method: 'POST',
+          body: gameData
+        }).then(response => response.text()) : Promise.resolve(null); //since conditinal on challengeGame
+
+        const challengeUpdateB = receivedGame ? fetch('/update_whc_score_B', {
+          method: 'POST',
+          body: gameData
+        }).then(response => response.text()) : Promise.resolve(null);
+
+        Promise.all([soloUpdate, challengeUpdateA, challengeUpdateB])
+
+        .then(([data1, data2, data3]) => {
+          console.log(data1);
+          if(data2) console.log(data2);
+          if(data3) console.log(data3);
+
+          if (selectedWords.length > 0) {
+            alert("Words you found:\n\n" + selectedWords.join('\n'));
+          } else {
+            alert("No words were found.");
+          }
+          if (receivedGame) {
+            window.location.href = '/game'; //placeholder for end screen
+          } else {
+            location.reload();
+          }
+        })
+        .catch(error => console.error(error));
       }
 
       function saveBoard() {
@@ -118,8 +170,8 @@ After the game, if not already friended, popup asking if you’d like to friend 
         .then(response => response.text())
         .then(data => {
           console.log(data);
+          startGame();
         })
-        .then(() => startGame())
         .catch(error => console.error(error));
       }
 
@@ -127,29 +179,47 @@ After the game, if not already friended, popup asking if you’d like to friend 
         const inputVal = document.getElementById("friend_id");
         const friend_id = inputVal.value;
 
-        const stringData = new FormData();
-        stringData.append('board_string', stringLetter);
+        const challengeData = new FormData();
+        challengeData.append('board_string', stringLetter);
+        challengeData.append('friend_id', friend_id);
 
-        fetch('/add_wh_board', {
+        fetch('/send_wordhunt_challenge', {
           method: 'POST',
-          body: stringData
+          body: challengeData
         })
-        .then(response => response.text())
+        .then(response => response.json()) //.json since in python, jsonify is used
         .then(data => {
-          console.log(data);
-          const challengeData = new FormData();
-          challengeData.append('board_string', stringLetter);
-          challengeData.append('friend_id', friend_id);
-          fetch('/send_wordhunt_challenge', {
-            method: 'POST',
-            body: challengeData
-          })
-          .then(response => response.text())
-        })
-        .then(data => {
-          startGame()
+          if (data.redirect) {
+            window.location.href = data.redirect;
+            return;
+          } else if (data.message) {
+            toastAlert(data.message);
+            if (data.message === "challenge request sent") {
+              startGame();
+              challengeGame = true;
+            }
+          }
         })
         .catch(error => console.error(error));
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const urlArgs = new URLSearchParams(window.location.search);
+        if(urlArgs.has('board')){
+          receivedGame = true;
+          startGame();
+        }
+      })
+
+      //for short alert messages
+      function toastAlert(message) {
+        const toast = document.getElementById('toast-simple');
+        toast.textContent = message;
+        toast.style.display = 'block';
+
+        setTimeout(() => {
+          toast.style.display = 'none';
+        }, 1500);
       }
 
       //button behavior when users select them

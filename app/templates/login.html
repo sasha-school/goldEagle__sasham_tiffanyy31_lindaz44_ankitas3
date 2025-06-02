@@ -3,6 +3,17 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+
+<!--snippet from https://stackoverflow.com/questions/66761712/change-flash-message-duration-in-flask-with-jinja2-templates-->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-warning" role="alert">
+             {{message}}
+        </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
     
       <hr>
       <div class="login">
