@@ -97,6 +97,17 @@
                 padding: 10px;
             }
         }
+        .friend-requests-count {
+            display: inline-block;
+            background: #ef4444;
+            color: #fff;
+            font-size: 0.9em;
+            font-weight: bold;
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 
@@ -160,7 +171,9 @@
 
     {% if session.get('username') %}
     <section class="friends-section">
-        <h4>Your Friends</h4>
+        <h4>
+            Your Friends
+        </h4>
         <ul>
             {% if friends_list %}
                 {% for friend in friends_list %}
@@ -170,10 +183,15 @@
                 <li>No friends yet. Add some friends to get started!</li>
             {% endif %}
         </ul>
-        <h4>Friend Requests</h4>
+        <h4>
+            Friend Requests
+            {% set valid_requests = friend_requests|selectattr('user_id', 'defined')|selectattr('username', 'defined')|list %}
+            {% if valid_requests and valid_requests|length > 0 %}
+                <span class="friend-requests-count">{{ valid_requests|length }}</span>
+            {% endif %}
+        </h4>
         <ul>
             {% if friend_requests %}
-                {% set valid_requests = friend_requests|selectattr('user_id', 'defined')|selectattr('username', 'defined')|list %}
                 {% if valid_requests %}
                     {% for request in valid_requests %}
                         <li>
@@ -206,4 +224,4 @@
     </section>
 </div>
 </body>
-{% endblock %}</section>
+{% endblock %}
