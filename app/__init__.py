@@ -99,10 +99,8 @@ def register():
 
 
 
-
 @app.route("/home")
 def home():
-    # Assume user_id is fetched from session if logged in
     user_id = session.get("user_id")
     if user_id:
         # Fetch stats from DB
@@ -118,9 +116,11 @@ def home():
             "wordbites": leaderboards.get("wordbites", {}).get("games_played"),
         }
         # Fetch friends and requests
-        friends_list = [...]  # Query your DB
-        friend_requests = [...]  # Query your DB
-        recent_challenges = [...]  # Query your DB
+        friends_list = get_friends(user_id)  # Should return list of usernames
+        # friend_requests should be a list of dicts: {"user_id": ..., "username": ...}
+        friend_requests = get_pending_friend_requests(user_id)
+        # recent_challenges: list of strings or dicts as needed by your template
+        recent_challenges = get_recent_challenges(user_id) if 'get_recent_challenges' in globals() else []
     else:
         highest_scores = {"anagrams": None, "wordhunt": None, "wordbites": None}
         games_played = {"anagrams": None, "wordhunt": None, "wordbites": None}
@@ -253,6 +253,9 @@ def wordbites_helper():
     letter = data.get("letter")
     from_box = data.get("from_box")
     to_box = data.get("to_box")
+    if data.get("final_score"):
+        final_score = data.get("final_score") ###FINAL SCORE FOR ROUND TO SEND LATER
+        return jsonify({"status": "received"})
 
     wordbites_letter_positions[letter] = to_box
 

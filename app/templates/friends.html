@@ -24,13 +24,19 @@
         text-align: center;
         width: 100%;
     }
-    ul {
+    .section-divider {
+        width: 100%;
+        border: none;
+        border-top: 2px solid #ecf0f1;
+        margin: 2rem 0 1.5rem 0;
+    }
+    .friends-list, .requests-list {
         list-style: none;
         padding: 0;
         margin-bottom: 2rem;
         width: 100%;
     }
-    li {
+    .friend-item, .request-item {
         padding: 0.5rem 0;
         border-bottom: 1px solid #eee;
         display: flex;
@@ -38,26 +44,39 @@
         justify-content: center;
         gap: 1.5rem;
     }
-    li:last-child {
+    .friends-list .friend-item:last-child,
+    .requests-list .request-item:last-child {
         border-bottom: none;
     }
     .friend-actions a, .request-actions a {
         margin-left: 0.5rem;
         text-decoration: none;
-        color: #3498db;
-        padding: 0.2rem 0.6rem;
+        color: #fff;
+        background: #3498db;
+        padding: 0.3rem 0.9rem;
         border-radius: 4px;
         transition: background 0.2s;
         font-size: 0.95em;
+        border: none;
+        display: inline-block;
+        font-weight: 500;
+        box-shadow: 0 1px 2px rgba(44,62,80,0.07);
     }
     .friend-actions a:hover, .request-actions a:hover {
-        background: #ecf0f1;
+        background: #217dbb;
+    }
+    .request-actions a:last-child {
+        background: #e74c3c;
+    }
+    .request-actions a:last-child:hover {
+        background: #c0392b;
     }
     form {
         display: flex;
         align-items: center;
         gap: 0.5rem;
         margin-bottom: 2rem;
+        justify-content: center;
     }
     label {
         font-weight: bold;
@@ -72,10 +91,15 @@
         background: #27ae60;
         color: #fff;
         border: none;
-        padding: 0.4rem 1rem;
+        padding: 0.4rem 1.2rem;
         border-radius: 4px;
         cursor: pointer;
         transition: background 0.2s;
+        font-size: 1em;
+        font-weight: 500;
+        box-shadow: 0 1px 2px rgba(44,62,80,0.07);
+        margin-left: 0.5rem;
+        display: inline-block;
     }
     button:hover {
         background: #219150;
@@ -97,23 +121,25 @@
     <h1>Friends</h1>
 
     <h2>Your Friends</h2>
-    <ul>
+    <ul class="friends-list">
     {% for friend in friends %}
-        <li>
+        <li class="friend-item">
             <span>{{ friend.username }}</span>
             <span class="friend-actions">
                 <a href="{{ url_for('remove_friend_route', friend_id=friend.user_id) }}">Remove</a>
             </span>
         </li>
     {% else %}
-        <li><em>No friends yet.</em></li>
+        <li class="friend-item"><em>No friends yet.</em></li>
     {% endfor %}
     </ul>
 
+    <hr class="section-divider">
+
     <h2>Friend Requests</h2>
-    <ul>
+    <ul class="requests-list">
     {% for req in requests %}
-        <li>
+        <li class="request-item">
             <span>{{ req.username }}</span>
             <span class="request-actions">
                 <a href="{{ url_for('respond_request', from_user_id=req.user_id, action='accept') }}">Accept</a>
@@ -121,9 +147,11 @@
             </span>
         </li>
     {% else %}
-        <li><em>No pending requests.</em></li>
+        <li class="request-item"><em>No pending requests.</em></li>
     {% endfor %}
     </ul>
+
+    <hr class="section-divider">
 
     <h2>Send Friend Request</h2>
     <form method="post" action="{{ url_for('send_request_dynamic') }}">

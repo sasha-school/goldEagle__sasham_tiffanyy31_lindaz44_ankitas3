@@ -14,15 +14,15 @@
     --sand-deep: #8b5d13;
 }
 
-/* General Styling */
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Quantico', sans-serif;
     background: linear-gradient(135deg, var(--gold), var(--yellow), var(--olive));
     color: var(--dark-green);
     margin: 0;
     padding: 0;
     text-align: center;
 }
+
 
 /* Navigation Bar */
 nav {
@@ -82,12 +82,7 @@ button:hover,
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
 }
 
-.button-container {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin: 12px 0;
-}
+
 
 /* Game Cards */
 .game-card,
