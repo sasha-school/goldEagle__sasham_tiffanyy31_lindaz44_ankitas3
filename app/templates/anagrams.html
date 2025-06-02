@@ -276,19 +276,25 @@ function dropHandler(ev) {
 
 function clickMove(thing){
   let im = document.getElementById(thing);
-  if (!document.getElementById("div" + 1).contains(im)) {
-    document.getElementById("div1").appendChild(im);
-  }
-  /*let im = document.getElementById(img)
   for (let i = 1; i < 7; i++) {
-    if (!document.getElementById("div" + i.toString()).contains(img)) {
-      document.getElementById("div" + i.toString()).appendChild(img);
-      break;
-    }
-  
+
+  if (!document.getElementById("div" + i).contains(document.getElementById("img1"))  && !document.getElementById("div" + i).contains(document.getElementById("img2")) && !document.getElementById("div" + i).contains(document.getElementById("img3")) && !document.getElementById("div" + i).contains(document.getElementById("img4")) && !document.getElementById("div" + i).contains(document.getElementById("img5")) && !document.getElementById("div" + i).contains(document.getElementById("img6"))) {
+        document.getElementById("div" + i).appendChild(im);
+        break;
   }
-  */
-}
+  }
+ }
+
+function clickMoveBack(thing){
+  let im = document.getElementById(thing);
+  
+  if (document.getElementById("div" + i).contains(document.getElementById("img1"))) {
+        document.getElementById("div" + i +"B").appendChild(im);
+        break;
+  }
+  
+ }
+
 
 function sendChallenge() {
 
@@ -357,7 +363,7 @@ function startGame() {
       let p = document.createElement('p');
       w.textContent = words[i] + "      " + pointsPerWord[i].toString();
       document.getElementById("disp").appendChild(w);
-     
+
     }
   }
 
@@ -375,7 +381,7 @@ function startGame() {
 
 
 
- 
+
 function checkLetters() {
   if (game==true) {
   const boxes = document.querySelectorAll(".seperate .box");
@@ -505,7 +511,7 @@ function checkLetters() {
 
 <div class="anagram-container">
 <div class="text-center">  <p id="timer" class="text-black text-3xl">60</p></div>
-<div class="text-center" id="start-but"> 
+<div class="text-center" id="start-but">
 <div id="send_challenge_ana">
     <input placeholder="User ID" id="friend_id" class="form-control w-auto d-inline-block"  type="number">
     <button id= "plsStart" type="submit" onclick="sendChallenge()">Send Challenge: Start</button>
@@ -570,23 +576,23 @@ function checkLetters() {
 
   <div class="pls">
     {% if letters %}
-    <div class="addBoxy0 box" id="div1" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
-      <button class="letter" id="img1" onclick="clickMove('img1')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.0 }}</button>
+    <div class="addBoxy0 box" id="div1B" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img1" onclick="clickMove('img1') clickMoveBack('img1')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.0 }}</button>
     </div>
     <div class="box addBoxy1" id="div2" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
-      <button class="letter" id="img2" onclick="clickMove()" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.1 }}</button>
+      <button class="letter" id="img2" onclick="clickMove('img2')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.1 }}</button>
     </div>
     <div class="box addBoxy2" id="div3" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
-      <button class="letter" id="img3" onclick="clickMove()" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.2 }}</button>
+      <button class="letter" id="img3" onclick="clickMove('img3')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.2 }}</button>
     </div>
     <div class="box addBoxy3" id="div4" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
-      <button class="letter" id="img4" onclick="clickMove()" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.3 }}</button>
+      <button class="letter" id="img4" onclick="clickMove('img4')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.3 }}</button>
     </div>
     <div class="box addBoxy4" id="div5" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
-      <button class="letter" id="img5" onclick="clickMove()" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.4 }}</button>
+      <button class="letter" id="img5" onclick="clickMove('img5')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.4 }}</button>
     </div>
   <div class="box addBoxy5" id="div6" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
-      <button class="letter" id="img6" onclick="clickMove()" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.5 }}</button>
+      <button class="letter" id="img6" onclick="clickMove('img6')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.5 }}</button>
     </div>
     {% endif %}
   </div>
@@ -602,30 +608,30 @@ function checkLetters() {
     <div id="both">
       <div id="firstUser">
       <h3>{{ userName }}</h3>
-      <div class="modal-body" id="disp"> 
+      <div class="modal-body" id="disp">
         <p></p> <p></p> <br>
       </div>
       </div>
-       
+
 
 
         <div id="secondUser">
       <h3>{{ userName }}</h3>
-      <div class="modal-body" id="disp"> 
+      <div class="modal-body" id="disp">
         <p></p> <p></p> <br>
       </div>
       </div>
        </div>
        <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-       
+
       </div>
-      
+
     </div>
   </div>
 </div>
 
-      
+
   </div>
 </div>
 {% endblock %}</div>
