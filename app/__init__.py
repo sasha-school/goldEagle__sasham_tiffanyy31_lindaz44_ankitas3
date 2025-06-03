@@ -507,6 +507,19 @@ def add_ana_board():
         add_anagrams_list(user_id, ana_string)
         #print(get_wordhunt_board(user_id))
         return "saved board"
+    
+
+@app.route('/add_ana_words', methods=['POST'])
+def add_ana_words():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        user_id = session['user_id']
+        ana_string = request.form.get('ana_string')
+        game_id = get_anagrams_id(ana_string)
+        word = request.form.get('word')
+        add_anagrams_word(game_id, user_id, word)
+        return "added word"
 
 def get_notifications(user_id):
     conn = get_db_connection()
