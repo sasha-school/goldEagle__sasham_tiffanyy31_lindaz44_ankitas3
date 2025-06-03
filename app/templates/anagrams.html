@@ -260,8 +260,9 @@
 }
 
 #img1, #img2, #img3, #img4, #img5, #img6 {
-   background-image: url("/static/img/wood.png");
+
    opacity: 0;
+   background-image: url("/static/img/wood.png");
    width: 90px;
 }
 
@@ -377,11 +378,9 @@ function sendChallenge() {
 
 function startGame() {
   game = true;
-  for (let i = 1; i < 7; i++) {
-
+  for (let i = 1; i <= 6; i++) {
   el = document.getElementById("img" + i)
   el.setAttribute('style', 'opacity:1;');
-
   }
 
   let scrm = "";
@@ -410,16 +409,11 @@ function startGame() {
     document.getElementById("timer").textContent = time;
         let ID = window.setInterval(() => {
           if (time > 0){
-            time -= 0.01;
-            document.getElementById("timer").textContent = time;
+            time = parseInt(time - 1);
           }
           else {
             clearInterval(ID);
             endGame();
-            
-
-
-
           }
         }, 1000);
 
@@ -675,7 +669,7 @@ function checkLetters() {
 
 
     -->
-     
+
       <div class="seperate">
     <div class="box" ondrop="dropHandler(event)" id="div1" ondragover="dragoverHandler(event)"></div>
     <div class="box" ondrop="dropHandler(event)" id="div2" ondragover="dragoverHandler(event)"></div>
@@ -737,7 +731,7 @@ function checkLetters() {
       </div>
       </div>
        </div>
-    
+
     </div>
   </div>
 </div>

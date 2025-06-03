@@ -507,7 +507,7 @@ def add_ana_board():
         add_anagrams_list(user_id, ana_string)
         #print(get_wordhunt_board(user_id))
         return "saved board"
-    
+
 
 @app.route('/add_ana_words', methods=['POST'])
 def add_ana_words():
@@ -520,6 +520,21 @@ def add_ana_words():
         word = request.form.get('word')
         add_anagrams_word(game_id, user_id, word)
         return "added word"
+
+
+@app.route('/update_ana_score', methods=['POST'])
+def update_ana_score():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        user_id = session['user_id']
+        ana_string = request.form.get('ana_string')
+        game_id = get_anagrams_id(ana_string)
+        score = request.form.get('score')
+        score = int(score)
+        update_anagrams_score(user_id, game_id, score)
+        update_anagrams_lb(user_id, score)
+        return "saved score"
 
 def get_notifications(user_id):
     conn = get_db_connection()
