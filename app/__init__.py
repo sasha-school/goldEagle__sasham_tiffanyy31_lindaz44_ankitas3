@@ -223,7 +223,7 @@ def wordbites():
             all_letters.extend(row)
     all_letters = [l for l in all_letters if l]
 
-    letters = []
+    letters = [] #"unique board"
     i=0
 
     while i<16:
@@ -310,6 +310,28 @@ def wordbites_score_calc(len):
     if len in key:
         return key[len]
     return 100
+## from linda's code
+@app.route('/send_wordbites_challenge', methods=['POST'])
+def send_wordbites_challenge():
+    if 'user_id' not in session:
+        return jsonify({'redirect': url_for('login')})
+    user_id = session['user_id']
+    friend_id = request.form.get('friend_id')
+    friend_username = get_user(friend_id)
+    if int(friend_id) == int(user_id):
+        return jsonify({'message': "you can't challenge yourself"})
+    elif friend_username is None:
+        return jsonify({'message': "user does not exist"})
+
+    board_string = request.form.get('board_string')
+    add_wordbites_board(user_id, board_string)
+    game_id = get_wordbites_id(board_string)
+    add_wordbites_challenge(user_id, friend_id, game_id)
+    return jsonify({'message' : "challenge request sent"})
+
+
+
+
 
 @app.route("/wordhunt", methods=['GET', 'POST'])
 def wordhunt():
@@ -507,7 +529,7 @@ def add_ana_board():
         add_anagrams_list(user_id, ana_string)
         #print(get_wordhunt_board(user_id))
         return "saved board"
-    
+
 
 @app.route('/add_ana_words', methods=['POST'])
 def add_ana_words():
