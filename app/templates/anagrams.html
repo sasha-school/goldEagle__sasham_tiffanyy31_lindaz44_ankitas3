@@ -330,9 +330,9 @@ function clickMove(thing){
 
 
 function sendChallenge() {
-  var scrm = "";
+  let scrm = "";
   for (let i = 1; i <= 6; i++) {
-    scrm += document.getElementById('img' + (i+1).toString()).textContent;
+    scrm += document.getElementById('img' + i).textContent;
   }
 
   for (let i = 1; i < 7; i++) {
@@ -383,22 +383,40 @@ function startGame() {
   el.setAttribute('style', 'opacity:1;');
 
   }
+
+  let scrm = "";
+  for (let i = 1; i <= 6; i++) {
+    scrm += document.getElementById('img' + i).textContent;
+  }
+
+  const wordData = new FormData();
+        wordData.append('ana_string', scrm);
+        fetch('/add_ana_string', {
+          method: 'POST',
+          body: wordData
+        })
+        .then(response => response.text())
+        .then(data => {
+          console.log(data);
+          startGame();
+        })
+        .catch(error => console.error(error));
+
   document.getElementById("friend_id").style.display="none";
   document.getElementById("send_challenge_ana").style.display="none";
   document.getElementById("plsStart2").style.display="none";
 
+
     document.getElementById("timer").textContent = time;
         let ID = window.setInterval(() => {
           if (time > 0){
-            time -= 1;
+            time -= 0.01;
             document.getElementById("timer").textContent = time;
           }
           else {
             clearInterval(ID);
-            game=false;
-            reset();
-            scoreBoard();
-            $("#myModal").modal();
+            endGame();
+            
 
 
 
@@ -407,6 +425,31 @@ function startGame() {
 
 
       }
+function endGame() {
+  let scrm = "";
+  for (let i = 1; i <= 6; i++) {
+    scrm += document.getElementById('img' + i).textContent;
+  }
+  game=false;
+  reset();
+  scoreBoard();
+  $("#myModal").modal();
+
+  const result = new FormData();
+  result.append('score', totPoint)
+  result.append('ana_string', scrm)
+
+
+const single_score = fetch('/update_ana_score', {
+  method: 'POST',
+  body:result
+}).then(response => response.text());
+
+Promise.all([single_score])
+
+}
+
+
 
   function scoreBoard() {
     for (let i = 0; i < words.length; i++) {
