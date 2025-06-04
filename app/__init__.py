@@ -41,6 +41,7 @@ app.secret_key = secret
 
 @app.route('/')
 def checkSession():
+    build()
     if 'username' in session:
         return redirect("/home")
     return redirect("/login")
@@ -172,6 +173,9 @@ def game():
         user_id = session['user_id']
         all_wh_received = get_received_wordhunt_challenges(user_id) #received wordhunt challenges
         all_wh_sent = get_sent_wordhunt_challenges(user_id)
+        print(user_id)
+        print(all_wh_received)
+        print(all_wh_sent)
         for row in all_wh_received:
             game_id = row[0]
             game_id = int(game_id)

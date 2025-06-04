@@ -326,6 +326,8 @@ def remove_friend(user_id, friend_id):
     conn.commit()
     conn.close()
 
+#------------------------------------- WORDHUNT -----------------------------------------
+
 def add_wordhunt_challenge(from_user_id, to_user_id, game_id):
     conn = get_db_connection()
     c = conn.cursor()
@@ -337,17 +339,17 @@ def get_sent_wordhunt_challenges(user_id):
     conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM wordhunt_challenge_requests WHERE from_user_id = ?", (user_id,))
-    row = c.fetchall()
+    rows = c.fetchall()
     conn.close()
-    return [list(row) for row in row]
+    return [list(row) for row in rows]
 
 def get_received_wordhunt_challenges(user_id):
     conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM wordhunt_challenge_requests WHERE to_user_id = ?", (user_id,))
-    row = c.fetchall()
+    rows = c.fetchall()
     conn.close()
-    return [list(row) for row in row]
+    return [list(row) for row in rows]
 
 def get_wh_saved_board(game_id):
     conn = get_db_connection()
@@ -441,7 +443,7 @@ def update_wordhunt_lb (user_id, score):
                 c.execute("UPDATE wordhunt_leaderboard SET top_score = ? WHERE user_id = ?", (score, user_id))
     conn.commit()
     conn.close()
-
+#------------------------------------- ANAGRAM -----------------------------------------
 
 def add_anagrams_challenge(from_user_id, to_user_id, game_id):
     conn = get_db_connection()
@@ -451,7 +453,7 @@ def add_anagrams_challenge(from_user_id, to_user_id, game_id):
     conn.close()
 
 
-def get_sent_wordhunt_challenges(user_id):
+def get_sent_anagrams_challenges(user_id):
     conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM anagrams_challenge_requests WHERE from_user_id = ?", (user_id,))
@@ -544,6 +546,8 @@ def update_anagrams_lb (user_id, score):
                 c.execute("UPDATE anagrams_leaderboard SET top_score = ? WHERE user_id = ?", (score, user_id))
     conn.commit()
     conn.close()
+
+#------------------------------------- WORDBITE -----------------------------------------
 
 def add_wordbites_board(user_id, board_string):
     conn = get_db_connection()
