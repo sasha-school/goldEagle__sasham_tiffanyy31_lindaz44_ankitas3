@@ -113,6 +113,9 @@ ankitaS -- 2025-05-23
 tiffanyy -- 2025 - 5 -27 
 - minor changes to css
 
+tiffanyY -- 2025-05-28
+- updated init functions to work with html
+
 lindaZ -- 2025-05-29 23:52
 - Fixed dict issue with profile
 - Wordhunt bug fix
@@ -120,8 +123,20 @@ lindaZ -- 2025-05-29 23:52
 - wordhunt board will be added upon start of the game
 - working on challenge requests for wordhunt
 
+tiffanyY -- 2025-05-29
+- updated init functions for friends
+
+tiffanyY -- 2025-05-30
+- Fixed friends html UI
+
+tiffanyY -- 2025-05-31
+- Updated init to work 
+
 lindaZ -- 2025-06-02 02:18
 - Working challenges function for wordhunt
 - fixed login/registration flash messages
 - edited db return for user and user_id
 - Working on ending page for wh
+
+tiffanyY -- 2025-06-02
+- Wordbites UI
