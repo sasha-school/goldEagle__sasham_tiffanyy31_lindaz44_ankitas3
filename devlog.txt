@@ -140,3 +140,15 @@ lindaZ -- 2025-06-02 02:18
 
 tiffanyY -- 2025-06-02
 - Wordbites UI
+
+sashaM -- 2025-06-01
+- droplet working
+
+sashaM -- 2025-06-02 IN CLASS
+- wordbites timer
+
+sashaM -- 2025-06-03 IN CLASS
+- wordbites challenge
+
+sashaM -- 2025-06-04 IN CLASS
+- wordbites challenge
