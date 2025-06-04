@@ -152,3 +152,11 @@ sashaM -- 2025-06-03 IN CLASS
 
 sashaM -- 2025-06-04 IN CLASS
 - wordbites challenge
+
+lindaZ -- 2025-06-04
+- working endpage screen (for solo and challenge games)
+- automatic redirect to endpage after end
+- non-logged-in users saved to db so endpage loads
+- override issues in db fixed (get_sent_wordhunt_challenges)
+
+
