@@ -190,7 +190,8 @@ def game():
             received_score = row[4]
             if received_score is None:
                 received_score = "awaiting score..."
-            sent_challenge += f'''<tr><td>Wordhunt to {received_user}</td><td>{sent_score}</td><td>{received_score}</td></tr>'''
+            link=f"/endgame?board_string={board_string}&game_type=wordhunt&challenge=true"
+            sent_challenge += f'''<tr><td>Wordhunt to {received_user}</td><td>{sent_score}</td><td>{received_score}</td><td><a href="{link}"><button>View Game</button></a></td></tr>'''
 
     return render_template("gamepage.html", received_challenge = received_challenge, sent_challenge = sent_challenge)
 
@@ -405,13 +406,13 @@ def remove_friend_route(friend_id):
 @app.route('/add_wh_board', methods=['POST'])
 def add_wh_board():
     if 'user_id' not in session:
-        return "not logged in"
+        user_id = 0
     else:
         user_id = session['user_id']
-        board_string = request.form.get('board_string')
-        add_wordhunt_board(user_id, board_string)
-        #print(get_wordhunt_board(user_id))
-        return "saved board"
+    board_string = request.form.get('board_string')
+    add_wordhunt_board(user_id, board_string)
+    #print(get_wordhunt_board(user_id))
+    return "saved board"
 
 @app.route('/send_wordhunt_challenge', methods=['POST'])
 def send_challenge():
@@ -437,16 +438,16 @@ def send_challenge():
 @app.route('/update_wh_score', methods=['POST'])
 def update_wh_score():
     if 'user_id' not in session:
-        return "not logged in"
+        user_id = 0
     else:
         user_id = session['user_id']
-        board_string = request.form.get('board_string')
-        game_id = get_wordhunt_id(board_string)
-        score = request.form.get('score')
-        score = int(score)
-        update_wordhunt_score(user_id, game_id, score)
-        update_wordhunt_lb(user_id, score)
-        return "saved score"
+    board_string = request.form.get('board_string')
+    game_id = get_wordhunt_id(board_string)
+    score = request.form.get('score')
+    score = int(score)
+    update_wordhunt_score(user_id, game_id, score)
+    update_wordhunt_lb(user_id, score)
+    return "saved score"
 
 #challenge game (sender score)
 @app.route('/update_whc_score_A', methods=['POST'])
@@ -477,14 +478,14 @@ def update_whc_score_B():
 @app.route('/add_wh_words', methods=['POST'])
 def add_wh_words():
     if 'user_id' not in session:
-        return "not logged in"
+        user_id = 0
     else:
         user_id = session['user_id']
-        board_string = request.form.get('board_string')
-        game_id = get_wordhunt_id(board_string)
-        word = request.form.get('word')
-        add_wordhunt_word(game_id, user_id, word)
-        return "added word"
+    board_string = request.form.get('board_string')
+    game_id = get_wordhunt_id(board_string)
+    word = request.form.get('word')
+    add_wordhunt_word(game_id, user_id, word)
+    return "added word"
 
 @app.route('/send_anagrams_challenge', methods=['POST'])
 def send_challenge_ana():
@@ -507,6 +508,68 @@ def add_ana_board():
         add_anagrams_list(user_id, ana_string)
         #print(get_wordhunt_board(user_id))
         return "saved board"
+
+@app.route('/endgame', methods=['POST', 'GET'])
+def endgame():
+    board_string = request.args.get('board_string')
+    game_id = get_wordhunt_id(board_string)
+
+    game_type = request.args.get('game_type')
+    challenge = request.args.get('challenge')
+
+    display = ""
+
+    words_a_html = ""
+    words_b_html = ""
+
+    # get found words for wordhunt
+    if challenge == 'true' and (game_type == "wordhunt"):
+        wh_game_info = get_wh_challenge_info(game_id)
+        words_a = sorted(get_all_words_wh(game_id, wh_game_info[1]))
+        words_b = sorted(get_all_words_wh(game_id, wh_game_info[2]))
+
+        words_a = sorted(words_a, key=len)
+        words_b = sorted(words_b, key=len)
+
+        for word in words_a:
+            words_a_html += f'''<li>{word}</li>'''
+
+        for word in words_b:
+            words_b_html += f'''<li>{word}</li>'''
+        
+        scoreA = wh_game_info[3]
+        scoreB = wh_game_info[4]
+
+        display = f'''<div style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" class="scroll-smooth overflow-y-auto rounded-lg text-3xl bg-[url(/static/img/wood.png)] w-full max-w-md h-full">
+                            <h1>Score: {scoreA}</h1>
+                            <ul class="list-none p-5">
+                                {words_a_html}
+                            </ul>
+                        </div>
+                        <div style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" class="scroll-smooth overflow-y-auto rounded-lg text-3xl bg-[url(/static/img/wood.png)] w-full max-w-md h-full">
+                            <h1>Score: {scoreB}</h4>
+                            <ul class="list-none p-5">
+                                {words_b_html}
+                            </ul>
+                        </div>'''
+    if challenge == 'false':
+        wh_game_info = get_wh_saved_board(game_id)
+        words = sorted(get_all_words_wh(game_id, wh_game_info[1]))
+        words = sorted (words, key=len)
+
+        for word in words:
+            words_a_html += f'''<li>{word}</li>'''
+        score = wh_game_info[2]
+        print(score)
+        print(wh_game_info)
+        display = f'''<div style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" class="scroll-smooth overflow-y-auto rounded-lg text-3xl bg-[url(/static/img/wood.png)] w-full max-w-md h-full">
+                            <h1>Score: {score}</h1>
+                            <ul class="list-none p-5">
+                                {words_a_html}
+                            </ul>
+                        </div>'''
+
+    return render_template("endpage.html", display=display)
 
 def get_notifications(user_id):
     conn = get_db_connection()

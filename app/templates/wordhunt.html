@@ -51,11 +51,11 @@ After the game, if not already friended, popup asking if you’d like to friend 
       </div>
     </div>
 
-    <input style="display: none;" id="display" readonly class="flex justify-content bg-transparent border-4 block mx-auto my-4 p-2 border border-transparent rounded w-full max-w-screen-sm text-center text-5xl">
+    <input style="display: none;" id="display" readonly class="bg-transparent border-4 border-transparent rounded text-center text-5xl">
 
 
     <div style="display: none;" id="letterString">{{letterString}}</div>
-    <div id="board" class="border-[15px] border-[#b4b86a] w-full max-w-screen-sm aspect-square mx-auto mt-10 bg-[#475c47] p-7 rounded-lg">
+    <div id="board" class="border-[15px] border-[#b4b86a] w-full max-w-screen-sm aspect-square mx-auto mt-5 bg-[#475c47] p-7 rounded-lg">
       <div class="grid grid-cols-4 grid-rows-4 gap-6 h-full">
         <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-8xl text-transparent pb-4">{{LetterA}}</button>
         <button style="box-shadow: 0px 11px 10px 4px rgba(0, 0, 0, 0.4);" type="button" class="letter-button bg-[url(/static/img/wood.png)] hover:bg-green-700 rounded-lg text-transparent text-8xl pb-4">{{LetterB}}</button>
@@ -95,7 +95,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
       let challengeGame = false; //determine if score needs to be saved into challenge db too
       let receivedGame = false; //determine if this is user #2 playing
 
-      //starts game once startbutton is clicked
+      //starts game once board is saved
       function startGame() {
         startButton.style.display = "none";
         challenge.style.display="none";
@@ -116,7 +116,7 @@ After the game, if not already friended, popup asking if you’d like to friend 
 
         setTimeout(() => {
           endGame();
-        }, 60000);
+        }, 5000);
       }
 
       function endGame() {
@@ -151,18 +151,17 @@ After the game, if not already friended, popup asking if you’d like to friend 
           if(data2) console.log(data2);
           if(data3) console.log(data3);
 
-          if (selectedWords.length > 0) {
-            alert("Words you found:\n\n" + selectedWords.join('\n'));
-          } else {
-            alert("No words were found.");
+          console.log(receivedGame);
+          console.log(challengeGame);
+          if (receivedGame||challengeGame) {
+            window.location.href = `/endgame?board_string=${stringLetter}&game_type=wordhunt&challenge=true`; //placeholder for end screen
           }
-          if (receivedGame) {
-            window.location.href = '/game'; //placeholder for end screen
-          } else {
-            location.reload();
+          else{
+            window.location.href = `/endgame?board_string=${stringLetter}&game_type=wordhunt&challenge=false`;
           }
         })
         .catch(error => console.error(error));
+
       }
 
       function saveBoard() {

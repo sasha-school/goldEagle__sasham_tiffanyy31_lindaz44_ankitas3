@@ -329,6 +329,22 @@ def get_received_wordhunt_challenges(user_id):
     conn.close()
     return [list(row) for row in row]
 
+def get_wh_saved_board(game_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id, user_id, score FROM wordhunt_boards WHERE game_id = ?", (game_id,))
+    row = c.fetchone()
+    conn.close()
+    return list(row)
+ 
+def get_wh_challenge_info(game_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM wordhunt_challenge_requests WHERE game_id = ?", (game_id,))
+    row = c.fetchone()
+    conn.close()
+    return list(row)
+
 def get_wordhunt_boardstring(game_id):
     conn = get_db_connection()
     c = conn.cursor()
@@ -382,7 +398,7 @@ def add_wordhunt_word(game_id, user_id, word):
     conn.commit()
     conn.close()
 
-def get_all_words (game_id, user_id):
+def get_all_words_wh (game_id, user_id):
     conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT word FROM wordhunt_found_words WHERE game_id = ? AND user_id = ?", (game_id, user_id))
