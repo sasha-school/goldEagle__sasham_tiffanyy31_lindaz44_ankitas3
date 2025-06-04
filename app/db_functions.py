@@ -120,7 +120,8 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS anagrams_boards(
             game_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
-            ana_string TEXT NOT NULL
+            ana_string TEXT NOT NULL,
+            score INTEGER
         );
     ''')
 
@@ -134,6 +135,25 @@ def create_tables():
 
     cur.execute('''
         CREATE TABLE IF NOT EXISTS anagrams_challenge_requests(
+            game_id INTEGER NOT NULL,
+            from_user_id INTEGER NOT NULL,
+            to_user_id INTEGER NOT NULL,
+            from_user_score INTEGER,
+            to_user_score INTEGER
+        );
+    ''')
+
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS wordbites_boards(
+            game_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            board_string TEXT NOT NULL,
+            score INTEGER
+        );
+    ''')
+
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS wordbites_challenge_requests(
             game_id INTEGER NOT NULL,
             from_user_id INTEGER NOT NULL,
             to_user_id INTEGER NOT NULL,
@@ -430,6 +450,32 @@ def add_anagrams_challenge(from_user_id, to_user_id, game_id):
     conn.commit()
     conn.close()
 
+
+def get_sent_wordhunt_challenges(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM anagrams_challenge_requests WHERE from_user_id = ?", (user_id,))
+    row = c.fetchall()
+    conn.close()
+    return [list(row) for row in row]
+
+def get_received_anagrams_challenges(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM anagrams_challenge_requests WHERE to_user_id = ?", (user_id,))
+    row = c.fetchall()
+    conn.close()
+    return [list(row) for row in row]
+
+
+def get_anagrams_boardstring(game_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT board_string FROM anagrams_boards WHERE game_id = ?", (game_id,))
+    row = c.fetchone()
+    conn.close()
+    return row["board_string"]
+
 def update_challenge_score_AnaA(game_id, from_user_score):
     conn = get_db_connection()
     c = conn.cursor()
@@ -452,6 +498,14 @@ def add_anagrams_list(user_id, ana_string):
     conn.commit()
     conn.close()
 
+def update_anagrams_score(user_id, game_id, score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("UPDATE anagrams_boards SET score = ? WHERE game_id = ? AND user_id = ?", (score, game_id, user_id))
+    conn.commit()
+    conn.close()
+
+
 def get_anagrams_id(ana_string):
     conn = get_db_connection()
     c = conn.cursor()
@@ -467,7 +521,7 @@ def add_anagrams_word(game_id, user_id, word):
     conn.commit()
     conn.close()
 
-def get_all_words (game_id, user_id):
+def get_all_words_ana(game_id, user_id):
     conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT word FROM anagrams_found_words WHERE game_id = ? AND user_id = ?", (game_id, user_id))
@@ -476,3 +530,102 @@ def get_all_words (game_id, user_id):
     conn.close()
     return words
 
+def update_anagrams_lb (user_id, score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT games_played, top_score FROM anagrams_leaderboard WHERE user_id = ?", (user_id,))
+    row = c.fetchone()
+    if row is None:
+        c.execute("INSERT INTO anagrams_leaderboard (user_id, games_played, top_score) VALUES (?, ?, ?)", (user_id, 1, score))
+    else:
+        games_played, top_score = row["games_played"], row["top_score"]
+        c.execute("UPDATE anagrams_leaderboard SET games_played = games_played + 1 WHERE user_id = ?", (user_id,))
+        if (score >= top_score):
+                c.execute("UPDATE anagrams_leaderboard SET top_score = ? WHERE user_id = ?", (score, user_id))
+    conn.commit()
+    conn.close()
+
+def add_wordbites_board(user_id, board_string):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("INSERT INTO wordbites_boards (board_string, user_id) VALUES (?, ?)", (board_string, user_id))
+    conn.commit()
+    conn.close()
+
+def get_wordbites_id(board_string):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id FROM wordbites_boards WHERE board_string = ?", (board_string,))
+    row = c.fetchone()
+    conn.close()
+    return row["game_id"]
+
+def add_wordbites_challenge(from_user_id, to_user_id, game_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("INSERT INTO wordbites_challenge_requests (game_id, from_user_id, to_user_id) VALUES (?, ?, ?)", (game_id, from_user_id, to_user_id))
+    conn.commit()
+    conn.close()
+
+def get_sent_wordbites_challenges(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM wordbites_challenge_requests WHERE from_user_id = ?", (user_id,))
+    row = c.fetchall()
+    conn.close()
+    return [list(row) for row in row]
+
+def get_received_wordbites_challenges(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM wordbites_challenge_requests WHERE to_user_id = ?", (user_id,))
+    row = c.fetchall()
+    conn.close()
+    return [list(row) for row in row]
+
+def get_wordbites_boardstring(game_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT board_string FROM wordbites_boards WHERE game_id = ?", (game_id,))
+    row = c.fetchone()
+    conn.close()
+    return row["board_string"]
+
+def update_wordbites_score(user_id, game_id, score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("UPDATE wordbites_boards SET score = ? WHERE game_id = ? AND user_id = ?", (score, game_id, user_id))
+    conn.commit()
+    conn.close()
+
+def update_wordbites_lb (user_id, score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT games_played, top_score FROM wordbites_leaderboard WHERE user_id = ?", (user_id,))
+    row = c.fetchone()
+    if row is None:
+        c.execute("INSERT INTO wordbites_leaderboard (user_id, games_played, top_score) VALUES (?, ?, ?)", (user_id, 1, score))
+    else:
+        games_played, top_score = row["games_played"], row["top_score"]
+        c.execute("UPDATE wordbites_leaderboard SET games_played = games_played + 1 WHERE user_id = ?", (user_id,))
+        if (score >= top_score):
+                c.execute("UPDATE wordbites_leaderboard SET top_score = ? WHERE user_id = ?", (score, user_id))
+    conn.commit()
+    conn.close()
+
+
+#inital first user score after sending
+def update_challenge_score_A_wb(game_id, from_user_score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("UPDATE wordbites_challenge_requests SET from_user_score = ? WHERE game_id = ?", (from_user_score, game_id))
+    conn.commit()
+    conn.close()
+
+#updates second user score after recieving
+def update_challenge_score_B_wb(game_id, to_user_score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("UPDATE wordbites_challenge_requests SET to_user_score = ? WHERE game_id = ?", (to_user_score, game_id))
+    conn.commit()
+    conn.close()
