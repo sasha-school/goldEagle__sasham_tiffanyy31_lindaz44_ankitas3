@@ -11,36 +11,49 @@
         <div class="absolute left-0 right-0 bottom-0 h-8 bg-yellow-700 rounded-b-lg shadow-lg z-0"></div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 relative z-10">
 
-            <div class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-visible">
+            <div
+                class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-visible">
                 <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Anagrams</h3>
-                <img src="https://i.imgur.com/NeyWYUu.png"
-                    alt="" width="180" height="180" class="mb-4 drop-shadow-lg" style="margin-bottom:-12px;">
-                <p class="text-gray-600 dark:text-gray-300 mt-4 mb-4 text-center">Anagram is a 60 second game, where you are given letters and you combine them to make words. </p>
-                <div class="absolute inset-0 bg-blue-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300 pointer-events-none"></div>
+                <img src="https://i.imgur.com/NeyWYUu.png" alt="" width="180" height="180" class="mb-4 drop-shadow-lg"
+                    style="margin-bottom:-12px;">
+                <p class="text-gray-600 dark:text-gray-300 mt-4 mb-4 text-center">Anagram is a 60 second game, where you
+                    are given letters and you combine them to make words. </p>
+                <div
+                    class="absolute inset-0 bg-blue-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300 pointer-events-none">
+                </div>
                 <div class="absolute bottom-6 left-6 hidden group-hover:flex space-x-2">
                     <a href="{{ url_for('anagrams') }}"
                         class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Play now!</a>
                 </div>
             </div>
 
-            <div class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-visible">
+            <div
+                class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-visible">
                 <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Word Bites</h3>
-                <img src="https://i.imgur.com/cSLXk8J.png"
-                    alt="" width="180" height="180" class="mb-4 drop-shadow-lg" style="margin-bottom:-12px;">
-                <p class="text-gray-600 dark:text-gray-300 mt-4 mb-4 text-center">Word Bites is the puzzle game with the words, only with completely new gameplay. </p>
-                <div class="absolute inset-0 bg-purple-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300 pointer-events-none"></div>
+                <img src="https://i.imgur.com/cSLXk8J.png" alt="" width="180" height="180" class="mb-4 drop-shadow-lg"
+                    style="margin-bottom:-12px;">
+                <p class="text-gray-600 dark:text-gray-300 mt-4 mb-4 text-center">Word Bites is the puzzle game with the
+                    words, only with completely new gameplay. </p>
+                <div
+                    class="absolute inset-0 bg-purple-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300 pointer-events-none">
+                </div>
                 <div class="absolute bottom-6 left-6 hidden group-hover:flex space-x-2">
                     <a href="{{ url_for('wordbites') }}"
-                        class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">Play now!</a>
+                        class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">Play
+                        now!</a>
                 </div>
             </div>
 
-            <div class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-visible">
+            <div
+                class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 shadow rounded-lg relative overflow-visible">
                 <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Word Hunt</h3>
                 <img src="https://img.itch.zone/aW1nLzE0NjM0Mzc1LnBuZw==/original/0yWb0s.png" alt="" width="180"
                     height="180" class="mb-4 drop-shadow-lg" style="margin-bottom:-12px;">
-                <p class="text-gray-600 dark:text-gray-300 mt-4 mb-4 text-center">Calling all word sleuths – Will you discover all of the possible letter combinations?</p>
-                <div class="absolute inset-0 bg-green-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300 pointer-events-none"></div>
+                <p class="text-gray-600 dark:text-gray-300 mt-4 mb-4 text-center">Calling all word sleuths – Will you
+                    discover all of the possible letter combinations?</p>
+                <div
+                    class="absolute inset-0 bg-green-500 bg-opacity-0 group-hover:bg-opacity-10 transition duration-300 pointer-events-none">
+                </div>
                 <div class="absolute bottom-6 left-6 hidden group-hover:flex space-x-2">
                     <a href="{{ url_for('wordhunt') }}"
                         class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">Play now!</a>
@@ -51,36 +64,36 @@
 </div>
 
 {% if session.get('user_id') %}
-    <div class="mt-12 mb-8">
-        <table class="table-auto w-full border-separate border-spacing-x-6 border-spacing-y-4 mb-12">
-            <thead>
-                <tr>
-                    <th class="py-3">Game</th>
-                    <th class="py-3">Challenger</th>
-                    <th class="py-3">Play</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{ received_challenge | safe }}
-            </tbody>
-        </table>
+<div class="mt-12 mb-8">
+    <table class="table-auto w-full border-separate border-spacing-x-6 border-spacing-y-4 mb-12">
+        <thead>
+            <tr>
+                <th class="py-3">Game</th>
+                <th class="py-3">Challenger</th>
+                <th class="py-3">Play</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ received_challenge | safe }}
+        </tbody>
+    </table>
 
-        <table class="table-auto w-full border-separate border-spacing-x-6 border-spacing-y-4 mb-12">
-            <thead>
-                <tr>
-                    <th class="py-3">Sent Challenges</th>
-                    <th class="py-3">Your Score</th>
-                    <th class="py-3">Opponent Score</th>
-                    <th class="py-3">View</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{ sent_challenge | safe }}
-            </tbody>
-        </table>
-    </div>
+    <table class="table-auto w-full border-separate border-spacing-x-6 border-spacing-y-4 mb-12">
+        <thead>
+            <tr>
+                <th class="py-3">Sent Challenges</th>
+                <th class="py-3">Your Score</th>
+                <th class="py-3">Opponent Score</th>
+                <th class="py-3">View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ sent_challenge | safe }}
+        </tbody>
+    </table>
+</div>
 {% else %}
-  <p class="text-center text-gray-600 mt-10">Please log in to see your challenges.</p>
+<p class="text-center text-gray-600 mt-10">Please log in to see your challenges.</p>
 {% endif %}
 
 {% endblock %}
