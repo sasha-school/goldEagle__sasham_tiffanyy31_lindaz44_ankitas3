@@ -497,6 +497,8 @@ def send_challenge_ana():
     add_anagrams_challenge(user_id, friend_id, game_id)
     return "sent request"
 
+
+
 @app.route('/add_ana_string', methods=['POST'])
 def add_ana_board():
     if 'user_id' not in session:
@@ -535,6 +537,32 @@ def update_ana_score():
         update_anagrams_score(user_id, game_id, score)
         update_anagrams_lb(user_id, score)
         return "saved score"
+
+
+@app.route('/update_ana_score_A', methods=['POST'])
+def update_ana_score_A():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        ana_string = request.form.get('ana_string')
+        game_id = get_anagrams_id(ana_string)
+        score = request.form.get('score')
+        score = int(score)
+        update_challenge_score_AnaA(game_id, score)
+        return "saved score"
+
+#receiver game (receiver score)
+@app.route('/update_ana_score_B', methods=['POST'])
+def update_ana_score_B():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        ana_string = request.form.get('ana_string')
+        game_id = get_anagrams_id(ana_string)
+        score = request.form.get('score')
+        score = int(score)
+        update_challenge_score_AnaB(game_id, score)
+
 
 def get_notifications(user_id):
     conn = get_db_connection()

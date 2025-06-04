@@ -18,11 +18,11 @@
 }
 
 .anagram-container {
-  max-width: 700px;
+  max-width: 8800px;
   margin: 40px auto;
   background: var(--timberwolf);
   border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(126, 106, 76, 0.13);
+  box-shadow: 0 4px 4px rgba(126, 106, 76, 0.13);
   padding: 32px 36px 36px 36px;
   font-family: 'Segoe UI', Arial, sans-serif;
   border: 2px solid var(--coyote-2);
@@ -197,21 +197,19 @@
 }
 .letter {
   background: var(--timberwolf);
-  border: 2px solid var(--lion);
+  box-shadow: 0px 5px 7px 4px rgba(0, 0, 0, 0.4);
   color: var(--sepia);
-  border-radius: 20%;
-  width: 76px;
-  height: 70px;
+  border-radius: 0%;
+  width: 94px;
+  height: 84px;
   font-size: 2em;
   font-weight: bold;
   cursor: grab;
   transition: background 0.2s, color 0.2s, border 0.2s;
-  box-shadow: 0 2px 8px rgba(176,137,82,0.13);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: -20;
-  padding: -20;
+ 
   outline: none;
 }
 
@@ -377,18 +375,49 @@ function sendChallenge() {
 
 
 function startGame() {
-  game = true;
-  for (let i = 1; i <= 6; i++) {
-  el = document.getElementById("img" + i)
-  el.setAttribute('style', 'opacity:1;');
-  }
 
   let scrm = "";
   for (let i = 1; i <= 6; i++) {
     scrm += document.getElementById('img' + i).textContent;
   }
 
-  const wordData = new FormData();
+  game = true;
+  for (let i = 1; i <= 6; i++) {
+  el = document.getElementById("img" + i)
+  el.setAttribute('style', 'opacity:1;');
+  }
+
+
+  document.getElementById("friend_id").style.display="none";
+  document.getElementById("send_challenge_ana").style.display="none";
+  document.getElementById("plsStart2").style.display="none";
+
+
+    document.getElementById("timer").textContent = time;
+        let ID = window.setInterval(() => {
+          if (time > 0){
+            time = parseInt(time - 1);
+            document.getElementById("timer").textContent = time;
+          }
+          else {
+            clearInterval(ID);
+            endGame();
+          }
+        }, 1000);
+
+
+      }
+
+
+  function saveBoard() {
+  
+    
+  let scrm = "";
+  for (let i = 1; i <= 6; i++) {
+    scrm += document.getElementById('img' + i).textContent;
+  }
+
+        const wordData = new FormData();
         wordData.append('ana_string', scrm);
         fetch('/add_ana_string', {
           method: 'POST',
@@ -400,25 +429,9 @@ function startGame() {
           startGame();
         })
         .catch(error => console.error(error));
+      
+    }
 
-  document.getElementById("friend_id").style.display="none";
-  document.getElementById("send_challenge_ana").style.display="none";
-  document.getElementById("plsStart2").style.display="none";
-
-
-    document.getElementById("timer").textContent = time;
-        let ID = window.setInterval(() => {
-          if (time > 0){
-            time = parseInt(time - 1);
-          }
-          else {
-            clearInterval(ID);
-            endGame();
-          }
-        }, 1000);
-
-
-      }
 function endGame() {
   let scrm = "";
   for (let i = 1; i <= 6; i++) {
@@ -439,9 +452,13 @@ const single_score = fetch('/update_ana_score', {
   body:result
 }).then(response => response.text());
 
-Promise.all([single_score])
 
-}
+
+
+        Promise.all([single_score])
+
+       
+      }
 
 
 
@@ -471,6 +488,12 @@ Promise.all([single_score])
 
 
 function checkLetters() {
+   let scrm = "";
+  for (let i = 1; i <= 6; i++) {
+    scrm += document.getElementById('img' + i).textContent;
+  }
+
+
   if (game==true) {
   const boxes = document.querySelectorAll(".seperate .box");
   const boxesAdd = document.querySelectorAll(".pls .addBoxy");
@@ -526,14 +549,14 @@ function checkLetters() {
           } else {
             usedLetters.push(letters);
             words.push(letters);
-            wL = words.length;
+            let wL = words.length;
             let pointThing = pointsCateg[numLetters];
             pointsPerWord.push(pointThing);
             totPoint += pointThing;
 
             const wordData = new FormData();
-            wordData.append('word', words);
-            wordData.append('board_string', stringLetter);
+            wordData.append('word', letters);
+            wordData.append('ana_string', scrm);
 
             fetch('/add_ana_words', {
               method: 'POST',
@@ -547,7 +570,7 @@ function checkLetters() {
 
 
             msg.innerHTML = `&#127942; <b>+${pointThing}</b> points!`;
-            tot1.innerHTML = `WORDS: ${totPoint}`;
+            tot1.innerHTML = `WORDS: ${wL}`;
             tot.innerHTML = `SCORE: ${totPoint}`;
             emptyBoxes = [];
             for (let i = 0; i < 6; i++) {
@@ -622,7 +645,7 @@ function checkLetters() {
     <input placeholder="User ID" id="friend_id" class="form-control w-auto d-inline-block"  type="number">
     <button id= "plsStart1" type="submit" onclick="sendChallenge()">Send Challenge: Start</button>
   </div>
-<div><button id="plsStart2" onclick="startGame()">Single-Player Mode: Start</button></div>
+<div><button id="plsStart2" onclick="saveBoard()">Single-Player Mode: Start</button></div>
 </div>
   <br>
   <div class="text-center">
@@ -686,7 +709,7 @@ function checkLetters() {
   <div class="pls">
     {% if letters %}
     <div class="addBoxy0 box" id="div1" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
-      <button class="letter text-transparent" id="img1" onclick="clickMove('img1') " draggable="true" ondragstart="dragstartHandler(event)">{{ letters.0 }}</button>
+      <button width="87px" class="letter text-transparent" id="img1" onclick="clickMove('img1') " draggable="true" ondragstart="dragstartHandler(event)">{{ letters.0 }}</button>
     </div>
     <div class="box addBoxy1" id="div2" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
       <button class="letter" id="img2" onclick="clickMove('img2')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.1 }}</button>
