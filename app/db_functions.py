@@ -120,7 +120,8 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS anagrams_boards(
             game_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
-            ana_string TEXT NOT NULL
+            ana_string TEXT NOT NULL,
+            score INTEGER
         );
     ''')
 
@@ -414,6 +415,32 @@ def add_anagrams_challenge(from_user_id, to_user_id, game_id):
     conn.commit()
     conn.close()
 
+
+def get_sent_wordhunt_challenges(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM anagrams_challenge_requests WHERE from_user_id = ?", (user_id,))
+    row = c.fetchall()
+    conn.close()
+    return [list(row) for row in row]
+
+def get_received_anagrams_challenges(user_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM anagrams_challenge_requests WHERE to_user_id = ?", (user_id,))
+    row = c.fetchall()
+    conn.close()
+    return [list(row) for row in row]
+
+
+def get_anagrams_boardstring(game_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT board_string FROM anagrams_boards WHERE game_id = ?", (game_id,))
+    row = c.fetchone()
+    conn.close()
+    return row["board_string"]
+
 def update_challenge_score_AnaA(game_id, from_user_score):
     conn = get_db_connection()
     c = conn.cursor()
@@ -436,6 +463,14 @@ def add_anagrams_list(user_id, ana_string):
     conn.commit()
     conn.close()
 
+def update_anagrams_score(user_id, game_id, score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("UPDATE anagrams_boards SET score = ? WHERE game_id = ? AND user_id = ?", (score, game_id, user_id))
+    conn.commit()
+    conn.close()
+
+
 def get_anagrams_id(ana_string):
     conn = get_db_connection()
     c = conn.cursor()
@@ -451,7 +486,7 @@ def add_anagrams_word(game_id, user_id, word):
     conn.commit()
     conn.close()
 
-def get_all_words (game_id, user_id):
+def get_all_words_ana(game_id, user_id):
     conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT word FROM anagrams_found_words WHERE game_id = ? AND user_id = ?", (game_id, user_id))
@@ -460,3 +495,17 @@ def get_all_words (game_id, user_id):
     conn.close()
     return words
 
+def update_anagrams_lb (user_id, score):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT games_played, top_score FROM anagrams_leaderboard WHERE user_id = ?", (user_id,))
+    row = c.fetchone()
+    if row is None:
+        c.execute("INSERT INTO anagrams_leaderboard (user_id, games_played, top_score) VALUES (?, ?, ?)", (user_id, 1, score))
+    else:
+        games_played, top_score = row["games_played"], row["top_score"]
+        c.execute("UPDATE anagrams_leaderboard SET games_played = games_played + 1 WHERE user_id = ?", (user_id,))
+        if (score >= top_score):
+                c.execute("UPDATE anagrams_leaderboard SET top_score = ? WHERE user_id = ?", (score, user_id))
+    conn.commit()
+    conn.close()

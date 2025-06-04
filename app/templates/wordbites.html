@@ -123,7 +123,9 @@ button.rounded-lg:hover {
 const toFrom = {};
 
 function dragstartHandler(ev) {
-  ev.dataTransfer.setData("text", ev.target.id);
+  // Drag the box, not the letter
+  const box = ev.target.classList.contains("box") ? ev.target : ev.target.closest(".box");
+  ev.dataTransfer.setData("box_id", box.id);
 }
 
 function dragoverHandler(ev) {
@@ -132,24 +134,26 @@ function dragoverHandler(ev) {
 
 function dropHandler(ev, boxNumber) {
   ev.preventDefault();
-  const letter_id = ev.dataTransfer.getData("text");
-  const imageElement = document.getElementById(letter_id);
+  const fromBoxId = ev.dataTransfer.getData("box_id");
+  const fromBox = document.getElementById(fromBoxId);
 
-  // Prevent moving a letter to a box with a letter already
+  // Only allow drop if fromBox has a letter and target box is empty
   const dropTarget = ev.target;
-  const box = dropTarget.classList.contains("box") ? dropTarget : dropTarget.closest(".box");
-  if (box.querySelector("h1")) {
-    box.classList.add('shake');
-    setTimeout(() => box.classList.remove('shake'), 400);
+  const toBox = dropTarget.classList.contains("box") ? dropTarget : dropTarget.closest(".box");
+  if (!fromBox || !fromBox.querySelector("h1")) return;
+  if (toBox.querySelector("h1")) {
+    toBox.classList.add('shake');
+    setTimeout(() => toBox.classList.remove('shake'), 400);
     return;
   }
 
-  box.appendChild(imageElement);
+  const letterElem = fromBox.querySelector("h1");
+  toBox.appendChild(letterElem);
 
+  const letter_id = letterElem.id;
   const letter = letter_id.split('_')[0];
-  const fromBox = toFrom[letter_id] || null;
-  const toBox = boxNumber;
-  toFrom[letter_id] = toBox;
+  const fromBoxNumber = parseInt(fromBox.id.replace("box", ""));
+  toFrom[letter_id] = boxNumber;
 
   fetch("/wordbites_helper", {
     method: "POST",
@@ -158,8 +162,8 @@ function dropHandler(ev, boxNumber) {
     },
     body: JSON.stringify({
       letter: letter,
-      from_box: fromBox,
-      to_box: toBox
+      from_box: fromBoxNumber,
+      to_box: boxNumber
     })
   })
   .then(response => response.json())
@@ -254,6 +258,9 @@ function sendChallenge() {
   .catch(error => console.error(error));
 }
 </script>
+
+
+
 </head>
 <body>
   <div id="send_challenge" class="flex items-center gap-2] rounded-lg p-3 bg-[#ffffff]">
@@ -274,14 +281,15 @@ function sendChallenge() {
             {% set box_number = row * 8 + col + 1 %}
             <td>
               <div class="box" id="box{{ box_number }}"
+                  draggable="true"
+                  ondragstart="dragstartHandler(event)"
                   ondrop="dropHandler(event, {{ box_number }})"
                   ondragover="dragoverHandler(event)">
                   {% if letters %}
                   {% if box_number <= letters|length %}
                     {% set letter = letters[box_number - 1] %}
                     {% set letter_id = letter ~ "_" ~ (box_number - 1) %}
-                    <h1 id="{{ letter_id }}" draggable="true"
-                          ondragstart="dragstartHandler(event)" class="h1 text-transparent">{{ letter }}</h1>
+                    <h1 id="{{ letter_id }}" class="h1 text-transparent">{{ letter }}</h1>
                     {% endif %}
                   {% endif %}
               </div>
