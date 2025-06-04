@@ -90,8 +90,8 @@
 }
 
 #enterWord {
-  background: #444063;
-  color: var(--timberwolf);
+  background: #9f9bbf;
+  color: black;
   border: none;
   border-radius: 8px;
   padding: 10px 28px;
@@ -109,7 +109,7 @@
 }
 #timer {
   font-weight: 600;
-  color: #4B3A22;
+  color: black;
 }
 #points {
   min-height: 24px;
@@ -175,7 +175,7 @@
   width: 60px;
   height: 70px;
   background: rgb(206, 198, 234);
-  border: 2px solid var(--coyote-2);
+  border: 2px solid black;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -187,7 +187,6 @@
 }
 
 .box:hover {
-  border: 2px solid var(--sepia);
   background: var(--timberwolf);
   box-shadow: 0 4px 16px rgba(101,63,12,0.13);
 }
@@ -198,7 +197,7 @@
 .letter {
   background: var(--timberwolf);
   box-shadow: 0px 5px 7px 4px rgba(0, 0, 0, 0.4);
-  color: var(--sepia);
+  color: black;
   border-radius: 0%;
   width: 94px;
   height: 84px;
@@ -215,7 +214,7 @@
 
 .letter:active {
   background: var(--lion);
-  color: var(--timberwolf);
+  color: black;
   border: 2px solid var(--sepia);
 }
 
@@ -238,7 +237,7 @@
     min-height: 48px;
   }
   .letter {
-    width: 46px;
+    width: 76px;
     height: 46px;
     font-size: 1.2em;
   }
@@ -339,9 +338,7 @@ function sendChallenge() {
     el.setAttribute('style', 'opacity:1;');
     }
 
-  document.getElementById("plsStart1").style.display="none";
-  document.getElementById("send_challenge_ana").style.display="none";
-  document.getElementById("plsStart2").style.display="none";
+  
 
 
   const inputVal = document.getElementById("friend_id");
@@ -351,27 +348,39 @@ function sendChallenge() {
   stringData.append('ana_string', scrm);
   stringData.append('friend_id', friend_id);
 
+  document.getElementById("plsStart1").style.display="none";
+  document.getElementById("send_challenge_ana").style.display="none";
+  document.getElementById("plsStart2").style.display="none";
+
   fetch('/send_anagrams_challenge', {
           method: 'POST',
-          body: challengeData
+          body: stringData
         })
 
   .then(response => response.json())
   .then(data => {
-    if (data.redirect) {
-      window.location.href = data.redirect;
-      return;
-    } else if (data.message) {
-      toastAlert(data.message);
-      if (data.message === "challenge request sent") {
-        startGame();
-        challengeGame = true;
-      }
-    }
+    startGame();
   })
   .catch(error => console.error(error));
-
 }
+
+  window.addEventListener('DOMContentLoaded', () => {
+        const urlArgs = new URLSearchParams(window.location.search);
+        if(urlArgs.has('board')){
+          receivedGame = true;
+          startGame();
+        }
+      })
+
+function toastAlert(message) {
+        const toast = document.getElementById('toast-simple');
+        toast.textContent = message;
+        toast.style.display = 'block';
+
+        setTimeout(() => {
+          toast.style.display = 'none';
+        }, 1500);
+      }
 
 
 function startGame() {
@@ -452,6 +461,16 @@ const single_score = fetch('/update_ana_score', {
   body:result
 }).then(response => response.text());
 
+const A_score = fetch('/update_ana_score_A', {
+  method: 'POST',
+  body:result
+}).then(response => response.text());
+
+const B_score = fetch('/update_ana_score_B', {
+  method: 'POST',
+  body:result
+}).then(response => response.text());
+
 
 
 
@@ -463,11 +482,13 @@ const single_score = fetch('/update_ana_score', {
 
 
   function scoreBoard() {
+    document.getElementById("tot").textContent = totPoint;
     for (let i = 0; i < words.length; i++) {
       let w = document.createElement('p');
       let p = document.createElement('p');
       w.textContent = words[i] + "      " + pointsPerWord[i].toString();
       document.getElementById("disp").appendChild(w);
+      
 
     }
   }
@@ -633,10 +654,12 @@ function checkLetters() {
 
 
 </script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
+<div id="toast-simple" class="flex items-center" role="alert">
 
 <div class="anagram-container">
 <div class="text-center">  <p id="timer" class="text-black text-3xl">60</p></div>
@@ -737,9 +760,12 @@ function checkLetters() {
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Score Board</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      
+     
     <div id="both">
       <div id="firstUser">
       <h3>{{ userName }}</h3>
+       <button id="tot">SCORE: </button>
       <div class="modal-body" id="disp">
         <p></p> <p></p> <br>
       </div>
