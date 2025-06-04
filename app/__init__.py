@@ -253,9 +253,6 @@ def wordbites_helper():
     letter = data.get("letter")
     from_box = data.get("from_box")
     to_box = data.get("to_box")
-    if data.get("final_score"):
-        final_score = data.get("final_score") ###FINAL SCORE FOR ROUND TO SEND LATER
-        return jsonify({"status": "received"})
 
     wordbites_letter_positions[letter] = to_box
 
@@ -329,8 +326,56 @@ def send_wordbites_challenge():
     add_wordbites_challenge(user_id, friend_id, game_id)
     return jsonify({'message' : "challenge request sent"})
 
+@app.route('/add_wb_board', methods=['POST'])
+def add_wb_board():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        user_id = session['user_id']
+        board_string = request.form.get('board_string')
+        add_wordbites_board(user_id, board_string)
+        #print(get_wordhunt_board(user_id))
+        return "saved board"
 
+@app.route('/update_wb_score', methods=['POST'])
+def update_wb_score():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        user_id = session['user_id']
+        board_string = request.form.get('board_string')
+        game_id = get_wordbites_id(board_string)
+        score = request.form.get('score')
+        score = int(score)
+        update_wordbites_score(user_id, game_id, score)
+        update_wordbites_lb(user_id, score)
+        return "saved score"
 
+#challenge game (sender score)
+@app.route('/update_wbc_score_A', methods=['POST'])
+def update_wbc_score_A():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        board_string = request.form.get('board_string')
+        game_id = get_wordbites_id(board_string)
+        score = request.form.get('score')
+        score = int(score)
+        update_challenge_score_A_wb(game_id, score)
+        return "saved score"
+
+#receiver game (receiver score)
+@app.route('/update_wbc_score_B', methods=['POST'])
+def update_wbc_score_B():
+    if 'user_id' not in session:
+        return "not logged in"
+    else:
+        board_string = request.form.get('board_string')
+        game_id = get_wordbites_id(board_string)
+        score = request.form.get('score')
+        score = int(score)
+        update_challenge_score_B_wb(game_id, score)
+        return "saved score"
 
 
 @app.route("/wordhunt", methods=['GET', 'POST'])

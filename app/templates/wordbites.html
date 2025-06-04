@@ -190,6 +190,7 @@ function dropHandler(ev, boxNumber) {
 function startGame(startButton) {
   const time = document.getElementById("timer");
   startButton.style.display = "none";
+  challenge.style.display="none";
   const lets = document.querySelectorAll(".h1");
   lets.forEach(h1 => {
     h1.classList.remove('text-transparent');
@@ -205,19 +206,6 @@ function startGame(startButton) {
     endGame();
     console.log("end");
 
-    // const final_score = {data.score}
-    fetch("/wordbites_helper", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        final_score: total_score,
-        letter: 'A',
-        from_box: 1,
-        to_box: 1
-      })
-    })
   }, 50000);
 }
 
@@ -227,6 +215,27 @@ function endGame() {
     h1.classList.remove('text-black');
     h1.classList.add('text-transparent');
   });
+
+  const gameData = new FormData();
+  gameData.append('score', total_score);
+  gameData.append('board_string', data.letters);
+
+  const soloUpdate = fetch('/update_wb_score', {
+    method: 'POST',
+    body: gameData
+  }).then(response => response.text());
+
+  const challengeUpdateA = challengeGame ? fetch('/update_wbc_score_A', {
+    method: 'POST',
+    body: gameData
+  }).then(response => response.text()) : Promise.resolve(null); //since conditinal on challengeGame
+
+  const challengeUpdateB = receivedGame ? fetch('/update_wbc_score_B', {
+    method: 'POST',
+    body: gameData
+  }).then(response => response.text()) : Promise.resolve(null);
+
+  Promise.all([soloUpdate, challengeUpdateA, challengeUpdateB])
 }
 
 //from linda's code
@@ -248,7 +257,6 @@ function sendChallenge() {
       window.location.href = data.redirect;
       return;
     } else if (data.message) {
-      toastAlert(data.message);
       if (data.message === "challenge request sent") {
         startGame();
         challengeGame = true;
@@ -257,6 +265,23 @@ function sendChallenge() {
   })
   .catch(error => console.error(error));
 }
+
+function saveBoard() {
+  const stringData = new FormData();
+  stringData.append('board_string', data.letters);
+  //using js to send to backend to prevent page reload
+  fetch('/add_wb_board', {
+    method: 'POST',
+    body: stringData
+  })
+  .then(response => response.text())
+  .then(data => {
+    console.log(data);
+    startGame();
+  })
+  .catch(error => console.error(error));
+}
+
 </script>
 
 
@@ -270,7 +295,7 @@ function sendChallenge() {
   </div>
 <div>
   <p id="timer" class="text-black text-3xl">50</p>
-  <button class="rounded-lg" onclick="startGame(this)">Start</button>
+  <button class="rounded-lg" onclick="saveBoard()">Start (Single player)</button>
 </div>
 <div style="display: flex; align-items: flex-start;">
   <div>
