@@ -167,6 +167,7 @@ def game():
     #html for challenge table -- could add challenges for anagrams and wordbite as well
     received_challenge = ""
     sent_challenge = ""
+    
 
     if 'user_id' in session:
         user_id = session['user_id']
@@ -191,10 +192,38 @@ def game():
             if received_score is None:
                 received_score = "awaiting score..."
             sent_challenge += f'''<tr><td>Wordhunt to {received_user}</td><td>{sent_score}</td><td>{received_score}</td></tr>'''
+           
+
 
     return render_template("gamepage.html", received_challenge = received_challenge, sent_challenge = sent_challenge)
 
+@app.route('/ana_game')
+def ana_game():
+    if 'user_id' in session:
+        ana_user_id = session['user_id']
+        ana_received_challenge = ""
+        ana_sent_challenge = ""
+        all_ana_received = get_received_anagrams_challenges(ana_user_id) #received wordhunt challenges
+        all_ana_sent = get_sent_anagrams_challenges(ana_user_id)
+        for i in all_ana_received:
+            ana_game_id = int(i[0])
+            ana_board_string = get_anagrams_ana_string(ana_game_id)
+            ana_link= f"/anagrams?board={ana_board_string}"
+            ana_sent_username = get_user(int(i[1]))
+            ana_received_score = i[4]
+            if ana_received_score is None: #if user hasn't played the game yet
+                ana_received_challenge += f'''<tr><td>Anagrams</td><td>{ana_sent_username} (#{i[1]})</td><td><a href="{ana_link}"><button>Play</button></a></td></tr>'''
+        for row in all_ana_sent:
+            ana_game_id = int(i[0])
+            ana_board_string = get_anagrams_ana_string(ana_game_id)
+            ana_received_user = get_user(int(i[2]))
+            ana_sent_score = row[3]
+            ana_received_score = row[4]
+            if ana_received_score is None:
+                ana_received_score = "awaiting score..."
+            ana_sent_challenge += f'''<tr><td>Anagrams to {ana_received_user}</td><td>{ana_sent_score}</td><td>{ana_received_score}</td></tr>''' 
 
+    return render_template("ana_gamepage.html", ana_received_challenge = ana_received_challenge, ana_sent_challenge = ana_sent_challenge)
 
 wordbites_letter_positions = {}
 wordbites_words = {}
@@ -489,14 +518,14 @@ def add_wh_words():
 @app.route('/send_anagrams_challenge', methods=['POST'])
 def send_challenge_ana():
     if 'user_id' not in session:
-        return redirect(url_for('login'))
+        return jsonify({'redirect': url_for('login')})
     user_id = session['user_id']
     friend_id = request.form.get('friend_id')
     ana_string = request.form.get('ana_string')
+    add_anagrams_list(user_id, ana_string)
     game_id = get_anagrams_id(ana_string)
     add_anagrams_challenge(user_id, friend_id, game_id)
-    return "sent request"
-
+    return jsonify({'message' : "challenge request sent"})
 
 
 @app.route('/add_ana_string', methods=['POST'])
@@ -562,6 +591,7 @@ def update_ana_score_B():
         score = request.form.get('score')
         score = int(score)
         update_challenge_score_AnaB(game_id, score)
+        return "saved score"
 
 
 def get_notifications(user_id):

@@ -432,14 +432,21 @@ def get_received_anagrams_challenges(user_id):
     conn.close()
     return [list(row) for row in row]
 
-
-def get_anagrams_boardstring(game_id):
+def get_sent_anagrams_challenges(user_id):
     conn = get_db_connection()
     c = conn.cursor()
-    c.execute("SELECT board_string FROM anagrams_boards WHERE game_id = ?", (game_id,))
+    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM anagrams_challenge_requests WHERE from_user_id = ?", (user_id,))
+    row = c.fetchall()
+    conn.close()
+    return [list(row) for row in row]
+
+def get_anagrams_ana_string(game_id):
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT ana_string FROM anagrams_boards WHERE game_id = ?", (game_id,))
     row = c.fetchone()
     conn.close()
-    return row["board_string"]
+    return row["ana_string"]
 
 def update_challenge_score_AnaA(game_id, from_user_score):
     conn = get_db_connection()

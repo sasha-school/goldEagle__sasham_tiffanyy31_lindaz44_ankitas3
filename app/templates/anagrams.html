@@ -265,6 +265,9 @@
 
 </style>
 <script>
+  let challengeGame = false; //determine if score needs to be saved into challenge db too
+  let receivedGame = false;
+
 let time = 60;
 let game = false;
 
@@ -333,38 +336,36 @@ function sendChallenge() {
     scrm += document.getElementById('img' + i).textContent;
   }
 
-  for (let i = 1; i < 7; i++) {
-    el = document.getElementById("img" + i)
-    el.setAttribute('style', 'opacity:1;');
-    }
-
-  
-
 
   const inputVal = document.getElementById("friend_id");
   const friend_id = inputVal.value;
 
-  const stringData = new FormData();
-  stringData.append('ana_string', scrm);
-  stringData.append('friend_id', friend_id);
+  const chNew = new FormData();
+  chNew.append('ana_string', scrm);
+  chNew.append('friend_id', friend_id);
 
-  document.getElementById("plsStart1").style.display="none";
-  document.getElementById("send_challenge_ana").style.display="none";
-  document.getElementById("plsStart2").style.display="none";
+  
 
   fetch('/send_anagrams_challenge', {
           method: 'POST',
-          body: stringData
+          body: chNew
         })
 
   .then(response => response.json())
   .then(data => {
+    if (data.redirect) {
+            window.location.href = data.redirect;
+            return;
+    }
+    else {
     startGame();
+    }
   })
   .catch(error => console.error(error));
 }
 
-  window.addEventListener('DOMContentLoaded', () => {
+
+window.addEventListener('DOMContentLoaded', () => {
         const urlArgs = new URLSearchParams(window.location.search);
         if(urlArgs.has('board')){
           receivedGame = true;
@@ -372,30 +373,13 @@ function sendChallenge() {
         }
       })
 
-function toastAlert(message) {
-        const toast = document.getElementById('toast-simple');
-        toast.textContent = message;
-        toast.style.display = 'block';
-
-        setTimeout(() => {
-          toast.style.display = 'none';
-        }, 1500);
-      }
-
 
 function startGame() {
-
-  let scrm = "";
-  for (let i = 1; i <= 6; i++) {
-    scrm += document.getElementById('img' + i).textContent;
-  }
-
   game = true;
   for (let i = 1; i <= 6; i++) {
-  el = document.getElementById("img" + i)
+  let el = document.getElementById("img" + i)
   el.setAttribute('style', 'opacity:1;');
   }
-
 
   document.getElementById("friend_id").style.display="none";
   document.getElementById("send_challenge_ana").style.display="none";
@@ -419,25 +403,23 @@ function startGame() {
 
 
   function saveBoard() {
-  
-    
   let scrm = "";
   for (let i = 1; i <= 6; i++) {
     scrm += document.getElementById('img' + i).textContent;
   }
 
-        const wordData = new FormData();
-        wordData.append('ana_string', scrm);
-        fetch('/add_ana_string', {
-          method: 'POST',
-          body: wordData
-        })
-        .then(response => response.text())
-        .then(data => {
-          console.log(data);
-          startGame();
-        })
-        .catch(error => console.error(error));
+  const wordData = new FormData();
+  wordData.append('ana_string', scrm);
+  fetch('/add_ana_string', {
+    method: 'POST',
+    body: wordData
+  })
+  .then(response => response.text())
+  .then(data => {
+    startGame();
+    challengeGame = true;
+  })
+  .catch(error => console.error(error));
       
     }
 
@@ -446,6 +428,7 @@ function endGame() {
   for (let i = 1; i <= 6; i++) {
     scrm += document.getElementById('img' + i).textContent;
   }
+  document.getElementById("tot").textContent = totPoint;
   game=false;
   reset();
   scoreBoard();
@@ -461,21 +444,27 @@ const single_score = fetch('/update_ana_score', {
   body:result
 }).then(response => response.text());
 
-const A_score = fetch('/update_ana_score_A', {
+const A_score = challengeGame ? fetch('/update_ana_score_A', {
   method: 'POST',
   body:result
-}).then(response => response.text());
+}).then(response => response.text()) : Promise.resolve(null);
 
-const B_score = fetch('/update_ana_score_B', {
+const B_score = receivedGame ? fetch('/update_ana_score_B', {
   method: 'POST',
   body:result
-}).then(response => response.text());
+}).then(response => response.text()) : Promise.resolve(null);
 
 
+Promise.all([single_score, A_score, B_score])
 
-
-        Promise.all([single_score])
-
+.then(([data,data1,data2]) => {
+    if (receivedGame) {
+            window.location.href = '/ana_game'; //placeholder for end screen
+          } else {
+            location.reload();
+          }
+})
+.catch(error => console.error(error));
        
       }
 
@@ -659,7 +648,7 @@ function checkLetters() {
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-<div id="toast-simple" class="flex items-center" role="alert">
+
 
 <div class="anagram-container">
 <div class="text-center">  <p id="timer" class="text-black text-3xl">60</p></div>
