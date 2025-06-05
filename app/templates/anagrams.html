@@ -359,6 +359,7 @@ function sendChallenge() {
         })
 
   .then(response => response.json())
+  
   .then(data => {
     if (data.redirect) {
       window.location.href = data.redirect;
@@ -410,6 +411,7 @@ function startGame() {
         let ID = window.setInterval(() => {
           if (time > 0){
             time = parseInt(time - 1);
+            document.getElementById("timer").textContent = time;
           }
           else {
             clearInterval(ID);
@@ -471,6 +473,10 @@ Promise.all([single_score])
 
 
 function checkLetters() {
+  let scrm = "";
+  for (let i = 1; i <= 6; i++) {
+    scrm += document.getElementById('img' + i).textContent;
+  }
   if (game==true) {
   const boxes = document.querySelectorAll(".seperate .box");
   const boxesAdd = document.querySelectorAll(".pls .addBoxy");
@@ -532,8 +538,8 @@ function checkLetters() {
             totPoint += pointThing;
 
             const wordData = new FormData();
-            wordData.append('word', words);
-            wordData.append('board_string', stringLetter);
+            wordData.append('word', letters);
+            wordData.append('ana_string', scrm);
 
             fetch('/add_ana_words', {
               method: 'POST',
