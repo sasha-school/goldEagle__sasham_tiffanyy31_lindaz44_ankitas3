@@ -370,7 +370,9 @@ window.addEventListener('DOMContentLoaded', () => {
         const urlArgs = new URLSearchParams(window.location.search);
         if(urlArgs.has('board')){
           receivedGame = true;
-          startGame();
+          setTimeout(function() {
+            startGame();
+          }, 4000);
         }
       })
 
@@ -462,7 +464,10 @@ Promise.all([single_score, A_score, B_score])
     if (receivedGame) {
             window.location.href = '/ana_game'; //placeholder for end screen
           } else {
+            setTimeout(function() {
             location.reload();
+          }, 4000);
+            
           }
 })
 .catch(error => console.error(error));
