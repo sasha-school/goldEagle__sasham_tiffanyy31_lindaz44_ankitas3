@@ -6,7 +6,13 @@
     <title>{% block title %}goldEagle{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    {% block styles %}{% endblock %}
+    {% block styles %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100..800&display=swap" rel="stylesheet">
+{% endblock
+    %}
 </head>
 
 <body class="min-h-screen flex flex-col select-none">
@@ -46,9 +52,17 @@
                 <li>
                     <a href="{{ url_for('game') }}"
                         class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">
-                        Games
+                        Word Hunt Games
                     </a>
                 </li>
+
+                <li>
+                    <a href="{{ url_for('ana_game') }}"
+                        class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition">
+                        Anagrams Games
+                    </a>
+                </li>
+
                 <li>
                     <a href="{{ url_for('friends') }}"
                         class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">

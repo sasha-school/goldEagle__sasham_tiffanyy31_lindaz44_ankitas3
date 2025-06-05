@@ -3,6 +3,18 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
+
+<!--snippet from https://stackoverflow.com/questions/66761712/change-flash-message-duration-in-flask-with-jinja2-templates-->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-warning" role="alert">
+             {{message}}
+        </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+    
     <body style="padding: 3%; text-align: center; width: 100%;">
         <div>
             <h3>Register to Save Stats & Play Multiplayer</h3>

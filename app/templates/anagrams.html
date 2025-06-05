@@ -18,18 +18,31 @@
 }
 
 .anagram-container {
-  max-width: 700px;
+  max-width: 8800px;
   margin: 40px auto;
   background: var(--timberwolf);
   border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(126, 106, 76, 0.13);
+  box-shadow: 0 4px 4px rgba(126, 106, 76, 0.13);
   padding: 32px 36px 36px 36px;
   font-family: 'Segoe UI', Arial, sans-serif;
   border: 2px solid var(--coyote-2);
 }
 
 #tot {
-  background: var(--lion);
+  background: rgb(250, 248, 255);
+  color: var(--black);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1em;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(176,137,82,0.13);
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+#tot1 {
+  background: rgb(250, 248, 255);
   color: var(--black);
   border: none;
   border-radius: 8px;
@@ -42,8 +55,25 @@
 }
 
 
-#plsStart {
-  background: #794d15;
+#plsStart1 {
+  background: #444063;
+  color: white;
+  border: none;
+  margin: 20px;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1em;
+  margin-top: 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(66,96,17,0.13);
+}
+
+#plsStart2 {
+  background: #444063;
   color: white;
   border: none;
   margin: 20px;
@@ -60,8 +90,8 @@
 }
 
 #enterWord {
-  background: var(--dark-moss-green);
-  color: var(--timberwolf);
+  background: #9f9bbf;
+  color: black;
   border: none;
   border-radius: 8px;
   padding: 10px 28px;
@@ -75,11 +105,11 @@
   box-shadow: 0 2px 8px rgba(66,96,17,0.13);
 }
 #enterWord:hover {
-  background: var(--pakistan-green);
+  background: #4e4a6bbc;
 }
 #timer {
   font-weight: 600;
-  color: #4B3A22;
+  color: black;
 }
 #points {
   min-height: 24px;
@@ -142,10 +172,10 @@
 }
 
 .box {
-  width: 70px;
+  width: 60px;
   height: 70px;
-  background: var(--khaki);
-  border: 2px solid var(--coyote-2);
+  background: rgb(206, 198, 234);
+  border: 2px solid black;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -157,34 +187,34 @@
 }
 
 .box:hover {
-  border: 2px solid var(--sepia);
   background: var(--timberwolf);
   box-shadow: 0 4px 16px rgba(101,63,12,0.13);
 }
 
+#MyModal {
+  background-color: rgb(255, 231, 169);
+}
 .letter {
   background: var(--timberwolf);
-  border: 2px solid var(--lion);
-  color: var(--sepia);
-  border-radius: 50%;
-  width: 54px;
-  height: 54px;
+  box-shadow: 0px 5px 7px 4px rgba(0, 0, 0, 0.4);
+  color: black;
+  border-radius: 0%;
+  width: 94px;
+  height: 84px;
   font-size: 2em;
   font-weight: bold;
   cursor: grab;
   transition: background 0.2s, color 0.2s, border 0.2s;
-  box-shadow: 0 2px 8px rgba(176,137,82,0.13);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0;
-  padding: 0;
+ 
   outline: none;
 }
 
 .letter:active {
   background: var(--lion);
-  color: var(--timberwolf);
+  color: black;
   border: 2px solid var(--sepia);
 }
 
@@ -193,7 +223,7 @@
 }
 
 .anagram-container {
-  background: linear-gradient(135deg, var(--timberwolf) 80%, var(--khaki) 100%);
+  background: linear-gradient(135deg, rgb(205, 201, 238) 80%, rgb(206, 202, 238) 100%);
 }
 
 @media (max-width: 600px) {
@@ -207,8 +237,8 @@
     min-height: 48px;
   }
   .letter {
-    width: 36px;
-    height: 36px;
+    width: 76px;
+    height: 46px;
     font-size: 1.2em;
   }
 }
@@ -225,10 +255,22 @@
 #disp {
   display: block;
 }
+
+#img1, #img2, #img3, #img4, #img5, #img6 {
+
+   opacity: 0;
+   background-image: url("/static/img/wood.png");
+   width: 90px;
+}
+
 </style>
 <script>
+  let challengeGame = false; //determine if score needs to be saved into challenge db too
+  let receivedGame = false;
+
 let time = 60;
 let game = false;
+
 
 /*
 json structure:
@@ -274,78 +316,175 @@ function dropHandler(ev) {
   box.appendChild(imgTag);
 }
 
-function clickMove(img){
+function clickMove(thing){
+  let im = document.getElementById(thing);
   for (let i = 1; i < 7; i++) {
-    if (!document.getElementById("div" + i.toString()).contains(img)) {
-      $( ".div" + i.toString()).append(img);
-      break;
-    }
-  
+
+  if (!document.getElementById("div" + i).contains(document.getElementById("img1"))  && !document.getElementById("div" + i).contains(document.getElementById("img2")) && !document.getElementById("div" + i).contains(document.getElementById("img3")) && !document.getElementById("div" + i).contains(document.getElementById("img4")) && !document.getElementById("div" + i).contains(document.getElementById("img5")) && !document.getElementById("div" + i).contains(document.getElementById("img6"))) {
+        document.getElementById("div" + i).appendChild(im);
+        break;
   }
-  
-}
+  }
+ }
+
+
+
 
 function sendChallenge() {
-        const inputVal = document.getElementById("friend_id");
-        const friend_id = inputVal.value;
+  let scrm = "";
+  for (let i = 1; i <= 6; i++) {
+    scrm += document.getElementById('img' + i).textContent;
+  }
 
-        const stringData = new FormData();
-        stringData.append('ana_string', scrm);
 
-        fetch('/add_ana_string', {
+  const inputVal = document.getElementById("friend_id");
+  const friend_id = inputVal.value;
+
+  const chNew = new FormData();
+  chNew.append('ana_string', scrm);
+  chNew.append('friend_id', friend_id);
+
+  
+
+  fetch('/send_anagrams_challenge', {
           method: 'POST',
-          body: stringData
+          body: chNew
         })
-        .then(response => response.text())
-        .then(data => {
-          console.log(data);
-          const challengeData = new FormData();
-          challengeData.append('ana_string', scrm);
-          challengeData.append('friend_id', friend_id);
-          fetch('/send_anagrams_challenge', {
-            method: 'POST',
-            body: challengeData
-          })
-          .then(response => response.text())
-        })
-        .then(data => {
-          startGame()
-        })
-        .catch(error => console.error(error));
 
-      }
+  .then(response => response.json())
+  
+  .then(data => {
+    if (data.redirect) {
+            window.location.href = data.redirect;
+            return;
+    }
+    else {
+    startGame();
+    }
+  })
+  .catch(error => console.error(error));
+}
+
+
+window.addEventListener('DOMContentLoaded', () => {
+        const urlArgs = new URLSearchParams(window.location.search);
+        if(urlArgs.has('board')){
+          receivedGame = true;
+          setTimeout(function() {
+            startGame();
+          }, 4000);
+        }
+      })
 
 
 function startGame() {
   game = true;
+  for (let i = 1; i <= 6; i++) {
+  let el = document.getElementById("img" + i)
+  el.setAttribute('style', 'opacity:1;');
+  }
+
+  document.getElementById("friend_id").style.display="none";
+  document.getElementById("send_challenge_ana").style.display="none";
+  document.getElementById("plsStart2").style.display="none";
+
+
     document.getElementById("timer").textContent = time;
         let ID = window.setInterval(() => {
           if (time > 0){
-            time -= 1;
+            time = parseInt(time - 1);
             document.getElementById("timer").textContent = time;
           }
           else {
             clearInterval(ID);
-            game=false;
-            reset();
-            scoreBoard();
-            $("#myModal").modal();
-
-
-
+            endGame();
           }
         }, 1000);
 
 
       }
 
+
+  function saveBoard() {
+  let scrm = "";
+  for (let i = 1; i <= 6; i++) {
+    scrm += document.getElementById('img' + i).textContent;
+  }
+
+  const wordData = new FormData();
+  wordData.append('ana_string', scrm);
+  fetch('/add_ana_string', {
+    method: 'POST',
+    body: wordData
+  })
+  .then(response => response.text())
+  .then(data => {
+    startGame();
+    challengeGame = true;
+  })
+  .catch(error => console.error(error));
+      
+    }
+
+function endGame() {
+  let scrm = "";
+  for (let i = 1; i <= 6; i++) {
+    scrm += document.getElementById('img' + i).textContent;
+  }
+  document.getElementById("tot").textContent = totPoint;
+  game=false;
+  reset();
+  scoreBoard();
+  $("#myModal").modal();
+
+  const result = new FormData();
+  result.append('score', totPoint)
+  result.append('ana_string', scrm)
+
+
+const single_score = fetch('/update_ana_score', {
+  method: 'POST',
+  body:result
+}).then(response => response.text());
+
+const A_score = challengeGame ? fetch('/update_ana_score_A', {
+  method: 'POST',
+  body:result
+}).then(response => response.text()) : Promise.resolve(null);
+
+const B_score = receivedGame ? fetch('/update_ana_score_B', {
+  method: 'POST',
+  body:result
+}).then(response => response.text()) : Promise.resolve(null);
+
+
+Promise.all([single_score, A_score, B_score])
+
+.then(([data,data1,data2]) => {
+    if (receivedGame) {
+            window.location.href = '/ana_game'; //placeholder for end screen
+          } else {
+            setTimeout(function() {
+            location.reload();
+          }, 4000);
+            
+          }
+})
+.catch(error => console.error(error));
+       
+      }
+
+
+
   function scoreBoard() {
+    document.getElementById("tot").textContent = totPoint;
     for (let i = 0; i < words.length; i++) {
       let w = document.createElement('p');
       let p = document.createElement('p');
       w.textContent = words[i] + "      " + pointsPerWord[i].toString();
       document.getElementById("disp").appendChild(w);
-     
+      
+
     }
   }
 
@@ -363,8 +502,14 @@ function startGame() {
 
 
 
- 
+
 function checkLetters() {
+
+   let scrm = "";
+  for (let i = 1; i <= 6; i++) {
+    scrm += document.getElementById('img' + i).textContent;
+  }
+
   if (game==true) {
   const boxes = document.querySelectorAll(".seperate .box");
   const boxesAdd = document.querySelectorAll(".pls .addBoxy");
@@ -420,11 +565,29 @@ function checkLetters() {
           } else {
             usedLetters.push(letters);
             words.push(letters);
+            let wL = words.length;
             let pointThing = pointsCateg[numLetters];
             pointsPerWord.push(pointThing);
             totPoint += pointThing;
+
+            const wordData = new FormData();
+            wordData.append('word', letters);
+            wordData.append('ana_string', scrm);
+
+            fetch('/add_ana_words', {
+              method: 'POST',
+              body: wordData
+            })
+            .then(response => response.text())
+            .then(data => {
+              console.log(data);
+            })
+            .catch(error => console.error(error));
+
+
             msg.innerHTML = `&#127942; <b>+${pointThing}</b> points!`;
-            tot.innerHTML = `Total Points: ${totPoint}`;
+            tot1.innerHTML = `WORDS: ${wL}`;
+            tot.innerHTML = `SCORE: ${totPoint}`;
             emptyBoxes = [];
             for (let i = 0; i < 6; i++) {
               let addBack = document.querySelector(".pls .addBoxy" + i.toString());
@@ -482,31 +645,31 @@ function checkLetters() {
   }
 }}
 
- var scrm = "";
-
-for (let i = 1; i < 6; i++) {
-  scrm += document.getElementById('img' + (i+1).toString()).textContent;
-}
 
 
 
 </script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 
+
 <div class="anagram-container">
 <div class="text-center">  <p id="timer" class="text-black text-3xl">60</p></div>
-<div class="text-center" id="start-but"> 
+<div class="text-center" id="start-but">
 <div id="send_challenge_ana">
     <input placeholder="User ID" id="friend_id" class="form-control w-auto d-inline-block"  type="number">
-    <button id= "plsStart" type="submit" onclick="sendChallenge()">Send Challenge: Start</button>
+    <button id= "plsStart1" type="submit" onclick="sendChallenge()">Send Challenge: Start</button>
   </div>
-<div><button id="plsStart" onclick="startGame()">Single-Player Mode: Start</button></div>
+<div><button id="plsStart2" onclick="saveBoard()">Single-Player Mode: Start</button></div>
 </div>
   <br>
-  <div class="text-center"><button id="tot">Total Points: </button></div>
+  <div class="text-center">
+    <button id="tot1">WORDS: </button>
+    <button id="tot">SCORE: </button>
+  </div>
   <!--
   <div class="seperate">
     <div class="box" ondrop="dropHandler(event)" id="div1" ondragover="dragoverHandler(event)"></div>
@@ -545,29 +708,16 @@ for (let i = 1; i < 6; i++) {
   </div>
 </div>
 
-<div id= "myModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Score Board</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-    <div id="both">
-      <div id="firstUser">
-      <h3>{{ userName }}</h3>
-      <div class="modal-body" id="disp"> 
-        <p></p> <p></p> <br>
-      </div>
-      </div>
+
     -->
-      <div class="text-center"><button id="tot">Total Points: </button></div>
-  <div class="seperate">
-    <div class="box"  id="div1" ></div>
-    <div class="box"  id="div2" ></div>
-    <div class="box"  id="div3" ></div>
-    <div class="box" id="div4" ></div>
-    <div class="box"  id="div5" ></div>
-     <div class="box" id="div6" ></div>
+
+      <div class="seperate">
+    <div class="box" ondrop="dropHandler(event)" id="div1" ondragover="dragoverHandler(event)"></div>
+    <div class="box" ondrop="dropHandler(event)" id="div2" ondragover="dragoverHandler(event)"></div>
+    <div class="box" ondrop="dropHandler(event)" id="div3" ondragover="dragoverHandler(event)"></div>
+    <div class="box" ondrop="dropHandler(event)" id="div4" ondragover="dragoverHandler(event)"></div>
+    <div class="box" ondrop="dropHandler(event)" id="div5" ondragover="dragoverHandler(event)"></div>
+     <div class="box" ondrop="dropHandler(event)" id="div6" ondragover="dragoverHandler(event)"></div>
   </div>
 
   <div class="text-center"><button id="enterWord" onclick="checkLetters()">Enter</button></div>
@@ -576,38 +726,61 @@ for (let i = 1; i < 6; i++) {
 
   <div class="pls">
     {% if letters %}
-    <div class="addBoxy0 box" id="div1" onclick="clickMove('img1')">
-      <button class="letter" id="img1" onclick="clickMove('img1')">{{ letters.0 }}</button>
+    <div class="addBoxy0 box" id="div1" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button width="87px" class="letter text-transparent" id="img1" onclick="clickMove('img1') " draggable="true" ondragstart="dragstartHandler(event)">{{ letters.0 }}</button>
     </div>
-    <div class="box addBoxy1" id="div2" onclick="clickMove('img2')">
-      <button class="letter" id="img2" onclick="clickMove('img2')" >{{ letters.1 }}</button>
+    <div class="box addBoxy1" id="div2" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img2" onclick="clickMove('img2')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.1 }}</button>
     </div>
-    <div class="box addBoxy2" id="div3" onclick="clickMove('img3')">
-      <button class="letter" id="img3" onclick="clickMove('img3')">{{ letters.2 }}</button>
+    <div class="box addBoxy2" id="div3" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img3" onclick="clickMove('img3')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.2 }}</button>
     </div>
-    <div class="box addBoxy3" id="div4" onclick="clickMove('img4')">
-      <button class="letter" id="img4" onclick="clickMove('img4')">{{ letters.3 }}</button>
+    <div class="box addBoxy3" id="div4" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img4" onclick="clickMove('img4')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.3 }}</button>
     </div>
-    <div class="box addBoxy4" id="div5" onclick="clickMove('img5')">
-      <button class="letter" id="img5" onclick="clickMove('img5')" >{{ letters.4 }}</button>
+    <div class="box addBoxy4" id="div5" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img5" onclick="clickMove('img5')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.4 }}</button>
     </div>
-  <div class="box addBoxy5" id="div6" onclick="clickMove('img6')">
-      <button class="letter" id="img6" onclick="clickMove('img6')">{{ letters.5 }}</button>
+  <div class="box addBoxy5" id="div6" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+      <button class="letter" id="img6" onclick="clickMove('img6')" draggable="true" ondragstart="dragstartHandler(event)">{{ letters.5 }}</button>
     </div>
     {% endif %}
+  </div>
+
+<!-- Modal -->
+ <div id= "myModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Score Board</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+     
+    <div id="both">
+      <div id="firstUser">
+      <h3>{{ userName }}</h3>
+       <button id="tot">SCORE: </button>
+      <div class="modal-body" id="disp">
+        <p></p> <p></p> <br>
+      </div>
+      </div>
+
+
+
+        <div id="secondUser">
+      <h3>{{ userName }}</h3>
+      <div class="modal-body" id="disp">
+        <p></p> <p></p> <br>
+      </div>
+      </div>
+       </div>
+
+    </div>
   </div>
 </div>
 
 
-      <div id="secondUser">
-        <h3 id="u">second user</h3>
-        <div class="modal-body" id="disp">
-          <p></p>
-        </div>
-      </div>
-    </div>
-
-      
   </div>
 </div>
 {% endblock %}</div>
