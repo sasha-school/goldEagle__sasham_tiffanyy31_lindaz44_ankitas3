@@ -201,13 +201,14 @@ def game():
 
     return render_template("gamepage.html", received_challenge = received_challenge, sent_challenge = sent_challenge)
 
+#lindas code
 @app.route('/ana_game')
 def ana_game():
     if 'user_id' in session:
         ana_user_id = session['user_id']
         ana_received_challenge = ""
         ana_sent_challenge = ""
-        all_ana_received = get_received_anagrams_challenges(ana_user_id) #received wordhunt challenges
+        all_ana_received = get_received_anagrams_challenges(ana_user_id) #received anagrams challenges
         all_ana_sent = get_sent_anagrams_challenges(ana_user_id)
         for i in all_ana_received:
             ana_game_id = int(i[0])
@@ -217,12 +218,12 @@ def ana_game():
             ana_received_score = i[4]
             if ana_received_score is None: #if user hasn't played the game yet
                 ana_received_challenge += f'''<tr><td>Anagrams</td><td>{ana_sent_username} (#{i[1]})</td><td><a href="{ana_link}"><button>Play</button></a></td></tr>'''
-        for row in all_ana_sent:
+        for i in all_ana_sent:
             ana_game_id = int(i[0])
             ana_board_string = get_anagrams_ana_string(ana_game_id)
             ana_received_user = get_user(int(i[2]))
-            ana_sent_score = row[3]
-            ana_received_score = row[4]
+            ana_sent_score = i[3]
+            ana_received_score = i[4]
             if ana_received_score is None:
                 ana_received_score = "awaiting score..."
             ana_sent_challenge += f'''<tr><td>Anagrams to {ana_received_user}</td><td>{ana_sent_score}</td><td>{ana_received_score}</td></tr>''' 
