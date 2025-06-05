@@ -327,7 +327,7 @@ function clickMove(thing){
   }
  }
 
-
+var boardStr = "";
 
 
 function sendChallenge() {
@@ -345,7 +345,6 @@ function sendChallenge() {
   chNew.append('friend_id', friend_id);
 
   
-
   fetch('/send_anagrams_challenge', {
           method: 'POST',
           body: chNew
@@ -360,7 +359,9 @@ function sendChallenge() {
     }
     else {
     startGame();
+    challengeGame = true;
     }
+    
   })
   .catch(error => console.error(error));
 }
@@ -370,9 +371,12 @@ window.addEventListener('DOMContentLoaded', () => {
         const urlArgs = new URLSearchParams(window.location.search);
         if(urlArgs.has('board')){
           receivedGame = true;
-          setTimeout(function() {
-            startGame();
-          }, 4000);
+          boardStr = urlArgs.get('board')
+          for (let i = 0; i < 6; i++) {
+        let el = document.getElementById("img" + (i+1))
+        el.textContent = boardStr[i];
+        }
+          startGame();
         }
       })
 
@@ -435,10 +439,10 @@ function endGame() {
   game=false;
   reset();
   scoreBoard();
-  $("#myModal").modal();
+ 
 
   const result = new FormData();
-  result.append('score', totPoint)
+  result.append('totPoint', totPoint)
   result.append('ana_string', scrm)
 
 
@@ -460,14 +464,16 @@ const B_score = receivedGame ? fetch('/update_ana_score_B', {
 
 Promise.all([single_score, A_score, B_score])
 
+
 .then(([data,data1,data2]) => {
+   $("#myModal").modal();
     if (receivedGame) {
             window.location.href = '/ana_game'; //placeholder for end screen
           } else {
+            location.reload();
             setTimeout(function() {
             location.reload();
-          }, 4000);
-            
+          }, 5000);
           }
 })
 .catch(error => console.error(error));

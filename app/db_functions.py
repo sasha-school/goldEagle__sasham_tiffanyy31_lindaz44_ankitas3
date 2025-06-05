@@ -453,14 +453,6 @@ def add_anagrams_challenge(from_user_id, to_user_id, game_id):
     conn.close()
 
 
-def get_sent_anagrams_challenges(user_id):
-    conn = get_db_connection()
-    c = conn.cursor()
-    c.execute("SELECT game_id, from_user_id, to_user_id, from_user_score, to_user_score FROM anagrams_challenge_requests WHERE from_user_id = ?", (user_id,))
-    row = c.fetchall()
-    conn.close()
-    return [list(row) for row in row]
-
 def get_received_anagrams_challenges(user_id):
     conn = get_db_connection()
     c = conn.cursor()

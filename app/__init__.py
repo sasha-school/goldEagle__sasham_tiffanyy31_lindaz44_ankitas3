@@ -223,12 +223,16 @@ def ana_game():
             ana_board_string = get_anagrams_ana_string(ana_game_id)
             ana_received_user = get_user(int(i[2]))
             ana_sent_score = i[3]
+            print("sent: " + str(ana_sent_score))
             ana_received_score = i[4]
+            print("re: " + str(ana_received_score))
             if ana_received_score is None:
                 ana_received_score = "awaiting score..."
             ana_sent_challenge += f'''<tr><td>Anagrams to {ana_received_user}</td><td>{ana_sent_score}</td><td>{ana_received_score}</td></tr>''' 
 
     return render_template("ana_gamepage.html", ana_received_challenge = ana_received_challenge, ana_sent_challenge = ana_sent_challenge)
+
+
 
 wordbites_letter_positions = {}
 wordbites_words = {}
@@ -596,7 +600,6 @@ def send_challenge_ana():
     add_anagrams_challenge(user_id, friend_id, game_id)
     return jsonify({'message' : "challenge request sent"})
 
-
 @app.route('/add_ana_string', methods=['POST'])
 def add_ana_board():
     if 'user_id' not in session:
@@ -670,6 +673,7 @@ def endgame():
 
     return render_template("endpage.html", display=display)
 
+
 @app.route('/add_ana_words', methods=['POST'])
 def add_ana_words():
     if 'user_id' not in session:
@@ -691,7 +695,7 @@ def update_ana_score():
         user_id = session['user_id']
         ana_string = request.form.get('ana_string')
         game_id = get_anagrams_id(ana_string)
-        score = request.form.get('score')
+        score = request.form.get('totPoint')
         score = int(score)
         update_anagrams_score(user_id, game_id, score)
         update_anagrams_lb(user_id, score)
@@ -705,8 +709,9 @@ def update_ana_score_A():
     else:
         ana_string = request.form.get('ana_string')
         game_id = get_anagrams_id(ana_string)
-        score = request.form.get('score')
+        score = request.form.get('totPoint')
         score = int(score)
+        print(score)
         update_challenge_score_AnaA(game_id, score)
         return "saved score"
 
@@ -718,8 +723,9 @@ def update_ana_score_B():
     else:
         ana_string = request.form.get('ana_string')
         game_id = get_anagrams_id(ana_string)
-        score = request.form.get('score')
+        score = request.form.get('totPoint')
         score = int(score)
+        print(score)
         update_challenge_score_AnaB(game_id, score)
         return "saved score"
 
