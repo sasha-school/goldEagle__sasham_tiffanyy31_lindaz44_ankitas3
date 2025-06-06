@@ -234,17 +234,17 @@ After the game, if not already friended, popup asking if you’d like to friend 
 
         if (!haveListener){
           buttons.forEach(button => {
-            button.addEventListener("mousedown", (e) => {
+            button.addEventListener("pointerdown", (e) => {
               appendLetter(button);
               console.log('mouse is down');
             });
-            button.addEventListener("mouseover", (e) => {
+            button.addEventListener("pointerover", (e) => {
               if (e.buttons === 1 && selectedLetters.size > 0) {
                 appendLetter(button);
               }
             });
 
-            button.addEventListener("mouseup", (e) => {
+            button.addEventListener("pointerup", (e) => {
               if (display.value.length > 2){
                 checkWords();
               }
