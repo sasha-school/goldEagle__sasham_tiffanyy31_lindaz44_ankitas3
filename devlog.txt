@@ -147,11 +147,18 @@ sashaM -- 2025-06-01
 sashaM -- 2025-06-02 IN CLASS
 - wordbites timer
 
+ankitaS -- 2025-06-02
+- working countdown timer
+- single player and challenge mose created
+
 sashaM -- 2025-06-03 IN CLASS
 - wordbites challenge
 
 sashaM -- 2025-06-04 IN CLASS
 - wordbites challenge
+
+ankitaS --2025-06-04
+- anagrams challenge mode interacting with db and single player interacting w db
 
 lindaZ -- 2025-06-04
 - working endpage screen (for solo and challenge games)
